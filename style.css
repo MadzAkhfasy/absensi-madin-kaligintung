@@ -462,3 +462,34 @@ body {
 main {
   position: relative;
 }
+/* AREA SAMBUTAN DASHBOARD */
+
+.welcome {
+  position: relative;
+  overflow: hidden;
+  padding: 24px 20px;
+  margin-bottom: 20px;
+  border-radius: 18px;
+  background: linear-gradient(120deg, #104b32, #176b45);
+  color: #ffffff;
+  box-shadow: 0 7px 20px rgba(16, 75, 50, .15);
+}
+
+.welcome h1 {
+  color: #ffffff;
+}
+
+.welcome p,
+.welcome small {
+  color: #e5eee8;
+}
+
+.welcome::after {
+  content: "✦";
+  position: absolute;
+  right: 20px;
+  top: -25px;
+  font-size: 110px;
+  color: rgba(255, 255, 255, .08);
+  pointer-events: none;
+}
