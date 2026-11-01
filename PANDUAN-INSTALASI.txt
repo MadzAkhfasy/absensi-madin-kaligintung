@@ -1,0 +1,62 @@
+ABSENSI MADIN KALIGINTUNG - PAKET APLIKASI ANDROID (PWA)
+=======================================================
+
+Paket ini adalah aplikasi web yang dapat dipasang di layar utama Android seperti aplikasi.
+Karena memakai database online, aplikasi harus dipublikasikan melalui hosting HTTPS dan
+dihubungkan ke proyek Firebase milik Madin. File ini belum berisi akun, data santri,
+atau konfigurasi Firebase.
+
+LANGKAH 1 - BUAT FIREBASE
+1. Buka https://console.firebase.google.com/ dan masuk dengan akun Google pengurus.
+2. Buat project baru: "Absensi Madin Kaligintung".
+3. Tambahkan aplikasi Web (ikon </>) dan salin konfigurasi Firebase.
+4. Di Authentication > Sign-in method, aktifkan Email/Password.
+5. Di Firestore Database, buat database (production mode).
+6. Konfigurasi Firebase untuk proyek Absensi Madin Kaligintung sudah dimasukkan ke app.js.
+
+LANGKAH 2 - BUAT AKUN ADMIN PERTAMA
+1. Di Firebase Authentication > Users > Add user, buat email dan kata sandi admin.
+2. Salin UID akun admin tersebut.
+3. Di Firestore, buat collection "users", document ID = UID admin.
+4. Isi field:
+   email (string) = email admin
+   name (string) = Admin Madin
+   role (string) = admin
+   assignedClass (null)
+5. Salin isi firestore.rules ke Firestore > Rules, lalu klik Publish.
+   Admin pertama akan membuat 6 kelas secara otomatis saat pertama kali login.
+
+LANGKAH 3 - PUBLIKASIKAN
+1. Upload seluruh isi folder ini ke layanan hosting HTTPS yang mendukung file statis
+   (misalnya Firebase Hosting).
+2. Buka alamat hosting dari Chrome Android.
+3. Pilih menu Chrome (tiga titik) > Tambahkan ke layar utama / Install aplikasi.
+4. Ulangi pada HP setiap ustaz/ustazah.
+
+LANGKAH 4 - DAFTARKAN GURU DAN BAGIKAN KELAS
+1. Setiap guru membuka aplikasi dan memilih "Daftar guru".
+2. Guru mengisi email dan kata sandi sendiri.
+3. Admin masuk ke menu Admin, lalu menetapkan satu kelas untuk setiap guru.
+4. Admin menambahkan data santri melalui menu Santri.
+
+ENAM KELAS YANG SUDAH DISIAPKAN
+- Kelas Jilid Pemula
+- Kelas Jilid 1
+- Kelas Jilid 2
+- Kelas Jilid 3
+- Kelas Jilid 4
+- Kelas Jilid 5
+
+FITUR
+- Login admin dan guru.
+- Guru hanya dapat melihat dan mengabsen kelas yang ditugaskan.
+- Status: Hadir, Izin, Sakit, Alpa.
+- Data santri dikelola admin.
+- Rekap bulanan dan unduh CSV yang dapat dibuka dengan Excel.
+
+CATATAN PENTING
+- Jangan bagikan kata sandi admin.
+- Simpan konfigurasi Firebase dan UID admin dengan aman.
+- Firebase dapat meminta pengaturan penagihan jika pemakaian/fitur melewati kuota gratis.
+- Sebelum dipakai resmi, uji dengan beberapa akun guru dan data percobaan.
+- Untuk mengubah nama kelas atau menambah fitur, edit project lalu deploy ulang.

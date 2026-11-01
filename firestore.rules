@@ -1,0 +1,32 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function admin() {
+      return signedIn()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+
+    match /users/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || admin());
+      // Profil admin dibuat secara manual oleh pemilik proyek di Firebase Console.
+      allow create: if false;
+      allow update, delete: if admin();
+    }
+
+    match /classes/{classId} {
+      allow read, write: if admin();
+    }
+
+    match /students/{studentId} {
+      allow read, write: if admin();
+    }
+
+    match /attendance/{attendanceId} {
+      allow read, write: if admin();
+    }
+  }
+}

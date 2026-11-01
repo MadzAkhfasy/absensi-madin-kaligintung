@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#176b45">
+  <title>Absensi Madin Kaligintung</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-mark">MK</div>
+    <div><strong>Absensi Madin</strong><small>Kaligintung</small></div>
+    <button id="logoutBtn" class="outline hidden">Keluar</button>
+  </header>
+
+  <main>
+    <section id="authView" class="card auth-card">
+      <h1>Selamat datang</h1>
+      <p class="muted">Masuk untuk mengelola absensi santri.</p>
+      <label>Email<input id="email" type="email" autocomplete="username" placeholder="nama@email.com"></label>
+      <label>Kata sandi<input id="password" type="password" autocomplete="current-password" placeholder="Minimal 6 karakter"></label>
+      <div class="row">
+        <button id="loginBtn" class="primary">Masuk</button>
+      </div>
+      <p class="hint">Gunakan akun Admin Madin untuk mengelola seluruh kelas dan absensi.</p>
+      <div id="authMsg" class="message"></div>
+    </section>
+
+    <section id="appView" class="hidden">
+      <div class="welcome">
+        <div><span class="eyebrow">PANEL ABSENSI</span><h1 id="hello">Halo!</h1><p id="roleInfo" class="muted"></p></div>
+        <div class="today-pill" id="todayLabel"></div>
+      </div>
+
+      <nav class="tabs">
+        <button class="tab active" data-tab="attendancePanel">Absensi</button>
+        <button class="tab" data-tab="studentsPanel">Santri</button>
+        <button class="tab" data-tab="reportsPanel">Rekap</button>
+      </nav>
+
+      <section id="attendancePanel" class="panel">
+        <div class="card">
+          <div class="section-head"><div><h2>Absensi harian</h2><p class="muted">Pilih tanggal, lalu tentukan status setiap santri.</p></div></div>
+          <label>Tanggal<input id="attendanceDate" type="date"></label>
+          <label id="attendanceClassWrap" class="hidden">Kelas<select id="attendanceClass"></select></label>
+          <div id="attendanceClassName" class="class-chip"></div>
+          <div id="attendanceList" class="list"></div>
+          <button id="saveAttendanceBtn" class="primary full hidden">Simpan absensi</button>
+          <div id="attendanceMsg" class="message"></div>
+        </div>
+      </section>
+
+      <section id="studentsPanel" class="panel hidden">
+        <div class="card">
+          <h2>Data santri</h2>
+          <p class="muted">Data santri dikelola oleh admin.</p>
+          <div id="studentAdminForm" class="hidden">
+            <label>Nama santri<input id="studentName" placeholder="Nama lengkap santri"></label>
+            <label>Kelas<select id="studentClass"></select></label>
+            <button id="addStudentBtn" class="primary full">Tambah santri</button>
+            <div id="studentMsg" class="message"></div>
+          </div>
+          <div id="studentList" class="list"></div>
+        </div>
+      </section>
+
+      <section id="reportsPanel" class="panel hidden">
+        <div class="card">
+          <h2>Rekap kehadiran</h2>
+          <div class="grid2">
+            <label>Bulan<select id="reportMonth"></select></label>
+            <label id="reportClassWrap">Kelas<select id="reportClass"></select></label>
+          </div>
+          <button id="loadReportBtn" class="secondary full">Tampilkan rekap</button>
+          <div id="reportSummary" class="summary-grid"></div>
+          <div id="reportTable" class="table-wrap"></div>
+          <button id="exportBtn" class="primary full hidden">Unduh Excel (CSV)</button>
+          <div id="reportMsg" class="message"></div>
+        </div>
+      </section>
+
+    </section>
+  </main>
+
+  <footer>Madrasah Diniyah Kaligintung · Absensi Santri</footer>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "Absensi Madin Kaligintung",
+  "short_name": "Absensi Madin",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f7f5",
+  "theme_color": "#176b45",
+  "description": "Aplikasi absensi santri Madin Kaligintung"
+}
