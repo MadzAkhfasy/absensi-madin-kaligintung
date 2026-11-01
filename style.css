@@ -165,8 +165,8 @@ img {
   max-width: 100%;
 }
 
-#authView, #appView
-input[type="date"] {
+#authView input[type="date"],
+#appView input[type="date"] {
   display: block;
   width: 100%;
   max-width: 100%;
