@@ -166,3 +166,15 @@ img {
 }
 
 #authView, #appView
+input[type="date"] {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  height: 44px;
+  padding: 8px 10px;
+  font-size: 15px;
+  border-radius: 9px;
+  overflow: hidden;
+}
