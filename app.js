@@ -61,7 +61,9 @@ async function loadStudents(){
  const snap=await getDocs(qy);students=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.name.localeCompare(b.name));
  renderStudentList();
 function renderStudentList(){
-  $("studentList").innerHTML = students.length ? "" : "<p class='muted'>Belum ada data santri.</p>";
+  $("studentList").innerHTML = students.length
+    ? ""
+    : "<p class='muted'>Belum ada data santri.</p>";
 
   students.forEach(s => {
     const r = document.createElement("div");
@@ -79,42 +81,49 @@ function renderStudentList(){
     `;
 
     if (isAdmin()) {
-      r.querySelector(".edit-btn").onclick = async () => {
-        const newName = prompt("Ubah nama santri:", s.name);
-        if (newName === null) return;
-        if (!newName.trim()) {
-          alert("Nama santri tidak boleh kosong.");
-          return;
-        }
+      r.querySelector(".edit-btn").onclick = () => {
+        r.innerHTML = `
+          <div style="width:100%">
+            <label>Nama Santri</label>
+            <input class="edit-name" value="${esc(s.name)}">
 
-        const classOptions = classes.map((c, i) =>
-          `${i + 1}. ${c.name}`
-        ).join("\n");
+            <label>Kelas</label>
+            <select class="edit-class">
+              ${classes.map(c => `
+                <option value="${c.id}" ${c.id === s.classId ? "selected" : ""}>
+                  ${esc(c.name)}
+                </option>
+              `).join("")}
+            </select>
 
-        const choice = prompt(
-          "Pilih nomor kelas:\n" + classOptions,
-          String(classes.findIndex(c => c.id === s.classId) + 1)
-        );
+            <button class="edit-save">Simpan</button>
+            <button class="secondary edit-cancel">Batal</button>
+          </div>
+        `;
 
-        if (choice === null) return;
+        r.querySelector(".edit-cancel").onclick = () => renderStudentList();
 
-        const selected = classes[Number(choice) - 1];
-        if (!selected) {
-          alert("Nomor kelas tidak valid.");
-          return;
-        }
+        r.querySelector(".edit-save").onclick = async () => {
+          const name = r.querySelector(".edit-name").value.trim();
+          const classId = r.querySelector(".edit-class").value;
 
-        try {
-          await updateDoc(doc(db, "students", s.id), {
-            name: newName.trim(),
-            classId: selected.id
-          });
+          if (!name) {
+            alert("Nama santri tidak boleh kosong.");
+            return;
+          }
 
-          alert("Data santri berhasil diperbarui.");
-          await loadStudents();
-        } catch (e) {
-          alert("Gagal memperbarui data: " + e.message);
-        }
+          try {
+            await updateDoc(doc(db, "students", s.id), {
+              name,
+              classId
+            });
+
+            alert("Data santri berhasil diperbarui.");
+            await loadStudents();
+          } catch (e) {
+            alert("Gagal memperbarui data: " + e.message);
+          }
+        };
       };
 
       r.querySelector(".delete-btn").onclick = async () => {
@@ -126,7 +135,7 @@ function renderStudentList(){
 
     $("studentList").append(r);
   });
-}}
+}
 function esc(s=""){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 async function importDeleteStudent(id){const {deleteDoc}=await import("https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js");await deleteDoc(doc(db,"students",id));await loadStudents();}
 $("addStudentBtn").onclick=async()=>{const name=$("studentName").value.trim(),classId=$("studentClass").value;if(!name)return msg("studentMsg","Masukkan nama santri.",true);try{await addDoc(collection(db,"students"),{name,classId,createdAt:serverTimestamp()});$("studentName").value="";msg("studentMsg","Santri berhasil ditambahkan.");await loadStudents();}catch(e){msg("studentMsg",e.message,true)}};
