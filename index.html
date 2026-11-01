@@ -35,10 +35,42 @@
       </div>
 
       <nav class="tabs">
-        <button class="tab active" data-tab="attendancePanel">Absensi</button>
-        <button class="tab" data-tab="studentsPanel">Santri</button>
-        <button class="tab" data-tab="reportsPanel">Rekap</button>
-      </nav>
+  <button class="tab active" data-tab="dashboardPanel">Dashboard</button>
+  <button class="tab" data-tab="attendancePanel">Absensi</button>
+  <button class="tab" data-tab="studentsPanel">Santri</button>
+  <button class="tab" data-tab="reportsPanel">Rekap</button>
+      </nav><section id="dashboardPanel" class="panel">
+  <div class="card">
+    <h2>Dashboard Madin</h2>
+    <p class="muted">Ringkasan data santri Madin Kaligintung.</p>
+
+    <div class="summary-grid">
+      <div class="stat">
+        <strong id="dashTotalStudents">0</strong>
+        <span>Total Santri</span>
+      </div>
+      <div class="stat">
+        <strong id="dashTotalClasses">6</strong>
+        <span>Jumlah Kelas</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Jumlah Santri per Kelas</h2>
+    <div id="dashClassStats"></div>
+  </div>
+
+  <div class="card">
+    <h2>Absensi Hari Ini</h2>
+    <div class="summary-grid">
+      <div class="stat"><strong id="dashHadir">0</strong><span>Hadir</span></div>
+      <div class="stat"><strong id="dashIzin">0</strong><span>Izin</span></div>
+      <div class="stat"><strong id="dashSakit">0</strong><span>Sakit</span></div>
+      <div class="stat"><strong id="dashAlpa">0</strong><span>Alpa</span></div>
+    </div>
+  </div>
+      </section>
 
       <section id="attendancePanel" class="panel">
         <div class="card">
