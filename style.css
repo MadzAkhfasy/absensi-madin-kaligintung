@@ -20,3 +20,149 @@ button:disabled{opacity:.5;cursor:not-allowed}.primary{background:var(--green);c
 .table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:13px}th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}th{background:#f4f8f5}
 footer{text-align:center;color:#819087;font-size:12px;padding:20px}
 @media(max-width:560px){main{margin:14px auto}.card{padding:16px}.welcome{align-items:flex-start;gap:8px}.today-pill{font-size:10px}.summary-grid{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.row{flex-direction:column}.status-select{width:112px}}
+/* =================================
+   DESAIN MODERN MADIN KALIGINTUNG
+================================= */
+
+:root {
+  --hijau: #145c42;
+  --hijau-tua: #0b3d2e;
+  --hijau-muda: #eaf4ee;
+  --emas: #d5ad52;
+  --putih: #ffffff;
+  --teks: #26352d;
+  --abu: #f4f7f5;
+}
+
+body {
+  background: var(--abu);
+  color: var(--teks);
+  font-family: "Segoe UI", Arial, sans-serif;
+  line-height: 1.6;
+}
+
+header, .topbar {
+  background: linear-gradient(135deg, var(--hijau-tua), var(--hijau));
+  color: white;
+  border-bottom: 4px solid var(--emas);
+  padding: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,.12);
+}
+
+header strong, .topbar strong {
+  color: white;
+  letter-spacing: .5px;
+}
+
+header small, .topbar small {
+  color: #e7d5a5;
+}
+
+main {
+  padding: 16px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+section, .card, .panel {
+  background: white;
+  border-radius: 15px;
+  padding: 18px;
+  margin-bottom: 16px;
+  border: 1px solid #e5ece7;
+  box-shadow: 0 3px 12px rgba(0,0,0,.05);
+}
+
+h1, h2, h3 {
+  color: var(--hijau-tua);
+}
+
+button {
+  background: var(--hijau);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .2s;
+}
+
+button:hover {
+  background: var(--hijau-tua);
+}
+
+input, select, textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 12px;
+  border: 1px solid #d5e0d8;
+  border-radius: 9px;
+  background: white;
+  color: var(--teks);
+  margin-top: 5px;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--hijau);
+  box-shadow: 0 0 0 3px rgba(20,92,66,.10);
+}
+
+nav, .tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+nav button, .tabs button {
+  border-radius: 10px;
+  background: #e5eee8;
+  color: var(--hijau-tua);
+}
+
+nav button:hover, .tabs button:hover {
+  background: var(--hijau);
+  color: white;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+th {
+  background: var(--hijau);
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+
+td {
+  padding: 11px;
+  border-bottom: 1px solid #e7eee9;
+}
+
+tr:nth-child(even) {
+  background: #f5f9f6;
+}
+
+ul {
+  padding-left: 20px;
+}
+
+li {
+  margin-bottom: 7px;
+}
+
+img {
+  max-width: 100%;
+}
+
+#authView, #appView
