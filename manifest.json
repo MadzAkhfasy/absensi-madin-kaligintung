@@ -2,8 +2,17 @@
   "name": "Absensi Madin Kaligintung",
   "short_name": "Absensi Madin",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#f4f7f5",
   "theme_color": "#176b45",
-  "description": "Aplikasi absensi santri Madin Kaligintung"
+  "description": "Aplikasi absensi santri Madin Kaligintung",
+  "icons": [
+    {
+      "src": "./LOGO%20MADIN%20REMOVE%20BG.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
 }
