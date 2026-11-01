@@ -60,11 +60,73 @@ async function loadStudents(){
  let qy=isAdmin()?collection(db,"students"):query(collection(db,"students"),where("classId","==",myClass()));
  const snap=await getDocs(qy);students=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.name.localeCompare(b.name));
  renderStudentList();
-}
 function renderStudentList(){
- $("studentList").innerHTML=students.length?"":"<p class='muted'>Belum ada data santri.</p>";
- students.forEach(s=>{const r=document.createElement("div");r.className="list-row";r.innerHTML=`<div class="grow"><strong>${esc(s.name)}</strong><small>${esc(clsName(s.classId))}</small></div>${isAdmin()?'<button class="secondary">Hapus</button>':''}`;if(isAdmin())r.querySelector("button").onclick=async()=>{if(confirm("Hapus data "+s.name+"?")){await importDeleteStudent(s.id);}};$("studentList").append(r);});
-}
+  $("studentList").innerHTML = students.length ? "" : "<p class='muted'>Belum ada data santri.</p>";
+
+  students.forEach(s => {
+    const r = document.createElement("div");
+    r.className = "list-row";
+
+    r.innerHTML = `
+      <div class="grow">
+        <strong>${esc(s.name)}</strong>
+        <small>${esc(clsName(s.classId))}</small>
+      </div>
+      ${isAdmin() ? `
+        <button class="secondary edit-btn">Edit</button>
+        <button class="secondary delete-btn">Hapus</button>
+      ` : ""}
+    `;
+
+    if (isAdmin()) {
+      r.querySelector(".edit-btn").onclick = async () => {
+        const newName = prompt("Ubah nama santri:", s.name);
+        if (newName === null) return;
+        if (!newName.trim()) {
+          alert("Nama santri tidak boleh kosong.");
+          return;
+        }
+
+        const classOptions = classes.map((c, i) =>
+          `${i + 1}. ${c.name}`
+        ).join("\n");
+
+        const choice = prompt(
+          "Pilih nomor kelas:\n" + classOptions,
+          String(classes.findIndex(c => c.id === s.classId) + 1)
+        );
+
+        if (choice === null) return;
+
+        const selected = classes[Number(choice) - 1];
+        if (!selected) {
+          alert("Nomor kelas tidak valid.");
+          return;
+        }
+
+        try {
+          await updateDoc(doc(db, "students", s.id), {
+            name: newName.trim(),
+            classId: selected.id
+          });
+
+          alert("Data santri berhasil diperbarui.");
+          await loadStudents();
+        } catch (e) {
+          alert("Gagal memperbarui data: " + e.message);
+        }
+      };
+
+      r.querySelector(".delete-btn").onclick = async () => {
+        if (confirm("Hapus data " + s.name + "?")) {
+          await importDeleteStudent(s.id);
+        }
+      };
+    }
+
+    $("studentList").append(r);
+  });
+}}
 function esc(s=""){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 async function importDeleteStudent(id){const {deleteDoc}=await import("https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js");await deleteDoc(doc(db,"students",id));await loadStudents();}
 $("addStudentBtn").onclick=async()=>{const name=$("studentName").value.trim(),classId=$("studentClass").value;if(!name)return msg("studentMsg","Masukkan nama santri.",true);try{await addDoc(collection(db,"students"),{name,classId,createdAt:serverTimestamp()});$("studentName").value="";msg("studentMsg","Santri berhasil ditambahkan.");await loadStudents();}catch(e){msg("studentMsg",e.message,true)}};
