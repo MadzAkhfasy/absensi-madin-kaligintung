@@ -119,5 +119,15 @@
 
   <footer>Madrasah Diniyah Kaligintung · Absensi Santri</footer>
   <script type="module" src="app.js"></script>
+  
+  <script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js")
+      .then(() => console.log("Service Worker aktif"))
+      .catch(error => console.log("Service Worker gagal:", error));
+  });
+}
+  </script>
 </body>
 </html>
