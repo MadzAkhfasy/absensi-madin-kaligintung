@@ -59,7 +59,7 @@ function selectedClass(){return isAdmin()?$("attendanceClass").value:myClass();}
 async function loadStudents(){
  let qy=isAdmin()?collection(db,"students"):query(collection(db,"students"),where("classId","==",myClass()));
  const snap=await getDocs(qy);students=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.name.localeCompare(b.name));
- renderStudentList();
+ renderStudentList();}
 function renderStudentList(){
   $("studentList").innerHTML = students.length
     ? ""
