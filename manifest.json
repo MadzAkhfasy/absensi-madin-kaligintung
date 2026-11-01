@@ -9,8 +9,14 @@
   "description": "Aplikasi absensi santri Madin Kaligintung",
   "icons": [
     {
-      "src": "./LOGO%20MADIN%20REMOVE%20BG.png",
-      "sizes": "any",
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     }
