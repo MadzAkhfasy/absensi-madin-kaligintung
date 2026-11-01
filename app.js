@@ -197,7 +197,7 @@ importFile.onchange = async () => {
   }
 
   importFile.value = "";
-  
+};
   // DASHBOARD MADIN
 async function renderDashboard() {
   if (!currentUser || !profile) return;
