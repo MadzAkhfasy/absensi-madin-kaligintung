@@ -369,3 +369,44 @@ footer {
     padding: 14px 8px;
   }
    }
+/* HEADER HIJAU BOTOL */
+.topbar {
+  background: linear-gradient(120deg, #0b3d2e, #176b45);
+  color: #ffffff;
+  border-top: 3px solid #c9a64f;
+  border-bottom: 2px solid #c9a64f;
+  box-shadow: 0 4px 14px rgba(11, 61, 46, .16);
+}
+
+.topbar strong {
+  color: #ffffff;
+}
+
+.topbar small {
+  color: #e5eee8;
+}
+
+/* NAVIGASI HIJAU */
+.tabs {
+  background: #104b32;
+  padding: 7px;
+  border-radius: 12px;
+}
+
+.tab {
+  color: #ffffff;
+  background: transparent;
+}
+
+.tab.active {
+  background: #ffffff;
+  color: #104b32;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, .15);
+}
+
+/* TOMBOL KELUAR */
+.topbar .outline {
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  background: transparent;
+}
