@@ -42,7 +42,7 @@ onAuthStateChanged(auth,async user=>{
   $("attendanceClassWrap").classList.toggle("hidden",!isAdmin());
   $("reportClassWrap").classList.toggle("hidden",!isAdmin());
   if(!isAdmin()&&!myClass()){$("attendanceList").innerHTML='<p class="muted">Akun Anda belum diberi kelas. Hubungi admin Madin.</p>';$("saveAttendanceBtn").classList.add("hidden");}
-  await fillClassSelects();await loadStudents();await renderAttendance();
+  await fillClassSelects();await loadStudents();await renderAttendance();await renderDashboard();
  }catch(e){console.error(e);alert("Gagal memuat data: "+e.message);}
 });
 
@@ -188,7 +188,47 @@ importFile.onchange = async () => {
 
       existing.add(key);
       added++;
-    }
+    }// DASHBOARD MADIN
+async function renderDashboard() {
+  if (!currentUser || !profile) return;
+
+  $("dashTotalStudents").textContent = students.length;
+  $("dashTotalClasses").textContent = isAdmin() ? classes.length : 1;
+
+  const classStats = isAdmin()
+    ? classes
+    : classes.filter(c => c.id === myClass());
+
+  $("dashClassStats").innerHTML = classStats.map(c => {
+    const total = students.filter(s => s.classId === c.id).length;
+    return `
+      <div class="list-item">
+        <span>${esc(c.name)}</span>
+        <strong>${total} santri</strong>
+      </div>
+    `;
+  }).join("");
+
+  const attendanceSnap = await getDocs(
+    query(
+      collection(db, "attendance"),
+      where("date", "==", today)
+    )
+  );
+
+  const records = attendanceSnap.docs
+    .map(d => d.data())
+    .filter(r => isAdmin() || r.classId === myClass());
+
+  $("dashHadir").textContent =
+    records.filter(r => r.status === "Hadir").length;
+  $("dashIzin").textContent =
+    records.filter(r => r.status === "Izin").length;
+  $("dashSakit").textContent =
+    records.filter(r => r.status === "Sakit").length;
+  $("dashAlpa").textContent =
+    records.filter(r => r.status === "Alpa").length;
+}
 
     await loadStudents();
     msg("studentMsg", `Impor selesai: ${added} ditambahkan, ${skipped} dilewati.`);
