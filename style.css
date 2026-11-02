@@ -567,3 +567,52 @@ main {
     font-size: 12px;
   }
 }
+/* TABEL DATA SANTRI DAN ABSENSI */
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+th {
+  background: linear-gradient(120deg, #104b32, #176b45);
+  color: #ffffff;
+  padding: 13px 12px;
+  font-weight: 700;
+  border: none;
+}
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid #e8eee9;
+  color: #34483b;
+}
+
+tbody tr:nth-child(even) {
+  background: #f1f7f3;
+}
+
+tbody tr:hover {
+  background: #e5f1e9;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* TABEL NYAMAN DI HP */
+
+@media (max-width: 560px) {
+  table {
+    font-size: 12px;
+  }
+
+  th, td {
+    padding: 10px 8px;
+    white-space: nowrap;
+  }
+}
