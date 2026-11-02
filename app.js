@@ -200,7 +200,120 @@ function renderStudentList() {
 
 </div>
 `;
+r.querySelector(".history-btn").onclick = async () => {
+  r.innerHTML = `
+    <div style="width:100%;text-align:center;padding:15px;">
+      <h3>Memuat Riwayat Absensi...</h3>
+    </div>
+  `;
 
+  try {
+    const snap = await getDocs(
+      query(
+        collection(db, "attendance"),
+        where("studentId", "==", s.id)
+      )
+    );
+
+    const records = snap.docs
+      .map(d => d.data())
+      .sort((a, b) => b.date.localeCompare(a.date));
+
+    const count = Object.fromEntries(
+      STATUSES.map(st => [
+        st,
+        records.filter(a => a.status === st).length
+      ])
+    );
+
+    const total = records.length;
+    const persen = total
+      ? Math.round(count.Hadir / total * 100)
+      : 0;
+
+    const formatTanggal = date => {
+      if (!date) return "-";
+      return new Date(date + "T00:00:00").toLocaleDateString("id-ID", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      });
+    };
+
+    const warna = {
+      Hadir: "#15803d",
+      Izin: "#2563eb",
+      Sakit: "#d97706",
+      Alpa: "#dc2626"
+    };
+
+    r.innerHTML = `
+      <div style="width:100%;">
+
+        <div style="text-align:center;padding:12px;">
+          ${
+            s.photoUrl
+              ? `<img src="${esc(s.photoUrl)}"
+                  style="width:85px;height:85px;object-fit:cover;border-radius:50%;">`
+              : ""
+          }
+          <h3 style="margin:8px 0 3px;">${esc(s.name)}</h3>
+          <span class="muted">${esc(clsName(s.classId))}</span>
+        </div>
+
+        <h3 style="margin:12px 0;">Ringkasan Kehadiran</h3>
+
+        <div class="history-summary">
+          ${STATUSES.map(st => `
+            <div class="history-stat" style="border-top:4px solid ${warna[st]};">
+              <strong>${count[st]}</strong>
+              <span>${st}</span>
+            </div>
+          `).join("")}
+        </div>
+
+        <div class="history-percent">
+          <strong>${persen}%</strong>
+          <span>Persentase Kehadiran</span>
+        </div>
+
+        <h3 style="margin:18px 0 10px;">Riwayat Per Pertemuan</h3>
+
+        ${
+          records.length
+            ? `<div class="history-list">
+                ${records.map(a => `
+                  <div class="history-item">
+                    <div>
+                      <strong>${formatTanggal(a.date)}</strong>
+                    </div>
+                    <span style="background:${warna[a.status] || "#64748b"};">
+                      ${esc(a.status || "-")}
+                    </span>
+                  </div>
+                `).join("")}
+              </div>`
+            : `<p class="muted" style="text-align:center;padding:20px;">
+                Belum ada riwayat absensi.
+              </p>`
+        }
+
+        <button type="button" class="secondary history-back"
+          style="width:100%;margin-top:18px;">
+          Kembali
+        </button>
+
+      </div>
+    `;
+
+    r.querySelector(".history-back").onclick = renderStudentList;
+
+  } catch (e) {
+    showToast("Gagal memuat riwayat: " + e.message);
+    renderStudentList();
+  }
+};
     r.querySelector(".biodata-btn").onclick = () => {
       const tanggalLahir = s.birthdate
         ? new Date(s.birthdate + "T00:00:00").toLocaleDateString("id-ID", {
