@@ -85,7 +85,18 @@ async function fillClassSelects() {
       el.append(o);
     });
   }
+const filter = $("studentFilterClass");
 
+if (filter) {
+  filter.innerHTML = '<option value="">Semua Kelas</option>';
+
+  classes.forEach(c => {
+    const option = document.createElement("option");
+    option.value = c.id;
+    option.textContent = c.name;
+    filter.append(option);
+  });
+}
   if (!isAdmin() && myClass()) {
     $("attendanceClassName").textContent = clsName(myClass());
   }
