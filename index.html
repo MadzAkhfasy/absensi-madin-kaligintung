@@ -89,10 +89,57 @@
           <h2>Data santri</h2>
           <p class="muted">Data santri dikelola oleh admin.</p>
           <div id="studentAdminForm" class="hidden">
-            <label>Nama santri<input id="studentName" placeholder="Nama lengkap santri"></label>
-            <label>Kelas<select id="studentClass"></select></label>
-            <button id="addStudentBtn" class="primary full">Tambah santri</button>
-            <div id="studentMsg" class="message"></div>
+  <h3>Tambah Biodata Santri</h3>
+
+  <label>Nama Lengkap
+    <input id="studentName" placeholder="Nama lengkap santri" required>
+  </label>
+
+  <label>Kelas
+    <select id="studentClass"></select>
+  </label>
+
+  <label>NIS / Nomor Induk
+    <input id="studentNis" placeholder="Nomor induk santri">
+  </label>
+
+  <label>Jenis Kelamin
+    <select id="studentGender">
+      <option value="">Pilih jenis kelamin</option>
+      <option value="Laki-laki">Laki-laki</option>
+      <option value="Perempuan">Perempuan</option>
+    </select>
+  </label>
+
+  <label>Tempat Lahir
+    <input id="studentBirthplace" placeholder="Kota/kabupaten">
+  </label>
+
+  <label>Tanggal Lahir
+    <input id="studentBirthdate" type="date">
+  </label>
+
+  <label>Alamat
+    <textarea id="studentAddress" rows="2" placeholder="Alamat lengkap"></textarea>
+  </label>
+
+  <label>Nama Ayah
+    <input id="studentFather" placeholder="Nama ayah">
+  </label>
+
+  <label>Nama Ibu
+    <input id="studentMother" placeholder="Nama ibu">
+  </label>
+
+  <label>Nomor HP Wali Santri
+    <input id="studentPhone" type="tel" placeholder="08xxxxxxxxxx">
+  </label>
+
+  <button id="addStudentBtn" class="primary full">
+    Simpan Biodata Santri
+  </button>
+
+  <p id="studentMsg"></p>
           </div>
           <div class="student-tools">
   <label>
