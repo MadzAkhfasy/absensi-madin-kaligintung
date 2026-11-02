@@ -90,7 +90,7 @@ async function fillClassSelects() {
     $("attendanceClassName").textContent = clsName(myClass());
   }
 }
-}
+
 function selectedClass(){return isAdmin()?$("attendanceClass").value:myClass();}
 async function loadStudents(){
  let qy=isAdmin()?collection(db,"students"):query(collection(db,"students"),where("classId","==",myClass()));
@@ -363,8 +363,8 @@ async function loadReport() {
   } catch (e) {
     msg("reportMsg", e.message, true);
   }
-}
-}$("exportBtn").onclick = () => {
+} 
+$("exportBtn").onclick = () => {
   const csv = [
     [
       "Kelas",
