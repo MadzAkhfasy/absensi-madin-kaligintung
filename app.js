@@ -66,9 +66,30 @@ async function loadClasses(){
  if(isAdmin()&&classes.length===0){for(let i=0;i<CLASS_NAMES.length;i++)await setDoc(doc(db,"classes","kelas"+(i+1)),{name:CLASS_NAMES[i],order:i+1});const s=await getDocs(collection(db,"classes"));classes=s.docs.map(d=>({id:d.id,...d.data()}));}
  classes.sort((a,b)=>(a.order||0)-(b.order||0));
 }
-async function fillClassSelects(){
- for(const id of ["attendanceClass","studentClass","reportClass"]){const el=$(id);el.innerHTML="";classes.forEach(c=>{const o=document.createElement("option");o.value=c.id;o.textContent=c.name;el.append(o);});}
- if(!isAdmin()&&myClass()){$("attendanceClassName").textContent=clsName(myClass());}
+async function fillClassSelects() {
+  for (const id of ["attendanceClass", "studentClass", "reportClass"]) {
+    const el = $(id);
+    el.innerHTML = "";
+
+    if (id === "reportClass" && isAdmin()) {
+      const all = document.createElement("option");
+      all.value = "__all__";
+      all.textContent = "Semua Kelas";
+      el.append(all);
+    }
+
+    classes.forEach(c => {
+      const o = document.createElement("option");
+      o.value = c.id;
+      o.textContent = c.name;
+      el.append(o);
+    });
+  }
+
+  if (!isAdmin() && myClass()) {
+    $("attendanceClassName").textContent = clsName(myClass());
+  }
+}
 }
 function selectedClass(){return isAdmin()?$("attendanceClass").value:myClass();}
 async function loadStudents(){
@@ -179,32 +200,212 @@ $("saveAttendanceBtn").onclick=async()=>{
 
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("hidden",x.id!==b.dataset.tab));if(b.dataset.tab==="studentsPanel")loadStudents();});
 $("loadReportBtn").onclick=loadReport;
-async function loadReport(){
- const month=$("reportMonth").value,classId=isAdmin()?$("reportClass").value:myClass();if(!classId)return msg("reportMsg","Akun belum memiliki kelas.",true);
- const start=month+"-01",end=month+"-31";
- try{
-  const [ss,aa]=await Promise.all([getDocs(query(collection(db,"students"),where("classId","==",classId))),getDocs(query(collection(db,"attendance"),where("classId","==",classId),where("date",">=",start),where("date","<=",end)))]);
-  const att=aa.docs.map(d=>d.data());
-  const meetingCount=new Set(att.map(a=>a.date)).size;
-  const counts=Object.fromEntries(STATUSES.map(s=>[s,att.filter(a=>a.status===s).length]));
-  $("reportSummary").innerHTML=STATUSES.map(s=>`<div class="stat"><strong>${counts[s]}</strong><span>${s}</span></div>`).join("")+`<div class="stat"><strong>${meetingCount}</strong><span>Hari pertemuan</span></div>`;
-  const rows=ss.docs.map(d=>{
-   const s=d.data(),mine=att.filter(a=>a.studentId===d.id);
-   const Hadir=mine.filter(a=>a.status==="Hadir").length;
-   const Izin=mine.filter(a=>a.status==="Izin").length;
-   const Sakit=mine.filter(a=>a.status==="Sakit").length;
-   const Alpa=mine.filter(a=>a.status==="Alpa").length;
-   const total=Hadir+Izin+Sakit+Alpa;
-   const persen=meetingCount?Math.round(Hadir/meetingCount*100):0;
-   return {name:s.name,Hadir,Izin,Sakit,Alpa,total,Persentase:persen};
-  }).sort((a,b)=>a.name.localeCompare(b.name));
-  reportRows=rows;reportMonthValue=month;reportClassValue=clsName(classId);
-  $("reportTable").innerHTML=`<table><thead><tr><th>Nama santri</th><th>Hadir</th><th>Izin</th><th>Sakit</th><th>Alpa</th><th>Total tercatat</th><th>Kehadiran</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${esc(r.name)}</td><td>${r.Hadir}</td><td>${r.Izin}</td><td>${r.Sakit}</td><td>${r.Alpa}</td><td>${r.total}</td><td><strong>${r.Persentase}%</strong></td></tr>`).join("")}</tbody></table><p class="muted">Persentase = jumlah Hadir ÷ jumlah hari absensi yang tersimpan (${meetingCount} hari) × 100%.</p>`;
-  $("exportBtn").classList.remove("hidden");msg("reportMsg",`Rekap ${month} · ${clsName(classId)} berhasil dimuat. ${meetingCount} hari absensi tercatat.`);
- }catch(e){msg("reportMsg",e.message,true)}
+async function loadReport() {
+  const month = $("reportMonth").value;
+  const selected = isAdmin()
+    ? $("reportClass").value
+    : myClass();
+
+  const allClasses = isAdmin() && selected === "__all__";
+  const classId = allClasses ? null : selected;
+
+  if (!allClasses && !classId) {
+    return msg("reportMsg", "Akun belum memiliki kelas.", true);
+  }
+
+  const start = month + "-01";
+  const end = month + "-31";
+
+  try {
+    const studentQuery = allClasses
+      ? getDocs(collection(db, "students"))
+      : getDocs(query(
+          collection(db, "students"),
+          where("classId", "==", classId)
+        ));
+
+    const attendanceQuery = allClasses
+      ? getDocs(query(
+          collection(db, "attendance"),
+          where("date", ">=", start),
+          where("date", "<=", end)
+        ))
+      : getDocs(query(
+          collection(db, "attendance"),
+          where("classId", "==", classId),
+          where("date", ">=", start),
+          where("date", "<=", end)
+        ));
+
+    const [ss, aa] = await Promise.all([
+      studentQuery,
+      attendanceQuery
+    ]);
+
+    const att = aa.docs.map(d => d.data());
+
+    const meetingCount = allClasses
+      ? new Set(att.map(a => a.classId + "|" + a.date)).size
+      : new Set(att.map(a => a.date)).size;
+
+    const counts = Object.fromEntries(
+      STATUSES.map(st => [
+        st,
+        att.filter(a => a.status === st).length
+      ])
+    );
+
+    $("reportSummary").innerHTML =
+      STATUSES.map(st => `
+        <div class="stat">
+          <strong>${counts[st]}</strong>
+          <span>${st}</span>
+        </div>
+      `).join("") + `
+        <div class="stat">
+          <strong>${meetingCount}</strong>
+          <span>Hari pertemuan</span>
+        </div>
+      `;
+
+    const rows = ss.docs.map(d => {
+      const s = d.data();
+
+      const mine = att.filter(a => a.studentId === d.id);
+
+      const Hadir = mine.filter(a => a.status === "Hadir").length;
+      const Izin = mine.filter(a => a.status === "Izin").length;
+      const Sakit = mine.filter(a => a.status === "Sakit").length;
+      const Alpa = mine.filter(a => a.status === "Alpa").length;
+
+      const total = Hadir + Izin + Sakit + Alpa;
+
+      const studentMeetingCount = allClasses
+        ? new Set(
+            att
+              .filter(a => a.classId === s.classId)
+              .map(a => a.date)
+          ).size
+        : meetingCount;
+
+      const persen = studentMeetingCount
+        ? Math.round(Hadir / studentMeetingCount * 100)
+        : 0;
+
+      return {
+        name: s.name,
+        className: clsName(s.classId),
+        Hadir,
+        Izin,
+        Sakit,
+        Alpa,
+        total,
+        Persentase: persen
+      };
+
+    }).sort((a, b) =>
+      a.className.localeCompare(b.className) ||
+      a.name.localeCompare(b.name)
+    );
+
+    reportRows = rows;
+    reportMonthValue = month;
+    reportClassValue = allClasses
+      ? "Semua Kelas"
+      : clsName(classId);
+
+    $("reportTable").innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            ${allClasses ? "<th>Kelas</th>" : ""}
+            <th>Nama Santri</th>
+            <th>Hadir</th>
+            <th>Izin</th>
+            <th>Sakit</th>
+            <th>Alpa</th>
+            <th>Total</th>
+            <th>Kehadiran</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          ${rows.map(r => `
+            <tr>
+              ${allClasses
+                ? `<td>${esc(r.className)}</td>`
+                : ""}
+              <td>${esc(r.name)}</td>
+              <td>${r.Hadir}</td>
+              <td>${r.Izin}</td>
+              <td>${r.Sakit}</td>
+              <td>${r.Alpa}</td>
+              <td>${r.total}</td>
+              <td><strong>${r.Persentase}%</strong></td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+
+      <p class="muted">
+        Persentase dihitung berdasarkan hari absensi
+        yang tercatat pada kelas masing-masing.
+      </p>
+    `;
+
+    $("exportBtn").classList.remove("hidden");
+
+    msg(
+      "reportMsg",
+      `Rekap ${month} · ${reportClassValue} berhasil dimuat. ${rows.length} santri.`
+    );
+
+  } catch (e) {
+    msg("reportMsg", e.message, true);
+  }
 }
-$("exportBtn").onclick=()=>{const csv=["Nama Santri,Hadir,Izin,Sakit,Alpa,Total Tercatat,Persentase Kehadiran",...reportRows.map(r=>[r.name,r.Hadir,r.Izin,r.Sakit,r.Alpa,r.total,r.Persentase+"%"].map(v=>'"'+String(v).replaceAll('"','""')+'"').join(","))].join("\r\n");const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="rekap-absensi-madin.csv";a.click();URL.revokeObjectURL(a.href);};
-if("serviceWorker" in navigator)navigator.serviceWorker.register("./sw.js").catch(console.warn);
+}$("exportBtn").onclick = () => {
+  const csv = [
+    [
+      "Kelas",
+      "Nama Santri",
+      "Hadir",
+      "Izin",
+      "Sakit",
+      "Alpa",
+      "Total Tercatat",
+      "Persentase Kehadiran"
+    ],
+
+    ...reportRows.map(r => [
+      r.className,
+      r.name,
+      r.Hadir,
+      r.Izin,
+      r.Sakit,
+      r.Alpa,
+      r.total,
+      r.Persentase + "%"
+    ])
+
+  ].map(row =>
+    row.map(v =>
+      '"' + String(v).replaceAll('"', '""') + '"'
+    ).join(",")
+  ).join("\r\n");
+
+  const blob = new Blob(
+    ["\ufeff" + csv],
+    { type: "text/csv;charset=utf-8" }
+  );
+
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "rekap-absensi-madin-semua-kelas.csv";
+  a.click();
+
+  URL.revokeObjectURL(a.href);
+};
 
 
 // Cetak laporan bulanan; pada Android pengguna dapat memilih "Save as PDF".
@@ -212,7 +413,19 @@ $("printReportBtn").onclick=()=>{
  if(!reportRows.length){msg("reportMsg","Tampilkan rekap terlebih dahulu sebelum mencetak.",true);return;}
  const title="Laporan Absensi Bulanan";
  const totals=Object.fromEntries(STATUSES.map(st=>[st,reportRows.reduce((n,r)=>n+r[st],0)]));
- const rows=reportRows.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.name)}</td><td>${r.Hadir}</td><td>${r.Izin}</td><td>${r.Sakit}</td><td>${r.Alpa}</td><td>${r.total}</td><td>${r.Persentase}%</td></tr>`).join("");
+ const rows = reportRows.map((r, i) => `
+  <tr>
+    <td>${i + 1}</td>
+    <td>${esc(r.className)}</td>
+    <td>${esc(r.name)}</td>
+    <td>${r.Hadir}</td>
+    <td>${r.Izin}</td>
+    <td>${r.Sakit}</td>
+    <td>${r.Alpa}</td>
+    <td>${r.total}</td>
+    <td>${r.Persentase}%</td>
+  </tr>
+`).join("");
  const html=`<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} - ${esc(reportClassValue)}</title><style>body{font-family:Arial,sans-serif;color:#17251d;margin:24px}h1{text-align:center;font-size:20px;margin:0 0 4px}.sub{text-align:center;margin:0 0 22px;font-size:13px}.meta{margin:12px 0 18px;font-size:13px}.stats{display:flex;gap:8px;margin-bottom:18px}.stat{border:1px solid #999;padding:9px 12px;flex:1;text-align:center}.stat b{display:block;font-size:18px}.stat span{font-size:11px}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border:1px solid #777;padding:8px;text-align:center}th{background:#eee}td:nth-child(2),th:nth-child(2){text-align:left}.sign{display:flex;justify-content:space-between;margin-top:55px;text-align:center;font-size:12px}.sign div{width:40%}.sign strong{display:block;margin-top:65px;text-decoration:underline}.note{font-size:10px;margin-top:24px;color:#555}@media print{body{margin:12mm}@page{size:A4 portrait;margin:12mm}.no-print{display:none}}</style></head><body><h1>MADRASAH DINIYAH KALIGINTUNG</h1><p class="sub">LAPORAN ABSENSI SANTRI</p><div class="meta"><b>Kelas:</b> ${esc(reportClassValue)}<br><b>Bulan:</b> ${esc(reportMonthValue)}</div><div class="stats">${STATUSES.map(st=>`<div class="stat"><b>${totals[st]}</b><span>${st}</span></div>`).join("")}</div><table><thead><tr><th>No.</th><th>Nama Santri</th><th>Hadir</th><th>Izin</th><th>Sakit</th><th>Alpa</th><th>Total</th><th>Kehadiran</th></tr></thead><tbody>${rows}</tbody></table><div class="sign"><div>Mengetahui,<br>Pengurus Madin<strong>(__________________)</strong></div><div>Kaligintung, ....................<br>Admin Absensi<strong>(__________________)</strong></div></div><p class="note">Dicetak dari Aplikasi Absensi Madin Kaligintung.</p><script>window.onload=()=>setTimeout(()=>window.print(),400);</script></body></html>`;
  const w=window.open("","_blank");if(!w){msg("reportMsg","Jendela cetak diblokir. Izinkan pop-up untuk situs ini, lalu coba lagi.",true);return;}w.document.open();w.document.write(html);w.document.close();};
 // FITUR IMPOR DATA SANTRI CSV
