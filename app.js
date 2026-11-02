@@ -518,10 +518,12 @@ $("addStudentBtn").onclick=async()=>{
     ["studentName","studentNis","studentBirthplace","studentBirthdate","studentAddress","studentFather","studentMother","studentPhone"].forEach(id=>$(id).value="");
     $("studentGender").value="";
     if($("studentPhoto")) $("studentPhoto").value="";
-    msg("studentMsg","Biodata santri berhasil disimpan.");
-    await loadStudents();
+    msg("studentMsg", "");
+showToast("✓ Biodata santri berhasil disimpan!");
+await loadStudents();
   }catch(e){
     msg("studentMsg",e.message,true);
+    showToast("✕ Gagal menyimpan: " + e.message, true);
   }
 };
 
