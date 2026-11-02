@@ -135,11 +135,11 @@ function renderStudentList() {
         <strong>${esc(s.name)}</strong>
         <small>${esc(clsName(s.classId))}</small>
       </div>
-      ${isAdmin() ? `
-        <button class="secondary edit-btn">Edit</button>
-        <button class="secondary delete-btn">Hapus</button>
-      ` : ""}
-    `;
+      <button class="secondary history-btn">Riwayat</button>
+${isAdmin() ? `
+  <button class="secondary edit-btn">Edit</button>
+  <button class="secondary delete-btn">Hapus</button>
+` : ""}
 
     if (isAdmin()) {
       r.querySelector(".edit-btn").onclick = () => {
