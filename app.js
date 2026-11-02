@@ -534,6 +534,12 @@ async function renderAttendance(){
  const list=students.filter(s=>s.classId===classId);
  $("attendanceClassName").textContent=clsName(classId);
  const date=$("attendanceDate").value;
+  if (new Date(date + "T00:00:00").getDay() === 0) {
+  $("attendanceList").innerHTML =
+    "<p style='text-align:center;padding:20px;color:#198754;font-weight:bold;'>HARI MINGGU – LIBUR NGAJI</p>";
+  $("saveAttendanceBtn").classList.add("hidden");
+  return;
+  }
  const snap=await getDocs(query(collection(db,"attendance"),where("classId","==",classId),where("date","==",date)));
  const old=new Map(snap.docs.map(d=>[d.data().studentId,d.data().status]));
  $("attendanceList").innerHTML="";
