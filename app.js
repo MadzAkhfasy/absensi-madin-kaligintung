@@ -211,7 +211,7 @@ $("addStudentBtn").onclick=async()=>{const name=$("studentName").value.trim(),cl
 
 $("attendanceDate").onchange=renderAttendance;$("attendanceClass").onchange=renderAttendance;
 async function renderAttendance(){
- if(!currentUser||(!isAdmin()&&!myClass()))return;
+ if(!currentUser||(!canAccessAllClasses()&&!myClass()))return;
  const classId=selectedClass();if(!classId)return;
  const list=students.filter(s=>s.classId===classId);
  $("attendanceClassName").textContent=clsName(classId);
