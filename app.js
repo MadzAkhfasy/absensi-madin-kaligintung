@@ -13,6 +13,46 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig), auth = getAuth(app), db = getFirestore(app);
 const $ = id => document.getElementById(id);
+const PHOTO_UPLOAD_URL = "https://script.google.com/macros/s/AKfycbyfKk9m9PNhv8qCjWh2iF4drHkYfWUufY7XJU59ful6tBLBnYWwwfOYb-D4fRDm8Vec/exec";
+
+async function uploadStudentPhoto(file) {
+  if (!file) return {};
+
+  if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+    throw new Error("Foto harus JPG, PNG, atau WebP.");
+  }
+
+  if (file.size > 1.5 * 1024 * 1024) {
+    throw new Error("Ukuran foto maksimal 1,5 MB.");
+  }
+
+  const image = await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error("Gagal membaca foto."));
+    reader.readAsDataURL(file);
+  });
+
+  const idToken = await currentUser.getIdToken();
+
+  const response = await fetch(PHOTO_UPLOAD_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ idToken, image, name: file.name }),
+    redirect: "follow"
+  });
+
+  const result = await response.json();
+
+  if (!result.success) {
+    throw new Error(result.error || "Unggah foto gagal.");
+  }
+
+  return {
+    photoUrl: result.imageUrl,
+    photoFileId: result.fileId
+  };
+}
 const CLASS_NAMES = ["Kelas Jilid Pemula","Kelas Jilid 1","Kelas Jilid 2","Kelas Jilid 3","Kelas Jilid 4","Kelas Jilid 5"];
 const STATUSES = ["Hadir","Izin","Sakit","Alpa"];
 let currentUser=null, profile=null, classes=[], students=[], reportRows=[], reportMonthValue="", reportClassValue="";
@@ -135,6 +175,7 @@ function renderStudentList() {
   <div class="grow">
     <strong>${esc(s.name)}</strong>
     <small>${esc(clsName(s.classId))}</small>
+        ${s.photoUrl ? `<img src="${esc(s.photoUrl)}" alt="Foto ${esc(s.name)}" style="width:64px;height:64px;object-fit:cover;border-radius:8px;margin-top:6px;">` : ""}
   </div>
 
   <button type="button" class="secondary history-btn">
@@ -215,6 +256,9 @@ $("addStudentBtn").onclick=async()=>{
   if(!classId)return msg("studentMsg","Pilih kelas santri.",true);
 
   try{
+        const photoFile = $("studentPhoto")?.files?.[0];
+    const photoData = photoFile ? await uploadStudentPhoto(photoFile) : {};
+    
     await addDoc(collection(db,"students"),{
       name,
       classId,
@@ -226,11 +270,13 @@ $("addStudentBtn").onclick=async()=>{
       fatherName:$("studentFather").value.trim(),
       motherName:$("studentMother").value.trim(),
       guardianPhone:$("studentPhone").value.trim(),
+      ...photoData,
       createdAt:serverTimestamp()
     });
 
     ["studentName","studentNis","studentBirthplace","studentBirthdate","studentAddress","studentFather","studentMother","studentPhone"].forEach(id=>$(id).value="");
     $("studentGender").value="";
+    if($("studentPhoto")) $("studentPhoto").value="";
     msg("studentMsg","Biodata santri berhasil disimpan.");
     await loadStudents();
   }catch(e){
