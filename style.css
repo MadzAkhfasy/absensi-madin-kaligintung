@@ -960,9 +960,10 @@ font-weight: 600;
 
 .student-actions button {
   width: 100%;
-  min-height: 38px;
+  min-height: 34px;
   margin: 0;
-  font-size: 13px;
+  font-size: 11px;
+   padding: 5px 6px;
   font-weight: 600;
   color: white;
   border: none;
