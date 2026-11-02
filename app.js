@@ -445,10 +445,12 @@ $("printReportBtn").onclick=()=>{
  if(!reportRows.length){msg("reportMsg","Tampilkan rekap terlebih dahulu sebelum mencetak.",true);return;}
  const title="Laporan Absensi Bulanan";
  const totals=Object.fromEntries(STATUSES.map(st=>[st,reportRows.reduce((n,r)=>n+r[st],0)]));
- const rows = reportRows.map((r, i) => `
+const allClasses = reportClassValue === "Semua Kelas";
+
+const rows = reportRows.map((r, i) => `
   <tr>
     <td>${i + 1}</td>
-    <td>${esc(r.className)}</td>
+    ${allClasses ? `<td>${esc(r.className)}</td>` : ""}
     <td>${esc(r.name)}</td>
     <td>${r.Hadir}</td>
     <td>${r.Izin}</td>
