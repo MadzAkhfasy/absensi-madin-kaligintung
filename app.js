@@ -178,17 +178,27 @@ function renderStudentList() {
         ${s.photoUrl ? `<img src="${esc(s.photoUrl)}" alt="Foto ${esc(s.name)}" style="width:64px;height:64px;object-fit:cover;border-radius:8px;margin-top:6px;">` : ""}
   </div>
 
+  <div class="student-actions">
+
   <button type="button" class="secondary history-btn">
     Riwayat
   </button>
-  
-  <button type="button" class="secondary biodata-btn">Profil</button>
+
+  <button type="button" class="secondary biodata-btn">
+    Profil
+  </button>
 
   ${isAdmin() ? `
+    <button type="button" class="secondary edit-btn">
+      Edit
+    </button>
 
-    <button type="button" class="secondary edit-btn">Edit</button>
-    <button type="button" class="secondary delete-btn">Hapus</button>
+    <button type="button" class="secondary delete-btn">
+      Hapus
+    </button>
   ` : ""}
+
+</div>
 `;
 
     r.querySelector(".biodata-btn").onclick = () => {
