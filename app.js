@@ -215,14 +215,15 @@ $("printReportBtn").onclick=()=>{
  const rows=reportRows.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.name)}</td><td>${r.Hadir}</td><td>${r.Izin}</td><td>${r.Sakit}</td><td>${r.Alpa}</td><td>${r.total}</td><td>${r.Persentase}%</td></tr>`).join("");
  const html=`<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} - ${esc(reportClassValue)}</title><style>body{font-family:Arial,sans-serif;color:#17251d;margin:24px}h1{text-align:center;font-size:20px;margin:0 0 4px}.sub{text-align:center;margin:0 0 22px;font-size:13px}.meta{margin:12px 0 18px;font-size:13px}.stats{display:flex;gap:8px;margin-bottom:18px}.stat{border:1px solid #999;padding:9px 12px;flex:1;text-align:center}.stat b{display:block;font-size:18px}.stat span{font-size:11px}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border:1px solid #777;padding:8px;text-align:center}th{background:#eee}td:nth-child(2),th:nth-child(2){text-align:left}.sign{display:flex;justify-content:space-between;margin-top:55px;text-align:center;font-size:12px}.sign div{width:40%}.sign strong{display:block;margin-top:65px;text-decoration:underline}.note{font-size:10px;margin-top:24px;color:#555}@media print{body{margin:12mm}@page{size:A4 portrait;margin:12mm}.no-print{display:none}}</style></head><body><h1>MADRASAH DINIYAH KALIGINTUNG</h1><p class="sub">LAPORAN ABSENSI SANTRI</p><div class="meta"><b>Kelas:</b> ${esc(reportClassValue)}<br><b>Bulan:</b> ${esc(reportMonthValue)}</div><div class="stats">${STATUSES.map(st=>`<div class="stat"><b>${totals[st]}</b><span>${st}</span></div>`).join("")}</div><table><thead><tr><th>No.</th><th>Nama Santri</th><th>Hadir</th><th>Izin</th><th>Sakit</th><th>Alpa</th><th>Total</th><th>Kehadiran</th></tr></thead><tbody>${rows}</tbody></table><div class="sign"><div>Mengetahui,<br>Pengurus Madin<strong>(__________________)</strong></div><div>Kaligintung, ....................<br>Admin Absensi<strong>(__________________)</strong></div></div><p class="note">Dicetak dari Aplikasi Absensi Madin Kaligintung.</p><script>window.onload=()=>setTimeout(()=>window.print(),400);</script></body></html>`;
  const w=window.open("","_blank");if(!w){msg("reportMsg","Jendela cetak diblokir. Izinkan pop-up untuk situs ini, lalu coba lagi.",true);return;}w.document.open();w.document.write(html);w.document.close();
-};// FITUR IMPOR DATA SANTRI CSV
+// FITUR IMPOR DATA SANTRI CSV
+// Format CSV: Nama Santri,Kelas
 const importButton = document.createElement("button");
-importButton.textContent = "Impor Data Santri (CSV)";
+importButton.textContent = "Impor Banyak Santri (CSV)";
 importButton.className = "secondary full";
 
 const importFile = document.createElement("input");
 importFile.type = "file";
-importFile.accept = ".csv";
+importFile.accept = ".csv,text/csv";
 importFile.style.display = "none";
 
 $("studentAdminForm").append(importButton, importFile);
@@ -231,35 +232,104 @@ importButton.onclick = () => {
   if (isAdmin()) importFile.click();
 };
 
+function parseStudentCSV(text) {
+  const rows = [];
+  let row = [], value = "", quoted = false;
+  const input = text.replace(/^\uFEFF/, "");
+
+  for (let i = 0; i < input.length; i++) {
+    const ch = input[i];
+
+    if (ch === '"' && quoted && input[i + 1] === '"') {
+      value += '"';
+      i++;
+    } else if (ch === '"') {
+      quoted = !quoted;
+    } else if (ch === "," && !quoted) {
+      row.push(value.trim());
+      value = "";
+    } else if ((ch === "\n" || ch === "\r") && !quoted) {
+      if (ch === "\r" && input[i + 1] === "\n") i++;
+      row.push(value.trim());
+      if (row.some(cell => cell !== "")) rows.push(row);
+      row = [];
+      value = "";
+    } else {
+      value += ch;
+    }
+  }
+
+  row.push(value.trim());
+  if (row.some(cell => cell !== "")) rows.push(row);
+  return rows;
+}
+
 importFile.onchange = async () => {
   if (!isAdmin()) return;
 
   const file = importFile.files[0];
   if (!file) return;
 
+  importButton.disabled = true;
+  msg("studentMsg", "Sedang membaca dan memasukkan data...");
+
   try {
-    const content = await file.text();
-    const lines = content.replace(/^\uFEFF/, "").trim().split(/\r?\n/);
+    const rows = parseStudentCSV(await file.text());
+
+    if (rows.length < 2) {
+      throw new Error("CSV belum berisi data santri.");
+    }
+
+    const headers = rows[0].map(h =>
+      h.toLowerCase().replace(/\s+/g, " ")
+    );
+
+    const nameIndex = headers.findIndex(h =>
+      ["nama santri", "nama"].includes(h)
+    );
+
+    const classIndex = headers.findIndex(h =>
+      ["kelas", "nama kelas"].includes(h)
+    );
+
+    if (nameIndex < 0 || classIndex < 0) {
+      throw new Error('Kolom CSV harus bernama "Nama Santri" dan "Kelas".');
+    }
+
     const existing = new Set(
-      students.map(s => s.name.trim().toLowerCase() + "|" + s.classId)
+      students.map(s =>
+        s.name.trim().toLocaleLowerCase("id") + "|" + s.classId
+      )
     );
 
     let added = 0;
     let skipped = 0;
+    const errors = [];
 
-    for (const line of lines.slice(1)) {
-      const [nameRaw, classRaw] = line.split(",");
-      const name = nameRaw?.trim();
-      const className = classRaw?.trim();
+    for (let i = 1; i < rows.length; i++) {
+      const name = (rows[i][nameIndex] || "").trim();
+      const className = (rows[i][classIndex] || "").trim();
 
-      const kelas = classes.find(c => c.name === "Kelas " + className);
-
-      if (!name || !kelas) {
+      if (!name || !className) {
         skipped++;
         continue;
       }
 
-      const key = name.toLowerCase() + "|" + kelas.id;
+      const kelas = classes.find(c =>
+        c.name.trim().toLocaleLowerCase("id") ===
+        className.toLocaleLowerCase("id")
+      );
+
+      if (!kelas) {
+        errors.push(
+          'Baris ' + (i + 1) + ': kelas "' + className + '" tidak dikenal'
+        );
+        skipped++;
+        continue;
+      }
+
+      const key =
+        name.toLocaleLowerCase("id") + "|" + kelas.id;
 
       if (existing.has(key)) {
         skipped++;
@@ -275,14 +345,28 @@ importFile.onchange = async () => {
       existing.add(key);
       added++;
     }
-    
+
     await loadStudents();
-    msg("studentMsg", `Impor selesai: ${added} ditambahkan, ${skipped} dilewati.`);
+    await renderDashboard();
+
+    const detail = errors.length
+      ? " Periksa: " + errors.slice(0, 3).join("; ")
+      : "";
+
+    msg(
+      "studentMsg",
+      "Impor selesai: " + added +
+      " santri ditambahkan, " + skipped +
+      " dilewati." + detail,
+      errors.length > 0
+    );
+
   } catch (e) {
     msg("studentMsg", "Impor gagal: " + e.message, true);
+  } finally {
+    importButton.disabled = false;
+    importFile.value = "";
   }
-
-  importFile.value = "";
 };
 
   // DASHBOARD MADIN
