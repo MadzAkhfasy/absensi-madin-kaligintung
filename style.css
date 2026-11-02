@@ -920,22 +920,16 @@ footer {
   content: none !important;
   display: none !important;
 }
-/* Tampilan ringkas tombol pada daftar santri */
+/* PERBAIKAN TAMPILAN DAFTAR SANTRI */
 .list-row {
-  gap: 6px;
-}
-
-.list-row button {
-  padding: 7px 8px;
-  font-size: 12px;
-  white-space: nowrap;
-  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .list-row .grow {
-  flex: 1;
+  flex: 1 1 auto;
   min-width: 0;
-  overflow: hidden;
 }
 
 .list-row strong {
@@ -943,4 +937,16 @@ footer {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.list-row button {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 0;
+  min-height: 30px !important;
+  padding: 5px 6px !important;
+  margin: 0;
+  font-size: 11px !important;
+  line-height: 1.2;
+  white-space: nowrap;
 }
