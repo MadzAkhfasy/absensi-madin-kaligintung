@@ -96,12 +96,26 @@ async function loadStudents(){
  let qy=isAdmin()?collection(db,"students"):query(collection(db,"students"),where("classId","==",myClass()));
  const snap=await getDocs(qy);students=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.name.localeCompare(b.name));
  renderStudentList();}
-function renderStudentList(){
-  $("studentList").innerHTML = students.length
-    ? ""
-    : "<p class='muted'>Belum ada data santri.</p>";
+function renderStudentList() {
+  const keyword = $("studentSearch")?.value
+    .trim()
+    .toLowerCase() || "";
 
-  students.forEach(s => {
+  const filterClass = isAdmin()
+    ? $("studentFilterClass")?.value || ""
+    : myClass();
+
+  const filtered = students.filter(s => {
+    const matchName = s.name.toLowerCase().includes(keyword);
+    const matchClass = !filterClass || s.classId === filterClass;
+    return matchName && matchClass;
+  });
+
+  $("studentList").innerHTML = filtered.length
+    ? ""
+    : "<p class='muted'>Santri tidak ditemukan.</p>";
+
+  filtered.forEach(s => {
     const r = document.createElement("div");
     r.className = "list-row";
 
@@ -137,7 +151,7 @@ function renderStudentList(){
           </div>
         `;
 
-        r.querySelector(".edit-cancel").onclick = () => renderStudentList();
+        r.querySelector(".edit-cancel").onclick = renderStudentList;
 
         r.querySelector(".edit-save").onclick = async () => {
           const name = r.querySelector(".edit-name").value.trim();
@@ -154,7 +168,7 @@ function renderStudentList(){
               classId
             });
 
-           showToast("Data santri berhasil diperbarui.");
+            showToast("Data santri berhasil diperbarui.");
             await loadStudents();
           } catch (e) {
             showToast("Gagal memperbarui data: " + e.message);
@@ -174,6 +188,9 @@ function renderStudentList(){
 }
 function esc(s=""){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 async function importDeleteStudent(id){const {deleteDoc}=await import("https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js");await deleteDoc(doc(db,"students",id));await loadStudents();}
+$("studentSearch").addEventListener("input", renderStudentList);
+
+$("studentFilterClass").addEventListener("change", renderStudentList);
 $("addStudentBtn").onclick=async()=>{const name=$("studentName").value.trim(),classId=$("studentClass").value;if(!name)return msg("studentMsg","Masukkan nama santri.",true);try{await addDoc(collection(db,"students"),{name,classId,createdAt:serverTimestamp()});$("studentName").value="";msg("studentMsg","Santri berhasil ditambahkan.");await loadStudents();}catch(e){msg("studentMsg",e.message,true)}};
 
 $("attendanceDate").onchange=renderAttendance;$("attendanceClass").onchange=renderAttendance;
