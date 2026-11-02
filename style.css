@@ -357,13 +357,8 @@ p {
 }
 
 .stat::after {
-  content: "✦";
-  position: absolute;
-  right: 10px;
-  bottom: -15px;
-  font-size: 55px;
-  color: rgba(23, 107, 69, .06);
-  pointer-events: none;
+  content: none;
+  display: none;
 }
 
 .stat strong {
