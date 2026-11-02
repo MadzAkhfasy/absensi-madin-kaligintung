@@ -493,3 +493,33 @@ main {
   color: rgba(255, 255, 255, .08);
   pointer-events: none;
 }
+/* AKSEN KARTU STATISTIK */
+
+#dashboardPanel .stat {
+  position: relative;
+  overflow: hidden;
+  border-left: 4px solid #176b45;
+  background: linear-gradient(145deg, #ffffff, #edf6f0);
+  box-shadow: 0 5px 15px rgba(16, 75, 50, .07);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+#dashboardPanel .stat::after {
+  content: "✦";
+  position: absolute;
+  right: 10px;
+  bottom: -15px;
+  font-size: 55px;
+  color: rgba(23, 107, 69, .06);
+  pointer-events: none;
+}
+
+#dashboardPanel .stat strong {
+  position: relative;
+  z-index: 1;
+}
+
+#dashboardPanel .stat span {
+  position: relative;
+  z-index: 1;
+}
