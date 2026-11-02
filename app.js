@@ -549,6 +549,10 @@ async function renderAttendance(){
 }
 $("saveAttendanceBtn").onclick=async()=>{
  const classId=selectedClass(),date=$("attendanceDate").value;if(!date)return;
+  if (new Date(date + "T00:00:00").getDay() === 0) {
+  showToast("Hari Minggu adalah hari libur!", true);
+  return;
+  }
  try{const btn=$("saveAttendanceBtn");btn.disabled=true;
   for(const el of document.querySelectorAll("#attendanceList select")){const id=el.dataset.id,docId=`${date}_${id}`;await setDoc(doc(db,"attendance",docId),{studentId:id,classId,date,status:el.value,markedBy:currentUser.uid,updatedAt:serverTimestamp()},{merge:true});}
   msg("attendanceMsg","Absensi berhasil disimpan.");btn.disabled=false;
