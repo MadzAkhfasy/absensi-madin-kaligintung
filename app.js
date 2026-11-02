@@ -37,6 +37,7 @@ function showToast(text) {
 }
 const clsName=id=>classes.find(c=>c.id===id)?.name||"Belum ditetapkan";
 const isAdmin=()=>profile?.role==="admin";
+const canAccessAllClasses=()=>isAdmin()||profile?.role==="petugas";
 const myClass=()=>profile?.assignedClass||"";
 
 $("loginBtn").onclick=async()=>{try{await signInWithEmailAndPassword(auth,$("email").value.trim(),$("password").value)}catch(e){msg("authMsg",friendly(e),true)}};
@@ -51,12 +52,12 @@ onAuthStateChanged(auth,async user=>{
   if(!p.exists()){await signOut(auth);msg("authMsg","Profil belum dibuat. Hubungi admin.",true);return;}
   profile=p.data(); await loadClasses();
   $("authView").classList.add("hidden");$("appView").classList.remove("hidden");$("logoutBtn").classList.remove("hidden");
-  $("hello").textContent="Halo, "+(profile.name||user.email);$("roleInfo").textContent=isAdmin()?"Admin/Pengurus":"Pengajar · "+clsName(myClass());
+  $("hello").textContent="Halo, "+(profile.name||user.email);$("roleInfo").textContent=isAdmin()?"Admin/Pengurus":profile?.role==="petugas"?"Admin Absensi · Semua Kelas":"Pengajar · "+clsName(myClass());
   document.querySelectorAll(".admin-only").forEach(x=>x.classList.toggle("hidden",!isAdmin()));
   $("studentAdminForm").classList.toggle("hidden",!isAdmin());
-  $("attendanceClassWrap").classList.toggle("hidden",!isAdmin());
-  $("reportClassWrap").classList.toggle("hidden",!isAdmin());
-  if(!isAdmin()&&!myClass()){$("attendanceList").innerHTML='<p class="muted">Akun Anda belum diberi kelas. Hubungi admin Madin.</p>';$("saveAttendanceBtn").classList.add("hidden");}
+  $("attendanceClassWrap").classList.toggle("hidden",!canAccessAllClasses());
+$("reportClassWrap").classList.toggle("hidden",!canAccessAllClasses());
+  if(!canAccessAllClasses()&&!myClass()){$("attendanceList").innerHTML='<p class="muted">Akun Anda belum diberi kelas. Hubungi admin Madin.</p>';$("saveAttendanceBtn").classList.add("hidden");}
   await fillClassSelects();await loadStudents();await renderAttendance();await renderDashboard();
  }catch(e){console.error(e);alert("Gagal memuat data: "+e.message);}
 });
@@ -71,7 +72,7 @@ async function fillClassSelects() {
     const el = $(id);
     el.innerHTML = "";
 
-    if (id === "reportClass" && isAdmin()) {
+    if (id === "reportClass" && canAccessAllClasses()) {
       const all = document.createElement("option");
       all.value = "__all__";
       all.textContent = "Semua Kelas";
@@ -97,14 +98,14 @@ if (filter) {
     filter.append(option);
   });
 }
-  if (!isAdmin() && myClass()) {
+  if (!canAccessAllClasses() && myClass()) {
     $("attendanceClassName").textContent = clsName(myClass());
   }
 }
 
-function selectedClass(){return isAdmin()?$("attendanceClass").value:myClass();}
+function selectedClass(){return canAccessAllClasses()?$("attendanceClass").value:myClass();}
 async function loadStudents(){
- let qy=isAdmin()?collection(db,"students"):query(collection(db,"students"),where("classId","==",myClass()));
+ let qy=canAccessAllClasses()?collection(db,"students"):query(collection(db,"students"),where("classId","==",myClass()));
  const snap=await getDocs(qy);students=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.name.localeCompare(b.name));
  renderStudentList();}
 function renderStudentList() {
@@ -112,7 +113,7 @@ function renderStudentList() {
     .trim()
     .toLowerCase() || "";
 
-  const filterClass = isAdmin()
+  const filterClass = canAccessAllClasses()
     ? $("studentFilterClass")?.value || ""
     : myClass();
 
@@ -234,11 +235,11 @@ document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelect
 $("loadReportBtn").onclick=loadReport;
 async function loadReport() {
   const month = $("reportMonth").value;
-  const selected = isAdmin()
+  const selected = canAccessAllClasses()
     ? $("reportClass").value
     : myClass();
 
-  const allClasses = isAdmin() && selected === "__all__";
+  const allClasses = canAccessAllClasses() && selected === "__all__";
   const classId = allClasses ? null : selected;
 
   if (!allClasses && !classId) {
@@ -457,8 +458,7 @@ $("printReportBtn").onclick = () => {
   );
 
   // Menentukan apakah laporan menampilkan semua kelas.
-  const allClasses = isAdmin() && $("reportClass").value === "__all__";
-
+  const allClasses = canAccessAllClasses() && $("reportClass").value === "__all__";
   // Membuat isi tabel PDF.
   const rows = reportRows.map((r, i) => `
     <tr>
@@ -830,9 +830,8 @@ async function renderDashboard() {
   if (!currentUser || !profile) return;
 
   $("dashTotalStudents").textContent = students.length;
-  $("dashTotalClasses").textContent = isAdmin() ? classes.length : 1;
-
-  const classStats = isAdmin()
+$("dashTotalClasses").textContent = canAccessAllClasses() ? classes.length : 1;
+  const classStats = canAccessAllClasses()
     ? classes
     : classes.filter(c => c.id === myClass());
 
@@ -852,8 +851,7 @@ async function renderDashboard() {
 
   const records = attendanceSnap.docs
     .map(d => d.data())
-    .filter(r => isAdmin() || r.classId === myClass());
-
+    .filter(r => canAccessAllClasses() || r.classId === myClass());
   $("dashHadir").textContent = records.filter(r => r.status === "Hadir").length;
   $("dashIzin").textContent = records.filter(r => r.status === "Izin").length;
   $("dashSakit").textContent = records.filter(r => r.status === "Sakit").length;
