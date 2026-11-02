@@ -189,49 +189,104 @@ function renderStudentList() {
 `;
     if (isAdmin()) {
       r.querySelector(".edit-btn").onclick = () => {
-        r.innerHTML = `
-          <div style="width:100%">
-            <label>Nama Santri</label>
-            <input class="edit-name" value="${esc(s.name)}">
+  r.innerHTML = `
+    <div style="width:100%">
+      <label>Nama Santri</label>
+      <input class="edit-name" value="${esc(s.name)}">
 
-            <label>Kelas</label>
-            <select class="edit-class">
-              ${classes.map(c => `
-                <option value="${c.id}" ${c.id === s.classId ? "selected" : ""}>
-                  ${esc(c.name)}
-                </option>
-              `).join("")}
-            </select>
+      <label>Kelas</label>
+      <select class="edit-class">
+        ${classes.map(c => `
+          <option value="${c.id}" ${c.id === s.classId ? "selected" : ""}>
+            ${esc(c.name)}
+          </option>
+        `).join("")}
+      </select>
 
-            <button class="edit-save">Simpan</button>
-            <button class="secondary edit-cancel">Batal</button>
-          </div>
-        `;
+      <label>NIS</label>
+      <input class="edit-nis" value="${esc(s.nis || "")}">
 
-        r.querySelector(".edit-cancel").onclick = renderStudentList;
+      <label>Jenis Kelamin</label>
+      <select class="edit-gender">
+        <option value="">Pilih jenis kelamin</option>
+        <option value="L" ${s.gender === "L" ? "selected" : ""}>Laki-laki</option>
+        <option value="P" ${s.gender === "P" ? "selected" : ""}>Perempuan</option>
+      </select>
 
-        r.querySelector(".edit-save").onclick = async () => {
-          const name = r.querySelector(".edit-name").value.trim();
-          const classId = r.querySelector(".edit-class").value;
+      <label>Tempat Lahir</label>
+      <input class="edit-birthplace" value="${esc(s.birthplace || "")}">
 
-          if (!name) {
-            showToast("Nama santri tidak boleh kosong.");
-            return;
-          }
+      <label>Tanggal Lahir</label>
+      <input type="date" class="edit-birthdate" value="${esc(s.birthdate || "")}">
 
-          try {
-            await updateDoc(doc(db, "students", s.id), {
-              name,
-              classId
-            });
+      <label>Alamat</label>
+      <textarea class="edit-address">${esc(s.address || "")}</textarea>
 
-            showToast("Data santri berhasil diperbarui.");
-            await loadStudents();
-          } catch (e) {
-            showToast("Gagal memperbarui data: " + e.message);
-          }
-        };
-      };
+      <label>Nama Ayah</label>
+      <input class="edit-father" value="${esc(s.fatherName || "")}">
+
+      <label>Nama Ibu</label>
+      <input class="edit-mother" value="${esc(s.motherName || "")}">
+
+      <label>Nomor HP Wali</label>
+      <input class="edit-phone" value="${esc(s.guardianPhone || "")}">
+
+      <label>Ganti Foto Santri (opsional)</label>
+      <input type="file" class="edit-photo" accept="image/jpeg,image/png,image/webp">
+
+      ${s.photoUrl ? `<img src="${esc(s.photoUrl)}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;">` : ""}
+
+      <br><br>
+      <button type="button" class="edit-save">Simpan Perubahan</button>
+      <button type="button" class="secondary edit-cancel">Batal</button>
+    </div>
+  `;
+
+  r.querySelector(".edit-cancel").onclick = renderStudentList;
+
+  r.querySelector(".edit-save").onclick = async () => {
+    const name = r.querySelector(".edit-name").value.trim();
+    const classId = r.querySelector(".edit-class").value;
+
+    if (!name || !classId) {
+      showToast("Nama dan kelas wajib diisi.");
+      return;
+    }
+
+    const button = r.querySelector(".edit-save");
+    button.disabled = true;
+    button.textContent = "Menyimpan...";
+
+    try {
+      const photoFile = r.querySelector(".edit-photo").files[0];
+      const photoData = photoFile
+        ? await uploadStudentPhoto(photoFile)
+        : {};
+
+      await updateDoc(doc(db, "students", s.id), {
+        name,
+        classId,
+        nis: r.querySelector(".edit-nis").value.trim(),
+        gender: r.querySelector(".edit-gender").value,
+        birthplace: r.querySelector(".edit-birthplace").value.trim(),
+        birthdate: r.querySelector(".edit-birthdate").value,
+        address: r.querySelector(".edit-address").value.trim(),
+        fatherName: r.querySelector(".edit-father").value.trim(),
+        motherName: r.querySelector(".edit-mother").value.trim(),
+        guardianPhone: r.querySelector(".edit-phone").value.trim(),
+        ...photoData
+      });
+
+      showToast("Seluruh biodata santri berhasil diperbarui.");
+      await loadStudents();
+
+    } catch (e) {
+      showToast("Gagal memperbarui data: " + e.message);
+      button.disabled = false;
+      button.textContent = "Simpan Perubahan";
+    }
+  };
+};
 
       r.querySelector(".delete-btn").onclick = async () => {
         if (confirm("Hapus data " + s.name + "?")) {
