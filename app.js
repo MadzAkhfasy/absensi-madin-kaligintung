@@ -183,7 +183,9 @@ function renderStudentList() {
   </button>
 
   ${isAdmin() ? `
+
     <button type="button" class="secondary edit-btn">Edit</button>
+    <button type="button" class="secondary biodata-btn">Profil</button>
     <button type="button" class="secondary delete-btn">Hapus</button>
   ` : ""}
 `;
