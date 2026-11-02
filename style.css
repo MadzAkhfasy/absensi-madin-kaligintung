@@ -523,3 +523,47 @@ main {
   position: relative;
   z-index: 1;
 }
+/* NAVIGASI MODERN DAN ELEGAN */
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  background: linear-gradient(135deg, #0b3d2e, #176b45);
+  border: 1px solid #c9a64f;
+  border-radius: 15px;
+  box-shadow: 0 5px 14px rgba(16, 75, 50, .13);
+}
+
+.tab {
+  flex: 1;
+  border: none;
+  border-radius: 10px;
+  color: #ffffff;
+  background: transparent;
+  font-weight: 600;
+  transition: all .2s ease;
+}
+
+.tab:hover {
+  background: rgba(255, 255, 255, .15);
+}
+
+.tab.active {
+  background: #ffffff;
+  color: #104b32;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, .15);
+  font-weight: 700;
+}
+
+@media (max-width: 560px) {
+  .tabs {
+    gap: 5px;
+    padding: 6px;
+  }
+
+  .tab {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+}
