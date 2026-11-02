@@ -756,3 +756,53 @@ textarea::placeholder {
     font-size: 12px;
   }
 }
+/* HALAMAN ABSENSI PROFESIONAL */
+
+#attendancePanel .card,
+#attendancePanel .panel {
+  background: #ffffff;
+  border: 1px solid #e2ebe5;
+  border-radius: 16px;
+  box-shadow: 0 5px 16px rgba(16, 75, 50, .06);
+  margin-bottom: 18px;
+}
+
+#attendancePanel h2,
+#attendancePanel h3 {
+  color: #104b32;
+  font-weight: 700;
+}
+
+#attendancePanel table {
+  border: 1px solid #e5eee8;
+}
+
+#attendancePanel th {
+  background: linear-gradient(120deg, #104b32, #176b45);
+  color: #ffffff;
+}
+
+#attendancePanel td {
+  vertical-align: middle;
+}
+
+#attendancePanel tbody tr:nth-child(even) {
+  background: #f0f7f2;
+}
+
+#attendancePanel select {
+  min-height: 40px;
+  border-radius: 9px;
+  border: 1px solid #dce8df;
+}
+
+@media (max-width: 560px) {
+  #attendancePanel .card,
+  #attendancePanel .panel {
+    padding: 14px;
+  }
+
+  #attendancePanel table {
+    font-size: 12px;
+  }
+}
