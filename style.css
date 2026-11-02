@@ -913,3 +913,11 @@ footer {
     break-inside: avoid;
   }
 }
+/* HILANGKAN SEMUA ORNAMEN BINTANG */
+.welcome::before,
+.welcome::after,
+.stat::before,
+.stat::after {
+  content: none !important;
+  display: none !important;
+}
