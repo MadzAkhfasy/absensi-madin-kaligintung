@@ -89,9 +89,32 @@
         <div class="card">
           <h2>Data santri</h2>
           <p class="muted">Data santri dikelola oleh admin.</p>
-          <div id="studentAdminForm" class="hidden">
-  <h3>Tambah Biodata Santri</h3>
+          
+          <div class="student-tools">
+  <label>
+    Cari nama santri
+    <input
+      id="studentSearch"
+      type="search"
+      placeholder="Ketik nama santri..."
+    >
+  </label>
 
+  <label class="admin-only">
+    Filter kelas
+    <select id="studentFilterClass">
+      <option value="">Semua Kelas</option>
+    </select>
+  </label>
+</div>
+
+<div id="studentList" class="list"></div>
+        </div>
+      </section>
+<section id="formPanel" class="panel hidden admin-only">
+  <div class="card">
+    <h2>Tambah Biodata Santri</h2>
+    <div id="studentAdminForm">
   <label>Nama Lengkap
     <input id="studentName" placeholder="Nama lengkap santri" required>
   </label>
@@ -145,29 +168,9 @@
   </button>
 
   <p id="studentMsg"></p>
-          </div>
-          <div class="student-tools">
-  <label>
-    Cari nama santri
-    <input
-      id="studentSearch"
-      type="search"
-      placeholder="Ketik nama santri..."
-    >
-  </label>
-
-  <label class="admin-only">
-    Filter kelas
-    <select id="studentFilterClass">
-      <option value="">Semua Kelas</option>
-    </select>
-  </label>
-</div>
-
-<div id="studentList" class="list"></div>
-        </div>
-      </section>
-
+      </div>
+</section>
+      
       <section id="reportsPanel" class="panel hidden">
         <div class="card">
           <h2>Rekap kehadiran</h2>
