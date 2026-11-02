@@ -94,7 +94,25 @@
             <button id="addStudentBtn" class="primary full">Tambah santri</button>
             <div id="studentMsg" class="message"></div>
           </div>
-          <div id="studentList" class="list"></div>
+          <div class="student-tools">
+  <label>
+    Cari nama santri
+    <input
+      id="studentSearch"
+      type="search"
+      placeholder="Ketik nama santri..."
+    >
+  </label>
+
+  <label class="admin-only">
+    Filter kelas
+    <select id="studentFilterClass">
+      <option value="">Semua Kelas</option>
+    </select>
+  </label>
+</div>
+
+<div id="studentList" class="list"></div>
         </div>
       </section>
 
