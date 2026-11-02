@@ -60,20 +60,38 @@ const today = new Date().toLocaleDateString("sv-SE");
 $("attendanceDate").value=today; $("todayLabel").textContent=new Date().toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
 for(let i=0;i<12;i++){const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-i);const v=d.toLocaleDateString("sv-SE").slice(0,7);const o=document.createElement("option");o.value=v;o.textContent=d.toLocaleDateString("id-ID",{month:"long",year:"numeric"});$("reportMonth").append(o);}
 const msg=(id,t,err=false)=>{$(id).textContent=t;$(id).classList.toggle("error",err)};
-function showToast(text) {
+function showToast(text, isError = false) {
   let toast = document.getElementById("appToast");
+
   if (!toast) {
     toast = document.createElement("div");
     toast.id = "appToast";
-    toast.style.cssText = "position:fixed;bottom:25px;left:50%;transform:translateX(-50%);background:#198754;color:white;padding:12px 20px;border-radius:10px;box-shadow:0 3px 12px #0003;z-index:99999;font-size:14px;text-align:center;";
+    toast.style.cssText = `
+      position: fixed;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      padding: 14px 20px;
+      border-radius: 10px;
+      box-shadow: 0 3px 12px #0003;
+      z-index: 99999;
+      font-size: 14px;
+      text-align: center;
+      width: max-content;
+      max-width: 90%;
+    `;
     document.body.appendChild(toast);
   }
+
   toast.textContent = text;
+  toast.style.background = isError ? "#dc3545" : "#198754";
   toast.style.display = "block";
+
   clearTimeout(window.toastTimer);
   window.toastTimer = setTimeout(() => {
     toast.style.display = "none";
-  }, 3000);
+  }, 3500);
 }
 const clsName=id=>classes.find(c=>c.id===id)?.name||"Belum ditetapkan";
 const isAdmin=()=>profile?.role==="admin";
