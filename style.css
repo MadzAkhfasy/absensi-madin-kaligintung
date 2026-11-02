@@ -936,6 +936,8 @@ footer {
 
 .list-row strong {
   display: block;
+   font-size: 16px;
+font-weight: 600;
   white-space: normal;
   overflow: visible;
   text-overflow: clip;
