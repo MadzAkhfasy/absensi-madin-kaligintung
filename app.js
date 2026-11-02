@@ -140,7 +140,7 @@ ${isAdmin() ? `
   <button class="secondary edit-btn">Edit</button>
   <button class="secondary delete-btn">Hapus</button>
 ` : ""}
-
+`;
     if (isAdmin()) {
       r.querySelector(".edit-btn").onclick = () => {
         r.innerHTML = `
