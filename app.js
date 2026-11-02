@@ -207,7 +207,36 @@ async function importDeleteStudent(id){const {deleteDoc}=await import("https://w
 $("studentSearch").addEventListener("input", renderStudentList);
 
 $("studentFilterClass").addEventListener("change", renderStudentList);
-$("addStudentBtn").onclick=async()=>{const name=$("studentName").value.trim(),classId=$("studentClass").value;if(!name)return msg("studentMsg","Masukkan nama santri.",true);try{await addDoc(collection(db,"students"),{name,classId,createdAt:serverTimestamp()});$("studentName").value="";msg("studentMsg","Santri berhasil ditambahkan.");await loadStudents();}catch(e){msg("studentMsg",e.message,true)}};
+$("addStudentBtn").onclick=async()=>{
+  const name=$("studentName").value.trim();
+  const classId=$("studentClass").value;
+
+  if(!name)return msg("studentMsg","Masukkan nama santri.",true);
+  if(!classId)return msg("studentMsg","Pilih kelas santri.",true);
+
+  try{
+    await addDoc(collection(db,"students"),{
+      name,
+      classId,
+      nis:$("studentNis").value.trim(),
+      gender:$("studentGender").value,
+      birthplace:$("studentBirthplace").value.trim(),
+      birthdate:$("studentBirthdate").value,
+      address:$("studentAddress").value.trim(),
+      fatherName:$("studentFather").value.trim(),
+      motherName:$("studentMother").value.trim(),
+      guardianPhone:$("studentPhone").value.trim(),
+      createdAt:serverTimestamp()
+    });
+
+    ["studentName","studentNis","studentBirthplace","studentBirthdate","studentAddress","studentFather","studentMother","studentPhone"].forEach(id=>$(id).value="");
+    $("studentGender").value="";
+    msg("studentMsg","Biodata santri berhasil disimpan.");
+    await loadStudents();
+  }catch(e){
+    msg("studentMsg",e.message,true);
+  }
+};
 
 $("attendanceDate").onchange=renderAttendance;$("attendanceClass").onchange=renderAttendance;
 async function renderAttendance(){
