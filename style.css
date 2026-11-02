@@ -276,16 +276,11 @@ p {
   padding: 8px;
   margin-bottom: 16px;
 
-  background: linear-gradient(
-    135deg,
-    var(--green-deep),
-    var(--green)
-  );
-
+  background: var(--green-deep);
   border: 1px solid var(--gold);
   border-radius: 15px;
 
-  box-shadow: 0 5px 14px rgba(16, 75, 50, .13);
+  box-shadow: 0 4px 12px rgba(16, 75, 50, .12);
 
   overflow-x: auto;
   scrollbar-width: thin;
@@ -296,10 +291,10 @@ p {
   white-space: nowrap;
 
   padding: 11px 17px;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, .18);
   border-radius: 10px;
 
-  background: transparent;
+  background: var(--green);
   color: var(--white);
 
   font-weight: 600;
@@ -307,13 +302,14 @@ p {
 }
 
 .tab:hover {
-  background: rgba(255, 255, 255, .15);
+  background: var(--green-dark);
 }
 
 .tab.active {
   background: var(--white);
-  color: var(--green-dark);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, .15);
+  color: var(--green-deep);
+  border-color: var(--gold);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
   font-weight: 700;
 }
 
