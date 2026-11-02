@@ -949,4 +949,30 @@ footer {
   font-size: 11px !important;
   line-height: 1.2;
   white-space: nowrap;
+}/* Tombol aksi santri dua baris */
+.student-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.student-actions button {
+  width: 100%;
+  min-height: 38px;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #14532d, #22a06b);
+  box-shadow: 0 2px 5px rgba(20, 83, 45, 0.25);
+  transition: 0.2s ease;
+}
+
+.student-actions button:hover {
+  background: linear-gradient(135deg, #166534, #34d399);
+  transform: translateY(-1px);
 }
