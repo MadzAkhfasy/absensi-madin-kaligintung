@@ -936,7 +936,7 @@ footer {
 
 .list-row strong {
   display: block;
-   font-size: 16px;
+   font-size: 18px;
 font-weight: 600;
   white-space: normal;
   overflow: visible;
@@ -960,9 +960,9 @@ font-weight: 600;
 
 .student-actions button {
   width: 100%;
-  min-height: 34px;
+  min-height: 32px;
   margin: 0;
-  font-size: 11px;
+  font-size: 10px;
    padding: 5px 6px;
   font-weight: 600;
   color: white;
