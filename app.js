@@ -441,27 +441,236 @@ $("exportBtn").onclick = () => {
 
 
 // Cetak laporan bulanan; pada Android pengguna dapat memilih "Save as PDF".
-$("printReportBtn").onclick=()=>{
- if(!reportRows.length){msg("reportMsg","Tampilkan rekap terlebih dahulu sebelum mencetak.",true);return;}
- const title="Laporan Absensi Bulanan";
- const totals=Object.fromEntries(STATUSES.map(st=>[st,reportRows.reduce((n,r)=>n+r[st],0)]));
-const allClasses = reportClassValue === "Semua Kelas";
+$("printReportBtn").onclick = () => {
+  if (!reportRows.length) {
+    msg("reportMsg", "Tampilkan rekap terlebih dahulu sebelum mencetak.", true);
+    return;
+  }
 
-const rows = reportRows.map((r, i) => `
-  <tr>
-    <td>${i + 1}</td>
-    ${allClasses ? `<td>${esc(r.className)}</td>` : ""}
-    <td>${esc(r.name)}</td>
-    <td>${r.Hadir}</td>
-    <td>${r.Izin}</td>
-    <td>${r.Sakit}</td>
-    <td>${r.Alpa}</td>
-    <td>${r.total}</td>
-    <td>${r.Persentase}%</td>
-  </tr>
-`).join("");
- const html=`<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} - ${esc(reportClassValue)}</title><style>body{font-family:Arial,sans-serif;color:#17251d;margin:24px}h1{text-align:center;font-size:20px;margin:0 0 4px}.sub{text-align:center;margin:0 0 22px;font-size:13px}.meta{margin:12px 0 18px;font-size:13px}.stats{display:flex;gap:8px;margin-bottom:18px}.stat{border:1px solid #999;padding:9px 12px;flex:1;text-align:center}.stat b{display:block;font-size:18px}.stat span{font-size:11px}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border:1px solid #777;padding:8px;text-align:center}th{background:#eee}td:nth-child(2),th:nth-child(2){text-align:left}.sign{display:flex;justify-content:space-between;margin-top:55px;text-align:center;font-size:12px}.sign div{width:40%}.sign strong{display:block;margin-top:65px;text-decoration:underline}.note{font-size:10px;margin-top:24px;color:#555}@media print{body{margin:12mm}@page{size:A4 portrait;margin:12mm}.no-print{display:none}}</style></head><body><h1>MADRASAH DINIYAH KALIGINTUNG</h1><p class="sub">LAPORAN ABSENSI SANTRI</p><div class="meta"><b>Kelas:</b> ${esc(reportClassValue)}<br><b>Bulan:</b> ${esc(reportMonthValue)}</div><div class="stats">${STATUSES.map(st=>`<div class="stat"><b>${totals[st]}</b><span>${st}</span></div>`).join("")}</div><table><thead><tr><th>No.</th><th>Nama Santri</th><th>Hadir</th><th>Izin</th><th>Sakit</th><th>Alpa</th><th>Total</th><th>Kehadiran</th></tr></thead><tbody>${rows}</tbody></table><div class="sign"><div>Mengetahui,<br>Pengurus Madin<strong>(__________________)</strong></div><div>Kaligintung, ....................<br>Admin Absensi<strong>(__________________)</strong></div></div><p class="note">Dicetak dari Aplikasi Absensi Madin Kaligintung.</p><script>window.onload=()=>setTimeout(()=>window.print(),400);</script></body></html>`;
- const w=window.open("","_blank");if(!w){msg("reportMsg","Jendela cetak diblokir. Izinkan pop-up untuk situs ini, lalu coba lagi.",true);return;}w.document.open();w.document.write(html);w.document.close();};
+  const title = "Laporan Absensi Bulanan";
+
+  const totals = Object.fromEntries(
+    STATUSES.map(st => [
+      st,
+      reportRows.reduce((n, r) => n + r[st], 0)
+    ])
+  );
+
+  // Menentukan apakah laporan menampilkan semua kelas.
+  const allClasses = reportClassValue === "Semua Kelas";
+
+  // Membuat isi tabel PDF.
+  const rows = reportRows.map((r, i) => `
+    <tr>
+      <td>${i + 1}</td>
+      ${allClasses ? `<td class="class-col">${esc(r.className)}</td>` : ""}
+      <td class="name-col">${esc(r.name)}</td>
+      <td>${r.Hadir}</td>
+      <td>${r.Izin}</td>
+      <td>${r.Sakit}</td>
+      <td>${r.Alpa}</td>
+      <td>${r.total}</td>
+      <td>${r.Persentase}%</td>
+    </tr>
+  `).join("");
+
+  // Membuat judul kolom PDF.
+  const html = `
+    <!doctype html>
+    <html lang="id">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>${title} - ${esc(reportClassValue)}</title>
+
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          color: #17251d;
+          margin: 24px;
+        }
+
+        h1 {
+          text-align: center;
+          font-size: 20px;
+          margin: 0 0 4px;
+        }
+
+        .sub {
+          text-align: center;
+          margin: 0 0 22px;
+          font-size: 13px;
+        }
+
+        .meta {
+          margin: 12px 0 18px;
+          font-size: 13px;
+        }
+
+        .stats {
+          display: flex;
+          gap: 8px;
+          margin-bottom: 18px;
+        }
+
+        .stat {
+          border: 1px solid #999;
+          padding: 9px 12px;
+          flex: 1;
+          text-align: center;
+        }
+
+        .stat b {
+          display: block;
+          font-size: 18px;
+        }
+
+        .stat span {
+          font-size: 11px;
+        }
+
+        table {
+          border-collapse: collapse;
+          width: 100%;
+          font-size: 12px;
+        }
+
+        th, td {
+          border: 1px solid #777;
+          padding: 8px;
+          text-align: center;
+        }
+
+        th {
+          background: #eee;
+        }
+
+        .class-col,
+        .name-col {
+          text-align: left;
+        }
+
+        .sign {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 55px;
+          text-align: center;
+          font-size: 12px;
+        }
+
+        .sign div {
+          width: 40%;
+        }
+
+        .sign strong {
+          display: block;
+          margin-top: 65px;
+          text-decoration: underline;
+        }
+
+        .note {
+          font-size: 10px;
+          margin-top: 24px;
+          color: #555;
+        }
+
+        @media print {
+          body {
+            margin: 12mm;
+          }
+
+          @page {
+            size: A4 portrait;
+            margin: 12mm;
+          }
+
+          .no-print {
+            display: none;
+          }
+        }
+      </style>
+    </head>
+
+    <body>
+      <h1>MADRASAH DINIYAH KALIGINTUNG</h1>
+
+      <p class="sub">LAPORAN ABSENSI SANTRI</p>
+
+      <div class="meta">
+        <b>Kelas:</b> ${esc(reportClassValue)}
+        <br>
+        <b>Bulan:</b> ${esc(reportMonthValue)}
+      </div>
+
+      <div class="stats">
+        ${STATUSES.map(st => `
+          <div class="stat">
+            <b>${totals[st]}</b>
+            <span>${st}</span>
+          </div>
+        `).join("")}
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>No.</th>
+            ${allClasses ? "<th>Kelas</th>" : ""}
+            <th>Nama Santri</th>
+            <th>Hadir</th>
+            <th>Izin</th>
+            <th>Sakit</th>
+            <th>Alpa</th>
+            <th>Total</th>
+            <th>Kehadiran</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+
+      <div class="sign">
+        <div>
+          Mengetahui,<br>
+          Pengurus Madin
+          <strong>(__________________)</strong>
+        </div>
+
+        <div>
+          Kaligintung, ....................<br>
+          Admin Absensi
+          <strong>(__________________)</strong>
+        </div>
+      </div>
+
+      <p class="note">
+        Dicetak dari Aplikasi Absensi Madin Kaligintung.
+      </p>
+
+      <script>
+        window.onload = () => setTimeout(() => window.print(), 400);
+      </script>
+    </body>
+    </html>
+  `;
+
+  const w = window.open("", "_blank");
+
+  if (!w) {
+    msg(
+      "reportMsg",
+      "Jendela cetak diblokir. Izinkan pop-up untuk situs ini, lalu coba lagi.",
+      true
+    );
+    return;
+  }
+
+  w.document.open();
+  w.document.write(html);
+  w.document.close();
+};
 // FITUR IMPOR DATA SANTRI CSV
 // Format CSV: Nama Santri,Kelas
 const importButton = document.createElement("button");
