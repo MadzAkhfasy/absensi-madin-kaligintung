@@ -659,7 +659,34 @@ tbody tr:last-child td {
 }
 
 /* 15. HALAMAN ABSENSI */
+/* Tampilan daftar absensi lebih rapat */
+#attendancePanel .list-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 0;
+  margin-bottom: 2px;
+}
 
+#attendancePanel .list-row .grow {
+  flex: 1;
+  min-width: 0;
+}
+
+#attendancePanel .list-row strong {
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+#attendancePanel .status-select {
+  width: 105px;
+  min-width: 105px;
+  margin: 0;
+  padding: 6px;
+  font-size: 12px;
+}
 #attendancePanel .card {
   background: var(--white);
   border: 1px solid var(--line);
