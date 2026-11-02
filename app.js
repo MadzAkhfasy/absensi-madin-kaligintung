@@ -457,7 +457,7 @@ $("printReportBtn").onclick = () => {
   );
 
   // Menentukan apakah laporan menampilkan semua kelas.
-  const allClasses = reportClassValue === "Semua Kelas";
+  const allClasses = isAdmin() && $("reportClass").value === "__all__";
 
   // Membuat isi tabel PDF.
   const rows = reportRows.map((r, i) => `
