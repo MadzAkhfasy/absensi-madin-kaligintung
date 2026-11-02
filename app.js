@@ -130,16 +130,20 @@ function renderStudentList() {
     const r = document.createElement("div");
     r.className = "list-row";
 
-    r.innerHTML = `
-      <div class="grow">
-        <strong>${esc(s.name)}</strong>
-        <small>${esc(clsName(s.classId))}</small>
-      </div>
-      <button class="secondary history-btn">Riwayat</button>
-${isAdmin() ? `
-  <button class="secondary edit-btn">Edit</button>
-  <button class="secondary delete-btn">Hapus</button>
-` : ""}
+   r.innerHTML = `
+  <div class="grow">
+    <strong>${esc(s.name)}</strong>
+    <small>${esc(clsName(s.classId))}</small>
+  </div>
+
+  <button type="button" class="secondary history-btn">
+    Riwayat
+  </button>
+
+  ${isAdmin() ? `
+    <button type="button" class="secondary edit-btn">Edit</button>
+    <button type="button" class="secondary delete-btn">Hapus</button>
+  ` : ""}
 `;
     if (isAdmin()) {
       r.querySelector(".edit-btn").onclick = () => {
