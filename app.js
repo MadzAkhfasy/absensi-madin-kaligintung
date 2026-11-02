@@ -490,16 +490,53 @@ $("printReportBtn").onclick = () => {
           margin: 24px;
         }
 
-        h1 {
-          text-align: center;
-          font-size: 20px;
-          margin: 0 0 4px;
+                .letterhead {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          width: 100%;
+          margin: 0 0 22px;
         }
 
-        .sub {
+        .letterhead img {
+          width: 92px;
+          height: 92px;
+          object-fit: contain;
+          flex: 0 0 92px;
+        }
+
+        .letterhead-text {
+          flex: 1;
+          min-width: 0;
           text-align: center;
-          margin: 0 0 22px;
+          color: #075b32;
+        }
+
+        .letterhead-text .organizer {
           font-size: 13px;
+          font-weight: 700;
+          letter-spacing: 1px;
+          margin-bottom: 3px;
+        }
+
+        .letterhead-text .school {
+          font-size: 19px;
+          line-height: 1.15;
+          font-weight: 800;
+          margin-bottom: 7px;
+        }
+
+        .letterhead-text .address {
+          color: #222;
+          font-size: 10px;
+          line-height: 1.35;
+        }
+
+        .report-title {
+          text-align: center;
+          font-size: 16px;
+          margin: 0 0 16px;
+          font-weight: 700;
         }
 
         .meta {
@@ -592,9 +629,16 @@ $("printReportBtn").onclick = () => {
     </head>
 
     <body>
-      <h1>MADRASAH DINIYAH KALIGINTUNG</h1>
+      <div class="letterhead">
+  <img src="https://madzakhfasy.github.io/absensi-madin-kaligintung/LOGO%20MADIN%20REMOVE%20BG.png" alt="Logo Madrasah Diniyah Kaligintung">
+  <div class="letterhead-text">
+    <div class="organizer">PENGURUS</div>
+    <div class="school">MADRASAH DINIYAH KALIGINTUNG</div>
+    <div class="address">Sekretariat: Dusun Kaligintung Rt. 05/ Rw. 03 Cilibang - Jeruklegi 53252</div>
+  </div>
+</div>
 
-      <p class="sub">LAPORAN ABSENSI SANTRI</p>
+<h1 class="report-title">LAPORAN ABSENSI SANTRI</h1>
 
       <div class="meta">
         <b>Kelas:</b> ${esc(reportClassValue)}
