@@ -190,6 +190,48 @@ function renderStudentList() {
     <button type="button" class="secondary delete-btn">Hapus</button>
   ` : ""}
 `;
+
+    r.querySelector(".biodata-btn").onclick = () => {
+      const tanggalLahir = s.birthdate
+        ? new Date(s.birthdate + "T00:00:00").toLocaleDateString("id-ID", {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+          })
+        : "-";
+
+      r.innerHTML = `
+        <div style="width:100%;text-align:center;">
+          ${
+            s.photoUrl
+              ? `<img src="${esc(s.photoUrl)}" alt="Foto ${esc(s.name)}"
+                  style="width:130px;height:160px;object-fit:cover;border-radius:12px;margin-bottom:12px;">`
+              : `<div style="width:130px;height:160px;margin:0 auto 12px;background:#eee;border-radius:12px;display:flex;align-items:center;justify-content:center;">Foto belum tersedia</div>`
+          }
+
+          <h3>${esc(s.name)}</h3>
+          <p class="muted">${esc(clsName(s.classId))}</p>
+        </div>
+
+        <div style="width:100%;margin-top:12px;">
+          <p><b>NIS:</b> ${esc(s.nis || "-")}</p>
+          <p><b>Jenis Kelamin:</b> ${esc(s.gender || "-")}</p>
+          <p><b>Tempat Lahir:</b> ${esc(s.birthplace || "-")}</p>
+          <p><b>Tanggal Lahir:</b> ${tanggalLahir}</p>
+          <p><b>Alamat:</b> ${esc(s.address || "-")}</p>
+          <p><b>Nama Ayah:</b> ${esc(s.fatherName || "-")}</p>
+          <p><b>Nama Ibu:</b> ${esc(s.motherName || "-")}</p>
+          <p><b>No. HP Wali:</b> ${esc(s.guardianPhone || "-")}</p>
+        </div>
+
+        <button type="button" class="secondary profile-back" style="margin-top:12px;">
+          Kembali
+        </button>
+      `;
+
+      r.querySelector(".profile-back").onclick = renderStudentList;
+    };
+
     if (isAdmin()) {
       r.querySelector(".edit-btn").onclick = () => {
   r.innerHTML = `
