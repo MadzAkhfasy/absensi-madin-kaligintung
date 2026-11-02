@@ -920,3 +920,27 @@ footer {
   content: none !important;
   display: none !important;
 }
+/* Tampilan ringkas tombol pada daftar santri */
+.list-row {
+  gap: 6px;
+}
+
+.list-row button {
+  padding: 7px 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.list-row .grow {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.list-row strong {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
