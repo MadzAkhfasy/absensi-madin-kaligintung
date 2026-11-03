@@ -1599,7 +1599,7 @@ MADRASAH DINIYAH KALIGINTUNG
 GREEN ELEGANT DESIGN
 ========================================== */
 
-#studentsPanel .list-row:has(.student-profile-v2) {
+#studentsPanel .list-row.profile-open {
 display: block !important;
 width: 100% !important;
 padding: 0 !important;
