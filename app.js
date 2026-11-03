@@ -563,7 +563,6 @@ r.querySelector(".history-btn").onclick = async () => {
     <small>Religius • Berilmu • Berakhlak Mulia</small>
   </div></div>
 `;r.querySelector(".profile-v2-back").onclick = renderStudentList;
-      r.querySelector(".profile-back").onclick = renderStudentList;
     };
 
     if (isAdmin()) {
