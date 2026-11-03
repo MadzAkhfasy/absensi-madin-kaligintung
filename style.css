@@ -1258,3 +1258,38 @@ font-weight: 500;
 #attendanceClassName {
   display: none !important;
 }
+/* DASHBOARD: DESAIN JUMLAH SANTRI PER KELAS */
+#dashboardPanel #dashClassStats {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+#dashboardPanel #dashClassStats .list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 52px;
+  padding: 12px 16px;
+  background: linear-gradient(145deg, #ffffff, #edf6f0);
+  border: 1px solid #dcebe0;
+  border-left: 4px solid var(--green);
+  border-radius: 14px;
+  box-shadow: 0 5px 15px rgba(16, 75, 50, .07);
+  color: var(--green-dark);
+  font-size: 14px;
+}
+
+#dashboardPanel #dashClassStats .list-item span {
+  min-width: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+#dashboardPanel #dashClassStats .list-item strong {
+  flex: 0 0 auto;
+  color: var(--green);
+  font-size: 14px;
+  font-weight: 800;
+}
