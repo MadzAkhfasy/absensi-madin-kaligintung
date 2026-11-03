@@ -1339,3 +1339,181 @@ document.addEventListener("click", event => {
       .forEach(el => el.classList.remove("is-open"));
   }
 });
+// CETAK DAFTAR SANTRI DAN PENGUMUMAN PEMBAGIAN KELAS
+function fillStudentPdfClass() {
+  const select = $("studentPdfClass");
+  if (!select) return;
+
+  select.innerHTML = '<option value="__all__">Semua Kelas</option>';
+
+  classes.forEach(c => {
+    const option = document.createElement("option");
+    option.value = c.id;
+    option.textContent = c.name;
+    select.appendChild(option);
+  });
+}
+
+$("studentPdfType").addEventListener("change", () => {
+  $("announcementDateWrap").classList.toggle(
+    "hidden",
+    $("studentPdfType").value !== "announcement"
+  );
+});
+
+$("studentPdfType").dispatchEvent(new Event("change"));
+
+$("printStudentsPdfBtn").onclick = () => {
+  try {
+    if (!isAdmin()) {
+      msg("studentPdfMsg", "Fitur ini hanya untuk admin.", true);
+      return;
+    }
+
+    const type = $("studentPdfType").value;
+    const selectedClass = $("studentPdfClass").value;
+    const dateValue = $("studentPdfDate").value;
+
+    if (type === "announcement" && !dateValue) {
+      msg("studentPdfMsg", "Silakan isi tanggal pengumuman.", true);
+      return;
+    }
+
+    const selectedStudents = students
+      .filter(s => selectedClass === "__all__" || s.classId === selectedClass)
+      .sort((a, b) => {
+        const classA = clsName(a.classId);
+        const classB = clsName(b.classId);
+        return classA.localeCompare(classB) || a.name.localeCompare(b.name);
+      });
+
+    if (!selectedStudents.length) {
+      msg("studentPdfMsg", "Tidak ada data santri untuk dicetak.", true);
+      return;
+    }
+
+    const grouped = classes
+      .filter(c => selectedClass === "__all__" || c.id === selectedClass)
+      .map(c => ({
+        name: c.name,
+        students: selectedStudents.filter(s => s.classId === c.id)
+      }))
+      .filter(group => group.students.length);
+
+    const rows = grouped.map(group => `
+      <div class="class-group">
+        <h3>${esc(group.name)}</h3>
+        <table>
+          <thead>
+            <tr><th style="width:55px">No.</th><th>Nama Santri</th></tr>
+          </thead>
+          <tbody>
+            ${group.students.map((s, i) => `
+              <tr>
+                <td>${i + 1}</td>
+                <td>${esc(s.name)}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+    `).join("");
+
+    const title = type === "announcement"
+      ? "PENGUMUMAN PEMBAGIAN KELAS"
+      : "DAFTAR SANTRI PER KELAS";
+
+    const dateText = dateValue
+      ? new Date(dateValue + "T00:00:00").toLocaleDateString("id-ID", {
+          day: "numeric", month: "long", year: "numeric"
+        })
+      : "";
+
+    const printWindow = window.open("", "_blank");
+
+    if (!printWindow) {
+      msg("studentPdfMsg", "Popup diblokir. Izinkan pop-up lalu coba lagi.", true);
+      return;
+    }
+
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html lang="id">
+      <head>
+        <meta charset="UTF-8">
+        <title>${title}</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            color: #222;
+            margin: 25px;
+          }
+          .letterhead {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            border-bottom: 3px double #222;
+            padding-bottom: 12px;
+            margin-bottom: 25px;
+            text-align: center;
+          }
+          .letterhead img { width: 75px; height: 75px; object-fit: contain; }
+          .letterhead h2 { margin: 0; font-size: 19px; }
+          .letterhead p { margin: 5px 0 0; font-size: 12px; }
+          h3 { margin: 22px 0 8px; font-size: 15px; }
+          .title { text-align: center; margin: 20px 0; }
+          .date { text-align: right; margin: 20px 0; }
+          table { width: 100%; border-collapse: collapse; }
+          th, td { border: 1px solid #555; padding: 7px; text-align: left; }
+          th { background: #eee; }
+          td:first-child { text-align: center; }
+          .class-group { margin-bottom: 18px; }
+          @media print {
+            body { margin: 15mm; }
+            .class-group { page-break-inside: avoid; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="letterhead">
+          <img src="https://madzakhfasy.github.io/absensi-madin-kaligintung/LOGO%20MADIN%20REMOVE%20BG.png">
+          <div>
+            <h2>MADRASAH DINIYAH KALIGINTUNG</h2>
+            <p>Sekretariat: Dusun Kaligintung, Desa Cilibang</p>
+          </div>
+        </div>
+
+        <h3 class="title">${title}</h3>
+
+        ${type === "announcement" ? `
+          <p>
+            Diberitahukan kepada seluruh wali santri bahwa pembagian kelas
+            santri Madrasah Diniyah Kaligintung adalah sebagai berikut:
+          </p>
+          <p class="date">Tanggal: ${dateText}</p>
+        ` : ""}
+
+        ${rows}
+
+        <p style="margin-top:25px">
+          Jumlah seluruh santri: <strong>${selectedStudents.length} santri</strong>
+        </p>
+
+        ${type === "announcement" ? `
+          <p>Demikian pengumuman ini disampaikan. Terima kasih atas perhatian dan kerja samanya.</p>
+        ` : ""}
+        <script>
+          window.onload = () => window.print();
+        <\/script>
+      </body>
+      </html>
+    `);
+
+    printWindow.document.close();
+    msg("studentPdfMsg", "Dokumen siap dicetak atau disimpan sebagai PDF.");
+  } catch (error) {
+    console.error(error);
+    msg("studentPdfMsg", "Gagal membuat PDF: " + error.message, true);
+  }
+};
