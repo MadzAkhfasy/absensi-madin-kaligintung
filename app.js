@@ -835,7 +835,7 @@ async function loadReport() {
     `;
 
     $("exportBtn").classList.remove("hidden");
-
+$("shareImageBtn").classList.remove("hidden");
     msg(
       "reportMsg",
       `Rekap ${month} · ${reportClassValue} berhasil dimuat. ${rows.length} santri.`
