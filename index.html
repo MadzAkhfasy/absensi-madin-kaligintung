@@ -220,6 +220,35 @@
     <div id="studentPdfMsg" class="message"></div>
   </div>
 </section>
+      <section id="backupPanel" class="panel hidden admin-only">
+  <div class="card">
+    <h2>Backup dan Restore Data</h2>
+    <p class="muted">Simpan cadangan data santri, kelas, dan absensi.</p>
+
+    <button id="backupDataBtn" class="primary full">
+      Unduh Backup Data
+    </button>
+
+    <hr>
+
+    <h3>Restore Data</h3>
+    <p class="muted">
+      Pilih file backup JSON untuk memulihkan data.
+    </p>
+    <p class="muted">
+      Restore akan menggabungkan data cadangan dengan data saat ini,
+      bukan menghapus seluruh data yang sudah ada.
+    </p>
+
+    <input id="restoreFile" type="file" accept=".json,application/json">
+
+    <button id="restoreDataBtn" class="secondary full">
+      Pulihkan Data
+    </button>
+
+    <div id="backupMsg" class="message"></div>
+  </div>
+      </section>
     </section>
   </main>
 
