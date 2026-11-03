@@ -223,6 +223,22 @@
       <section id="backupPanel" class="panel hidden admin-only">
   <div class="card">
     <h2>Backup dan Restore Data</h2>
+    <hr>
+
+<h3>📸 Pemantauan Foto Santri</h3>
+
+<div class="card">
+  <p>Total Santri: <strong id="photoTotal">-</strong></p>
+  <p>Sudah Ada Foto: <strong id="photoUploaded">-</strong></p>
+  <p>Belum Ada Foto: <strong id="photoMissing">-</strong></p>
+  <p>Kelengkapan Foto: <strong id="photoPercentage">-</strong></p>
+
+  <button id="refreshPhotoStatsBtn" class="secondary full">
+    Perbarui Jumlah Foto
+  </button>
+
+  <div id="photoStatsMsg" class="message"></div>
+</div>
     <p class="muted">Simpan cadangan data santri, kelas, dan absensi.</p>
 
     <button id="backupDataBtn" class="primary full">
