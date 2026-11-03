@@ -409,33 +409,86 @@ r.querySelector(".history-btn").onclick = async () => {
         : "-";
 
       r.innerHTML = `
-        <div style="width:100%;text-align:center;">
-          ${
-            s.photoUrl
-              ? `<img src="${esc(s.photoUrl)}" alt="Foto ${esc(s.name)}"
-                  style="width:130px;height:160px;object-fit:cover;border-radius:12px;margin-bottom:12px;">`
-              : `<div style="width:130px;height:160px;margin:0 auto 12px;background:#eee;border-radius:12px;display:flex;align-items:center;justify-content:center;">Foto belum tersedia</div>`
-          }
+  <div class="student-profile">
 
-          <h3>${esc(s.name)}</h3>
-          <p class="muted">${esc(clsName(s.classId))}</p>
-        </div>
+    <div class="profile-hero">
+      <div class="profile-photo-wrap">
+        ${
+          s.photoUrl
+            ? `<img class="profile-photo" src="${esc(s.photoUrl)}" alt="Foto ${esc(s.name)}">`
+            : `<div class="profile-photo-placeholder">Foto belum tersedia</div>`
+        }
+      </div>
 
-        <div style="width:100%;margin-top:12px;">
-          <p><b>NIS:</b> ${esc(s.nis || "-")}</p>
-          <p><b>Jenis Kelamin:</b> ${s.gender === "L" || s.gender === "Laki-laki" ? "Laki-Laki" : s.gender === "P" || s.gender === "Perempuan" ? "Perempuan" : "-"}</p>
-          <p><b>Tempat Lahir:</b> ${esc(s.birthplace || "-")}</p>
-          <p><b>Tanggal Lahir:</b> ${tanggalLahir}</p>
-          <p><b>Alamat:</b> ${esc(s.address || "-")}</p>
-          <p><b>Nama Ayah:</b> ${esc(s.fatherName || "-")}</p>
-          <p><b>Nama Ibu:</b> ${esc(s.motherName || "-")}</p>
-          <p><b>No. HP Wali:</b> ${esc(s.guardianPhone || "-")}</p>
-        </div>
+      <h2 class="profile-name">${esc(s.name)}</h2>
 
-        <button type="button" class="secondary profile-back" style="margin-top:12px;">
-          Kembali
-        </button>
-      `;
+      <div class="profile-divider">
+        <span>✦</span>
+      </div>
+
+      <div class="profile-class">
+        🎓 ${esc(clsName(s.classId))}
+      </div>
+    </div>
+
+    <div class="profile-details">
+
+      <div class="profile-detail">
+        <span class="profile-icon">▣</span>
+        <strong>NIS</strong>
+        <span>${esc(s.nis || "-")}</span>
+      </div>
+
+      <div class="profile-detail">
+        <span class="profile-icon">♟</span>
+        <strong>Jenis Kelamin</strong>
+        <span>${s.gender === "L" || s.gender === "Laki-laki" ? "Laki-Laki" : s.gender === "P" || s.gender === "Perempuan" ? "Perempuan" : "-"}</span>
+      </div>
+
+      <div class="profile-detail">
+        <span class="profile-icon">⌖</span>
+        <strong>Tempat Lahir</strong>
+        <span>${esc(s.birthplace || "-")}</span>
+      </div>
+
+      <div class="profile-detail">
+        <span class="profile-icon">▦</span>
+        <strong>Tanggal Lahir</strong>
+        <span>${tanggalLahir}</span>
+      </div>
+
+      <div class="profile-detail">
+        <span class="profile-icon">📍</span>
+        <strong>Alamat</strong>
+        <span>${esc(s.address || "-")}</span>
+      </div>
+
+      <div class="profile-detail">
+        <span class="profile-icon">♙</span>
+        <strong>Nama Ayah</strong>
+        <span>${esc(s.fatherName || "-")}</span>
+      </div>
+
+      <div class="profile-detail">
+        <span class="profile-icon">♙</span>
+        <strong>Nama Ibu</strong>
+        <span>${esc(s.motherName || "-")}</span>
+      </div>
+
+      <div class="profile-detail">
+        <span class="profile-icon">☎</span>
+        <strong>No. HP Wali</strong>
+        <span>${esc(s.guardianPhone || "-")}</span>
+      </div>
+
+    </div>
+
+    <button type="button" class="profile-back">
+      ← &nbsp; Kembali
+    </button>
+
+  </div>
+`;
 
       r.querySelector(".profile-back").onclick = renderStudentList;
     };
