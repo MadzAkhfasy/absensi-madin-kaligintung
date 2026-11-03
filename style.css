@@ -1802,20 +1802,13 @@ box-shadow: 0 5px 18px rgba(0,60,40,.07);
 /* BARIS BIODATA */
 
 .profile-v2-item {
-display: grid;
-
-grid-template-columns:
-44px
-minmax(0, .95fr)
-minmax(0, 1.1fr);
-
-align-items: center;
-gap: 10px;
-
-min-height: 65px;
-padding: 9px 0;
-
-border-bottom: 1px solid #e8ede9;
+  display: grid;
+  grid-template-columns: 42px 115px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  min-height: 62px;
+  padding: 10px 0;
+  border-bottom: 1px solid #e8ede9;
 }
 
 .profile-v2-item:last-child {
@@ -2022,17 +2015,11 @@ font-size: 13px;
 
 /* HP LAYAR KECIL */
 
-@media(max-width:360px) {
-
-.profile-v2-item {
-grid-template-columns:
-33px
-minmax(0,.95fr)
-minmax(0,1fr);
-
-gap: 6px;
-
-}
+@media (max-width: 380px) {
+  .profile-v2-item {
+    grid-template-columns: 34px 100px minmax(0, 1fr);
+    gap: 7px;
+  }
 
 .profile-v2-icon {
 width: 32px;
