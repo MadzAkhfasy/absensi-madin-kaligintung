@@ -2072,3 +2072,105 @@ line-height: 1.35 !important;
 padding-top: 5px !important;
 padding-bottom: 5px !important;
 }
+/* =====================================
+FINAL FIX - JARAK BIODATA SANTRI
+===================================== */
+
+/* Memadatkan seluruh baris biodata */
+.student-profile-v2 .profile-v2-item {
+display: grid !important;
+
+grid-template-columns: 36px 112px minmax(0, 1fr) !important;
+
+align-items: center !important;
+gap: 8px !important;
+
+min-height: 0 !important;
+height: auto !important;
+
+padding: 5px 0 !important;
+margin: 0 !important;
+
+line-height: 1.25 !important;
+}
+
+/* Ikon biodata */
+.student-profile-v2 .profile-v2-icon {
+width: 32px !important;
+height: 32px !important;
+margin: 0 !important;
+}
+
+.student-profile-v2 .profile-v2-icon svg {
+width: 18px !important;
+height: 18px !important;
+}
+
+/* Label biodata */
+.student-profile-v2 .profile-v2-item strong {
+margin: 0 !important;
+padding: 0 !important;
+line-height: 1.25 !important;
+}
+
+/* Isi biodata */
+.student-profile-v2 .profile-v2-item > span {
+margin: 0 !important;
+padding: 0 !important;
+line-height: 1.3 !important;
+}
+
+/* Kartu biodata */
+.student-profile-v2 .profile-v2-card {
+padding: 4px 12px !important;
+}
+
+/* =====================================
+MEMPERPENDEK JARAK FOTO KE BIODATA
+===================================== */
+
+/* Memperkecil tinggi header */
+.student-profile-v2 .profile-v2-header {
+padding-top: 16px !important;
+padding-bottom: 8px !important;
+}
+
+/* Mengurangi jarak bawah foto */
+.student-profile-v2 .profile-v2-photo {
+margin-bottom: 10px !important;
+}
+
+/* Mengurangi jarak nama */
+.student-profile-v2 .profile-v2-name {
+margin-bottom: 7px !important;
+}
+
+/* Mengurangi jarak ornamen */
+.student-profile-v2 .profile-v2-divider {
+margin-bottom: 8px !important;
+}
+
+/* Memperkecil jarak kelas ke biodata */
+.student-profile-v2 .profile-v2-content {
+padding-top: 0 !important;
+margin-top: -2px !important;
+}
+
+/* Memastikan tidak ada ruang tambahan */
+.student-profile-v2 {
+gap: 0 !important;
+}
+
+/* =====================================
+RESPONSIVE HP
+===================================== */
+
+@media (max-width: 380px) {
+
+.student-profile-v2 .profile-v2-item {
+grid-template-columns: 32px 100px minmax(0, 1fr) !important;
+gap: 6px !important;
+padding: 5px 0 !important;
+}
+
+}
