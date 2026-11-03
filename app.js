@@ -423,7 +423,7 @@ r.querySelector(".history-btn").onclick = async () => {
 
         <div style="width:100%;margin-top:12px;">
           <p><b>NIS:</b> ${esc(s.nis || "-")}</p>
-          <p><b>Jenis Kelamin:</b> ${esc(s.gender || "-")}</p>
+          <p><b>Jenis Kelamin:</b> ${s.gender === "L" || s.gender === "Laki-laki" ? "Laki-Laki" : s.gender === "P" || s.gender === "Perempuan" ? "Perempuan" : "-"}</p>
           <p><b>Tempat Lahir:</b> ${esc(s.birthplace || "-")}</p>
           <p><b>Tanggal Lahir:</b> ${tanggalLahir}</p>
           <p><b>Alamat:</b> ${esc(s.address || "-")}</p>
