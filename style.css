@@ -2174,3 +2174,43 @@ padding: 5px 0 !important;
 }
 
 }
+/* =====================================
+   FIX NIS TERTUTUP HEADER PROFIL
+===================================== */
+
+/* Hilangkan dekorasi lengkung yang menutupi NIS */
+.student-profile-v2 .profile-v2-header::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* Atur batas bawah header */
+.student-profile-v2 .profile-v2-header {
+  position: relative !important;
+  padding-bottom: 18px !important;
+  margin-bottom: 0 !important;
+  overflow: visible !important;
+}
+
+/* Pastikan biodata berada di depan dan tidak tertutup */
+.student-profile-v2 .profile-v2-content {
+  position: relative !important;
+  z-index: 5 !important;
+  margin-top: 0 !important;
+  padding-top: 10px !important;
+}
+
+/* Pastikan kartu biodata tampil utuh */
+.student-profile-v2 .profile-v2-card {
+  position: relative !important;
+  z-index: 6 !important;
+  overflow: visible !important;
+}
+
+/* Pastikan baris NIS tidak terpotong */
+.student-profile-v2 .profile-v2-item:first-child {
+  display: grid !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  margin-top: 0 !important;
+}
