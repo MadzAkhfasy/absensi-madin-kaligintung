@@ -108,7 +108,7 @@ onAuthStateChanged(auth,async user=>{
  try{
   const p=await getDoc(doc(db,"users",user.uid));
   if(!p.exists()){await signOut(auth);msg("authMsg","Profil belum dibuat. Hubungi admin.",true);return;}
-  profile=p.data(); await loadClasses();
+  profile=p.data(); await loadClasses(); fillStudentPdfClass();
   $("authView").classList.add("hidden");$("appView").classList.remove("hidden");$("logoutBtn").classList.remove("hidden");
   $("hello").textContent="Halo, "+(profile.name||user.email);$("roleInfo").textContent=isAdmin()?"Admin/Pengurus":profile?.role==="petugas"?"Admin Absensi · Semua Kelas":"Pengajar · "+clsName(myClass());
   document.querySelectorAll(".admin-only:not(.panel)").forEach(x=>x.classList.toggle("hidden",!isAdmin()));
