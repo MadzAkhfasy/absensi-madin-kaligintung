@@ -1229,3 +1229,32 @@ font-weight: 500;
   margin: 0;
   min-height: 40px;
 }
+/* ABSENSI: DROPDOWN KELAS MINIMALIS */
+#attendanceClassWrap {
+  display: block !important;
+  margin: 10px 0 14px !important;
+  padding: 0 !important;
+  font-size: 0 !important;
+}
+
+#attendanceClassWrap .custom-select-wrap {
+  width: 100% !important;
+}
+
+#attendanceClassWrap .custom-select-trigger {
+  min-height: 48px !important;
+  justify-content: center !important;
+  text-align: center !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+}
+
+#attendanceClassWrap .custom-select-trigger::after {
+  position: absolute;
+  right: 16px;
+}
+
+#attendanceClassName {
+  display: none !important;
+}
