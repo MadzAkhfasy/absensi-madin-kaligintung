@@ -408,6 +408,7 @@ r.querySelector(".history-btn").onclick = async () => {
           })
         : "-";
 
+      r.classList.add("profile-open");
       r.innerHTML = `
 
 <div class="student-profile-v2">  <!-- HEADER PROFIL -->  <div class="profile-v2-header"><div class="profile-v2-ornament">۞</div>
