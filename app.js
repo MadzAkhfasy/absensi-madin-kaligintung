@@ -1228,4 +1228,114 @@ $("dashTotalClasses").textContent = canAccessAllClasses() ? classes.length : 1;
   $("dashIzin").textContent = records.filter(r => r.status === "Izin").length;
   $("dashSakit").textContent = records.filter(r => r.status === "Sakit").length;
   $("dashAlpa").textContent = records.filter(r => r.status === "Alpa").length;
+}// DROPDOWN CUSTOM MADIN
+function enhanceCustomDropdown(select) {
+  if (select.dataset.customized === "true") return;
+  select.dataset.customized = "true";
+
+  const wrap = document.createElement("div");
+  wrap.className = "custom-select-wrap";
+  select.parentNode.insertBefore(wrap, select);
+  wrap.appendChild(select);
+  select.classList.add("native-select-hidden");
+
+  const trigger = document.createElement("button");
+  trigger.type = "button";
+  trigger.className = "custom-select-trigger";
+  trigger.setAttribute("aria-haspopup", "listbox");
+  trigger.setAttribute("aria-expanded", "false");
+  wrap.appendChild(trigger);
+
+  const menu = document.createElement("div");
+  menu.className = "custom-select-menu hidden";
+  menu.setAttribute("role", "listbox");
+  wrap.appendChild(menu);
+
+  function refresh() {
+    const chosen = select.options[select.selectedIndex];
+    trigger.textContent = chosen ? chosen.textContent : "Pilih...";
+    menu.innerHTML = "";
+
+    Array.from(select.options).forEach((option, index) => {
+      if (option.disabled) return;
+
+      const item = document.createElement("button");
+      item.type = "button";
+      item.className = "custom-select-option" +
+        (option.selected ? " selected" : "");
+      item.textContent = option.textContent;
+
+      if (option.selected) {
+        const check = document.createElement("span");
+        check.className = "custom-select-check";
+        check.textContent = "✓";
+        item.appendChild(check);
+      }
+
+      item.onclick = () => {
+        select.selectedIndex = index;
+        select.dispatchEvent(new Event("change", { bubbles: true }));
+        refresh();
+        closeMenu();
+      };
+
+      menu.appendChild(item);
+    });
+  }
+
+  function closeMenu() {
+    menu.classList.add("hidden");
+    trigger.setAttribute("aria-expanded", "false");
+    wrap.classList.remove("is-open");
+  }
+
+  trigger.onclick = () => {
+    const opening = menu.classList.contains("hidden");
+
+    document.querySelectorAll(".custom-select-menu")
+      .forEach(el => el.classList.add("hidden"));
+
+    document.querySelectorAll(".custom-select-wrap")
+      .forEach(el => el.classList.remove("is-open"));
+
+    if (opening) {
+      menu.classList.remove("hidden");
+      trigger.setAttribute("aria-expanded", "true");
+      wrap.classList.add("is-open");
+    } else {
+      closeMenu();
+    }
+  };
+
+  select.addEventListener("change", refresh);
+
+  new MutationObserver(refresh).observe(select, {
+    childList: true,
+    subtree: true,
+    attributes: true
+  });
+
+  refresh();
 }
+
+function initializeCustomDropdowns() {
+  document.querySelectorAll("select:not([data-customized='true'])")
+    .forEach(enhanceCustomDropdown);
+}
+
+initializeCustomDropdowns();
+
+new MutationObserver(initializeCustomDropdowns).observe(document.body, {
+  childList: true,
+  subtree: true
+});
+
+document.addEventListener("click", event => {
+  if (!event.target.closest(".custom-select-wrap")) {
+    document.querySelectorAll(".custom-select-menu")
+      .forEach(el => el.classList.add("hidden"));
+
+    document.querySelectorAll(".custom-select-wrap")
+      .forEach(el => el.classList.remove("is-open"));
+  }
+});
