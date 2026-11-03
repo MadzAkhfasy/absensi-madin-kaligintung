@@ -2214,3 +2214,71 @@ padding: 5px 0 !important;
   opacity: 1 !important;
   margin-top: 0 !important;
 }
+/* =====================================
+   FIX FINAL NIS TERPOTONG
+===================================== */
+
+/* Hilangkan lengkungan yang menutupi biodata */
+.profile-v2-header::before {
+    display: none !important;
+    content: none !important;
+}
+
+/* Atur ulang header */
+.student-profile-v2 .profile-v2-header {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding-bottom: 12px !important;
+    margin-bottom: 0 !important;
+    overflow: visible !important;
+}
+
+/* Area biodata */
+.student-profile-v2 .profile-v2-content {
+    display: block !important;
+    position: relative !important;
+    z-index: 10 !important;
+
+    height: auto !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 8px 9px 5px !important;
+
+    overflow: visible !important;
+}
+
+/* Kartu biodata */
+.student-profile-v2 .profile-v2-card {
+    display: block !important;
+    position: relative !important;
+    z-index: 11 !important;
+
+    height: auto !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 8px 12px !important;
+
+    background: #ffffff !important;
+    overflow: visible !important;
+}
+
+/* Baris pertama NIS */
+.student-profile-v2 .profile-v2-card
+.profile-v2-item:first-child {
+    display: grid !important;
+    position: relative !important;
+
+    min-height: 48px !important;
+    height: auto !important;
+
+    margin-top: 0 !important;
+    padding-top: 5px !important;
+
+    visibility: visible !important;
+    opacity: 1 !important;
+   }
