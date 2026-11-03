@@ -1831,3 +1831,292 @@ $("restoreDataBtn").onclick = async () => {
     msg("backupMsg", "Restore gagal: " + error.message, true);
   }
 };
+$("shareImageBtn").onclick = async () => {
+  if (!reportRows.length) {
+    return msg("reportMsg", "Tampilkan rekap terlebih dahulu.", true);
+  }
+
+  const btn = $("shareImageBtn");
+  btn.disabled = true;
+  btn.textContent = "Membuat gambar...";
+
+  try {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    const W = 1200;
+    const margin = 45;
+    const tableWidth = W - margin * 2;
+
+    canvas.width = W;
+
+    const logo = new Image();
+    logo.crossOrigin = "anonymous";
+    logo.src = "https://madzakhfasy.github.io/absensi-madin-kaligintung/LOGO%20MADIN%20REMOVE%20BG.png";
+
+    await new Promise((resolve, reject) => {
+      logo.onload = resolve;
+      logo.onerror = reject;
+    });
+
+    const nameWidth = 490;
+    const fontName = "28px Arial";
+
+    function wrapText(text, maxWidth, font) {
+      ctx.font = font;
+      const words = String(text || "").split(/\s+/);
+      const lines = [];
+      let line = "";
+
+      words.forEach(word => {
+        const test = line ? line + " " + word : word;
+
+        if (ctx.measureText(test).width > maxWidth && line) {
+          lines.push(line);
+          line = word;
+        } else {
+          line = test;
+        }
+      });
+
+      if (line) lines.push(line);
+      return lines.length ? lines : [""];
+    }
+
+    const preparedRows = reportRows.map((r, i) => {
+      const lines = wrapText(r.name, nameWidth, fontName);
+      return {
+        ...r,
+        no: i + 1,
+        nameLines: lines,
+        height: Math.max(76, lines.length * 34 + 28)
+      };
+    });
+
+    const tableHeaderHeight = 90;
+    const headerHeight = 420;
+    const footerHeight = 180;
+
+    const tableHeight = preparedRows.reduce(
+      (sum, r) => sum + r.height,
+      tableHeaderHeight
+    );
+
+    canvas.height = headerHeight + tableHeight + footerHeight;
+
+    // Latar belakang
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, W, canvas.height);
+
+    // Ornamen atas
+    ctx.fillStyle = "#075b35";
+    ctx.fillRect(0, 0, W, 18);
+
+    ctx.strokeStyle = "#d8ad35";
+    ctx.lineWidth = 8;
+    ctx.beginPath();
+    ctx.moveTo(0, 28);
+    ctx.lineTo(W, 28);
+    ctx.stroke();
+
+    // Logo asli
+    ctx.drawImage(logo, 65, 65, 230, 230);
+
+    // Identitas Madin
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#075b35";
+    ctx.font = "bold 65px Arial";
+    ctx.fillText("MADIN KALIGINTUNG", 330, 145);
+
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(325, 175, 815, 75);
+
+    ctx.fillStyle = "#075b35";
+    ctx.fillRect(325, 175, 815, 75);
+
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 38px Arial";
+    ctx.fillText("REKAP KEHADIRAN SANTRI", 732, 225);
+
+    ctx.fillStyle = "#075b35";
+    ctx.font = "italic 28px Arial";
+    ctx.fillText(
+      "Belajar Bersama, Meraih Ridha Allah",
+      735,
+      300
+    );
+
+    // Informasi laporan
+    const infoY = 345;
+    const infoH = 65;
+
+    ctx.fillStyle = "#edf8e9";
+    ctx.strokeStyle = "#176b45";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.roundRect(margin, infoY, tableWidth, infoH, 18);
+    ctx.fill();
+    ctx.stroke();
+
+    const totalHadir = reportRows.reduce((s, r) => s + r.Hadir, 0);
+    const totalIzin = reportRows.reduce((s, r) => s + r.Izin, 0);
+    const totalSakit = reportRows.reduce((s, r) => s + r.Sakit, 0);
+    const totalAlpa = reportRows.reduce((s, r) => s + r.Alpa, 0);
+
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#123c27";
+    ctx.font = "bold 24px Arial";
+
+    ctx.fillText(`KELAS: ${reportClassValue}`, 240, 385);
+    ctx.fillText(`BULAN: ${reportMonthValue}`, 600, 385);
+    ctx.fillText(`TOTAL SANTRI: ${reportRows.length}`, 970, 385);
+
+    // Header tabel
+    let y = headerHeight;
+
+    const cols = [
+      { label: "NO", x: 45, w: 75 },
+      { label: "NAMA SANTRI", x: 120, w: 470 },
+      { label: "H", x: 590, w: 110 },
+      { label: "I", x: 700, w: 110 },
+      { label: "S", x: 810, w: 110 },
+      { label: "A", x: 920, w: 110 },
+      { label: "%", x: 1050, w: 105 }
+    ];
+
+    ctx.fillStyle = "#075b35";
+    ctx.fillRect(margin, y, tableWidth, tableHeaderHeight);
+
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 27px Arial";
+    ctx.textAlign = "center";
+
+    cols.forEach(c => {
+      ctx.fillText(c.label, c.x + c.w / 2, y + 55);
+    });
+
+    y += tableHeaderHeight;
+
+    // Isi tabel
+    preparedRows.forEach((r, i) => {
+      ctx.fillStyle = i % 2 === 0 ? "#edf7ed" : "#ffffff";
+      ctx.fillRect(margin, y, tableWidth, r.height);
+
+      ctx.strokeStyle = "#a8c9ae";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(margin, y, tableWidth, r.height);
+
+      ctx.fillStyle = "#172b20";
+      ctx.font = "26px Arial";
+      ctx.textAlign = "center";
+
+      const centerY = y + r.height / 2 + 9;
+
+      ctx.fillText(r.no, 82, centerY);
+
+      // Nama lengkap, otomatis turun baris
+      ctx.textAlign = "left";
+      ctx.font = fontName;
+
+      r.nameLines.forEach((line, index) => {
+        ctx.fillText(
+          line,
+          135,
+          y + (r.height - r.nameLines.length * 34) / 2 + 27 + index * 34
+        );
+      });
+
+      ctx.textAlign = "center";
+      ctx.font = "bold 27px Arial";
+
+      ctx.fillText(r.Hadir, 645, centerY);
+      ctx.fillText(r.Izin, 755, centerY);
+      ctx.fillText(r.Sakit, 865, centerY);
+      ctx.fillText(r.Alpa, 975, centerY);
+
+      ctx.fillStyle = "#075b35";
+      ctx.fillText(`${r.Persentase}%`, 1100, centerY);
+
+      y += r.height;
+    });
+
+    // Garis pemisah kolom
+    ctx.strokeStyle = "#a8c9ae";
+    ctx.lineWidth = 2;
+
+    [120, 590, 700, 810, 920, 1050].forEach(x => {
+      ctx.beginPath();
+      ctx.moveTo(x, headerHeight);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    });
+
+    // Footer statistik
+    y += 35;
+
+    ctx.fillStyle = "#075b35";
+    ctx.beginPath();
+    ctx.roundRect(margin, y, tableWidth, 65, 18);
+    ctx.fill();
+
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 26px Arial";
+    ctx.textAlign = "center";
+
+    ctx.fillText(
+      `HADIR ${totalHadir}  •  IZIN ${totalIzin}  •  SAKIT ${totalSakit}  •  ALPA ${totalAlpa}`,
+      W / 2,
+      y + 42
+    );
+
+    y += 105;
+
+    ctx.fillStyle = "#075b35";
+    ctx.font = "italic 27px Arial";
+    ctx.fillText(
+      "Semoga ilmu yang dipelajari menjadi bekal kebaikan.",
+      W / 2,
+      y
+    );
+
+    ctx.fillStyle = "#d8ad35";
+    ctx.fillRect(0, canvas.height - 18, W, 18);
+
+    // Buat file gambar
+    const blob = await new Promise(resolve =>
+      canvas.toBlob(resolve, "image/png")
+    );
+
+    if (!blob) throw new Error("Gambar gagal dibuat.");
+
+    const file = new File(
+      [blob],
+      `Rekap-${reportClassValue}-${reportMonthValue}.png`,
+      { type: "image/png" }
+    );
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: "Rekap Kehadiran Madin Kaligintung"
+      });
+    } else {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = file.name;
+      link.click();
+
+      setTimeout(() => URL.revokeObjectURL(url), 3000);
+      msg("reportMsg", "Gambar rekap berhasil disimpan.");
+    }
+
+  } catch (e) {
+    console.error(e);
+    msg("reportMsg", "Gagal membuat gambar: " + e.message, true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Simpan Rekap sebagai Gambar";
+  }
+};
