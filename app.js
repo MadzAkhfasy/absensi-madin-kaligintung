@@ -202,6 +202,37 @@ async function loadStudents(){
  let qy=canAccessAllClasses()?collection(db,"students"):query(collection(db,"students"),where("classId","==",myClass()));
  const snap=await getDocs(qy);students=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.name.localeCompare(b.name));
  renderStudentList();}
+async function loadPhotoStats() {
+  try {
+    $("photoStatsMsg").textContent = "Menghitung foto santri...";
+
+    const snap = await getDocs(collection(db, "students"));
+    const total = snap.size;
+
+    const uploaded = snap.docs.filter(docSnap => {
+      const data = docSnap.data();
+      return data.photoUrl && data.photoUrl.trim() !== "";
+    }).length;
+
+    const missing = total - uploaded;
+    const percentage = total > 0
+      ? Math.round((uploaded / total) * 100)
+      : 0;
+
+    $("photoTotal").textContent = total;
+    $("photoUploaded").textContent = uploaded;
+    $("photoMissing").textContent = missing;
+    $("photoPercentage").textContent = percentage + "%";
+
+    $("photoStatsMsg").textContent = "Data berhasil diperbarui.";
+  } catch (error) {
+    console.error(error);
+    $("photoStatsMsg").textContent =
+      "Gagal menghitung foto: " + error.message;
+  }
+}
+
+$("refreshPhotoStatsBtn").onclick = loadPhotoStats;
 function renderStudentList() {
   const keyword = $("studentSearch")?.value
     .trim()
