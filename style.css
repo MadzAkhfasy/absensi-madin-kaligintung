@@ -2039,3 +2039,36 @@ font-size: 11px;
 font-size: 12px;
 }
    }
+/* PERBAIKAN JARAK BARIS BIODATA */
+
+.student-profile-v2 .profile-v2-item {
+min-height: 48px !important;
+padding: 5px 0 !important;
+gap: 8px !important;
+}
+
+/* Ukuran ikon */
+.student-profile-v2 .profile-v2-icon {
+width: 34px !important;
+height: 34px !important;
+}
+
+.student-profile-v2 .profile-v2-icon svg {
+width: 19px !important;
+height: 19px !important;
+}
+
+/* Tulisan biodata */
+.student-profile-v2 .profile-v2-item strong {
+line-height: 1.3 !important;
+}
+
+.student-profile-v2 .profile-v2-item > span {
+line-height: 1.35 !important;
+}
+
+/* Jarak dalam kartu biodata */
+.student-profile-v2 .profile-v2-card {
+padding-top: 5px !important;
+padding-bottom: 5px !important;
+}
