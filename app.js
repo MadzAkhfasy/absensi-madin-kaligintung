@@ -1964,7 +1964,7 @@ ctx.fillText(
     ctx.fillStyle = "#123c27";
     ctx.font = "bold 24px Arial";
 
-    ctx.fillText(`KELAS: ${reportClassValue}`, 240, 385);
+    ctx.fillText(`${reportClassValue}`, 240, 385);
     ctx.fillText(`BULAN: ${reportMonthValue}`, 600, 385);
     ctx.fillText(`TOTAL SANTRI: ${reportRows.length}`, 970, 385);
 
