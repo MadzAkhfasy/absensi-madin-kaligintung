@@ -1516,3 +1516,197 @@ $("printStudentsPdfBtn").onclick = () => {
     msg("studentPdfMsg", "Gagal membuat PDF: " + error.message, true);
   }
 };
+
+// ================= BACKUP DAN RESTORE DATA =================
+
+function serializeBackupValue(value) {
+  if (value instanceof Timestamp) {
+    return {
+      __backupType: "timestamp",
+      seconds: value.seconds,
+      nanoseconds: value.nanoseconds
+    };
+  }
+
+  if (value instanceof Date) {
+    return {
+      __backupType: "date",
+      value: value.toISOString()
+    };
+  }
+
+  if (Array.isArray(value)) {
+    return value.map(serializeBackupValue);
+  }
+
+  if (value && typeof value === "object") {
+    const result = {};
+    Object.entries(value).forEach(([key, val]) => {
+      result[key] = serializeBackupValue(val);
+    });
+    return result;
+  }
+
+  return value;
+}
+
+function restoreBackupValue(value) {
+  if (Array.isArray(value)) {
+    return value.map(restoreBackupValue);
+  }
+
+  if (value && typeof value === "object") {
+    if (value.__backupType === "timestamp") {
+      return new Timestamp(value.seconds, value.nanoseconds);
+    }
+
+    if (value.__backupType === "date") {
+      return new Date(value.value);
+    }
+
+    const result = {};
+    Object.entries(value).forEach(([key, val]) => {
+      result[key] = restoreBackupValue(val);
+    });
+    return result;
+  }
+
+  return value;
+}
+
+// UNDUH BACKUP
+$("backupDataBtn").onclick = async () => {
+  if (!isAdmin()) {
+    msg("backupMsg", "Fitur ini hanya untuk admin.", true);
+    return;
+  }
+
+  try {
+    msg("backupMsg", "Sedang membuat backup...");
+
+    const backup = {
+      app: "absensi-madin-kaligintung",
+      version: 1,
+      createdAt: new Date().toISOString(),
+      collections: {}
+    };
+
+    let total = 0;
+
+    for (const name of ["classes", "students", "attendance"]) {
+      const snapshot = await getDocs(collection(db, name));
+
+      backup.collections[name] = snapshot.docs.map(item => ({
+        id: item.id,
+        data: serializeBackupValue(item.data())
+      }));
+
+      total += snapshot.size;
+    }
+
+    const blob = new Blob(
+      [JSON.stringify(backup, null, 2)],
+      { type: "application/json" }
+    );
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = `backup-absensi-madin-${new Date().toISOString().slice(0, 10)}.json`;
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+    msg("backupMsg", `Backup berhasil. ${total} data tersimpan.`);
+  } catch (error) {
+    console.error(error);
+    msg("backupMsg", "Backup gagal: " + error.message, true);
+  }
+};
+
+// PULIHKAN BACKUP
+$("restoreDataBtn").onclick = async () => {
+  if (!isAdmin()) {
+    msg("backupMsg", "Fitur ini hanya untuk admin.", true);
+    return;
+  }
+
+  const file = $("restoreFile").files[0];
+
+  if (!file) {
+    msg("backupMsg", "Pilih file backup terlebih dahulu.", true);
+    return;
+  }
+
+  if (!confirm(
+    "Restore akan menggabungkan data backup dengan data saat ini. Data yang ada tidak dihapus. Lanjutkan?"
+  )) {
+    return;
+  }
+
+  try {
+    msg("backupMsg", "Memeriksa file backup...");
+
+    const backup = JSON.parse(await file.text());
+
+    if (
+      backup.app !== "absensi-madin-kaligintung" ||
+      backup.version !== 1 ||
+      !backup.collections
+    ) {
+      throw new Error("File backup tidak valid atau tidak cocok.");
+    }
+
+    const allowedCollections = ["classes", "students", "attendance"];
+
+    for (const name of allowedCollections) {
+      if (!Array.isArray(backup.collections[name])) {
+        throw new Error(`Data ${name} tidak ditemukan atau tidak valid.`);
+      }
+    }
+
+    let restored = 0;
+
+    for (const name of allowedCollections) {
+      for (const item of backup.collections[name]) {
+        if (
+          !item ||
+          typeof item.id !== "string" ||
+          !item.id ||
+          item.id.includes("/") ||
+          !item.data ||
+          typeof item.data !== "object" ||
+          Array.isArray(item.data)
+        ) {
+          throw new Error(`Ada data ${name} yang tidak valid.`);
+        }
+
+        await setDoc(
+          doc(db, name, item.id),
+          restoreBackupValue(item.data),
+          { merge: true }
+        );
+
+        restored++;
+        msg("backupMsg", `Memulihkan data... ${restored} dokumen.`);
+      }
+    }
+
+    msg(
+      "backupMsg",
+      `Restore berhasil. ${restored} dokumen telah dipulihkan. Halaman akan dimuat ulang.`
+    );
+
+    $("restoreFile").value = "";
+
+    setTimeout(() => location.reload(), 2000);
+
+  } catch (error) {
+    console.error(error);
+    msg("backupMsg", "Restore gagal: " + error.message, true);
+  }
+};
