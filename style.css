@@ -1030,7 +1030,8 @@ select option {
 background: #ffffff;
 color: #104b32;
 font-weight: 500;
-}/* DROPDOWN CUSTOM MADIN */
+}
+/* DROPDOWN CUSTOM MADIN */
 .custom-select-wrap {
   position: relative;
   width: 100%;
