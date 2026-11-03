@@ -1831,3 +1831,133 @@ $("restoreDataBtn").onclick = async () => {
     msg("backupMsg", "Restore gagal: " + error.message, true);
   }
 };
+$("shareImageBtn").onclick = async () => {
+  if (!reportRows.length) {
+    return msg("reportMsg", "Tampilkan rekap terlebih dahulu.", true);
+  }
+
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  const width = 1080;
+  const rowHeight = 82;
+  const height = 520 + reportRows.length * rowHeight + 100;
+
+  canvas.width = width;
+  canvas.height = height;
+
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, width, height);
+
+  ctx.fillStyle = "#176b45";
+  ctx.fillRect(0, 0, width, 260);
+
+  ctx.fillStyle = "#ffffff";
+  ctx.textAlign = "center";
+  ctx.font = "bold 48px Arial";
+  ctx.fillText("MADIN KALIGINTUNG", width / 2, 90);
+
+  ctx.font = "32px Arial";
+  ctx.fillText("REKAP KEHADIRAN SANTRI", width / 2, 150);
+
+  ctx.font = "28px Arial";
+  ctx.fillText(
+    `${reportClassValue} • ${reportMonthValue}`,
+    width / 2,
+    210
+  );
+
+  const columns = [
+    { text: "NAMA SANTRI", x: 55 },
+    { text: "H", x: 590 },
+    { text: "I", x: 690 },
+    { text: "S", x: 790 },
+    { text: "A", x: 890 },
+    { text: "%", x: 990 }
+  ];
+
+  let y = 330;
+
+  ctx.fillStyle = "#176b45";
+  ctx.fillRect(40, y - 45, 1000, 65);
+
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "bold 25px Arial";
+  ctx.textAlign = "left";
+
+  columns.forEach(c => ctx.fillText(c.text, c.x, y));
+
+  y += 65;
+
+  reportRows.forEach((r, i) => {
+    ctx.fillStyle = i % 2 === 0 ? "#f0f7f3" : "#ffffff";
+    ctx.fillRect(40, y - 42, 1000, rowHeight);
+
+    ctx.fillStyle = "#222222";
+    ctx.font = "24px Arial";
+    ctx.textAlign = "left";
+
+    let name = r.name || "";
+    while (ctx.measureText(name).width > 490 && name.length > 3) {
+      name = name.slice(0, -1);
+    }
+    if (name !== r.name) name += "...";
+
+    ctx.fillText(name, 55, y);
+
+    ctx.textAlign = "center";
+    ctx.fillText(r.Hadir, 610, y);
+    ctx.fillText(r.Izin, 710, y);
+    ctx.fillText(r.Sakit, 810, y);
+    ctx.fillText(r.Alpa, 910, y);
+
+    ctx.fillStyle = "#176b45";
+    ctx.font = "bold 24px Arial";
+    ctx.fillText(`${r.Persentase}%`, 990, y);
+
+    y += rowHeight;
+  });
+
+  ctx.fillStyle = "#176b45";
+  ctx.font = "24px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText(
+    "H = Hadir  •  I = Izin  •  S = Sakit  •  A = Alpa",
+    width / 2,
+    height - 55
+  );
+
+  canvas.toBlob(async blob => {
+    if (!blob) {
+      return msg("reportMsg", "Gagal membuat gambar.", true);
+    }
+
+    const file = new File(
+      [blob],
+      `Rekap-${reportClassValue}-${reportMonthValue}.png`,
+      { type: "image/png" }
+    );
+
+    try {
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: "Rekap Kehadiran Santri"
+        });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = file.name;
+        link.click();
+        URL.revokeObjectURL(url);
+
+        msg("reportMsg", "Gambar rekap berhasil diunduh.");
+      }
+    } catch (e) {
+      if (e.name !== "AbortError") {
+        msg("reportMsg", "Gagal membagikan gambar: " + e.message, true);
+      }
+    }
+  }, "image/png");
+};
