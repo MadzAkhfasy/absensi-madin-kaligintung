@@ -1,4 +1,4 @@
-const CACHE = "absensi-madin-v8";
+const CACHE = "absensi-madin-v9";
 
 self.addEventListener("install", event => {
   event.waitUntil(
