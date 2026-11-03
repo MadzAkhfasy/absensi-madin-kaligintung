@@ -557,12 +557,7 @@ r.querySelector(".history-btn").onclick = async () => {
 
   </div>  <!-- TOMBOL KEMBALI -->  <button type="button" class="profile-v2-back">
     <span>←</span> Kembali
-  </button>  <!-- FOOTER -->  <div class="profile-v2-footer">
-    <div class="profile-v2-footer-title">
-      📖 Madrasah Diniyah Kaligintung
-    </div>
-    <small>Religius • Berilmu • Berakhlak Mulia</small>
-  </div></div>
+  </button>  </div>
 `;r.querySelector(".profile-v2-back").onclick = renderStudentList;
     };
 
