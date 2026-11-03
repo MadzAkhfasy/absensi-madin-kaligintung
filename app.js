@@ -1922,31 +1922,27 @@ $("shareImageBtn").onclick = async () => {
     // Logo asli
     ctx.drawImage(logo, 65, 65, 230, 230);
 
-    // Identitas Madin
-    ctx.textAlign = "left";
-    ctx.fillStyle = "#075b35";
-    ctx.font = "bold 65px Arial";
-    ctx.fillText("MADIN KALIGINTUNG", 330, 145);
+    // Kop laporan
+ctx.textAlign = "center";
 
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(325, 175, 815, 75);
+ctx.fillStyle = "#075b35";
+ctx.font = "bold 58px Arial";
+ctx.fillText("MADIN KALIGINTUNG", 765, 145);
 
-    ctx.fillStyle = "#075b35";
-    ctx.fillRect(325, 175, 815, 75);
+ctx.fillStyle = "#075b35";
+ctx.fillRect(325, 175, 815, 75);
 
-    ctx.textAlign = "center";
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 38px Arial";
-    ctx.fillText("REKAP KEHADIRAN SANTRI", 732, 225);
+ctx.fillStyle = "#ffffff";
+ctx.font = "bold 38px Arial";
+ctx.fillText("REKAP KEHADIRAN SANTRI", 732, 225);
 
-    ctx.fillStyle = "#075b35";
-    ctx.font = "italic 28px Arial";
-    ctx.fillText(
-      "Belajar Bersama, Meraih Ridha Allah",
-      735,
-      300
-    );
-
+ctx.fillStyle = "#075b35";
+ctx.font = "italic 28px Arial";
+ctx.fillText(
+  "Belajar Bersama, Meraih Ridha Allah",
+  732,
+  300
+);
     // Informasi laporan
     const infoY = 345;
     const infoH = 65;
