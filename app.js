@@ -1926,8 +1926,8 @@ $("shareImageBtn").onclick = async () => {
 ctx.textAlign = "center";
 
 ctx.fillStyle = "#075b35";
-ctx.font = "bold 58px Arial";
-ctx.fillText("MADIN KALIGINTUNG", 765, 145);
+ctx.font = "bold 42px Arial";
+ctx.fillText("MADRASAH DINIYAH KALIGINTUNG", 732, 145);
 
 ctx.fillStyle = "#075b35";
 ctx.fillRect(325, 175, 815, 75);
