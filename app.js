@@ -409,87 +409,160 @@ r.querySelector(".history-btn").onclick = async () => {
         : "-";
 
       r.innerHTML = `
-  <div class="student-profile">
 
-    <div class="profile-hero">
-      <div class="profile-photo-wrap">
-        ${
-          s.photoUrl
-            ? `<img class="profile-photo" src="${esc(s.photoUrl)}" alt="Foto ${esc(s.name)}">`
-            : `<div class="profile-photo-placeholder">Foto belum tersedia</div>`
-        }
-      </div>
+<div class="student-profile-v2">  <!-- HEADER PROFIL -->  <div class="profile-v2-header"><div class="profile-v2-ornament">۞</div>
 
-      <h2 class="profile-name">${esc(s.name)}</h2>
+<div class="profile-v2-photo">
+  ${
+    s.photoUrl
+      ? `<img src="${esc(s.photoUrl)}" alt="Foto ${esc(s.name)}">`
+      : `<div class="profile-v2-placeholder">Foto Santri</div>`
+  }
+</div>
 
-      <div class="profile-divider">
-        <span>✦</span>
-      </div>
+<h2 class="profile-v2-name">${esc(s.name)}</h2>
 
-      <div class="profile-class">
-        🎓 ${esc(clsName(s.classId))}
-      </div>
+<div class="profile-v2-divider">
+  <span></span>
+  <b>✦</b>
+  <span></span>
+</div>
+
+<div class="profile-v2-class">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M2 9l10-5 10 5-10 5-10-5z"/>
+    <path d="M6 11v5c3 3 9 3 12 0v-5"/>
+    <path d="M22 9v6"/>
+  </svg>
+  ${esc(clsName(s.classId))}
+</div>
+
+  </div>  <!-- BIODATA SANTRI -->  <div class="profile-v2-content">
+    <div class="profile-v2-card">  <!-- NIS -->
+  <div class="profile-v2-item">
+    <div class="profile-v2-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3" y="4" width="18" height="16" rx="2"/>
+        <circle cx="9" cy="10" r="2"/>
+        <path d="M6 16c.5-2 5.5-2 6 0"/>
+        <path d="M15 9h3M15 13h3"/>
+      </svg>
     </div>
-
-    <div class="profile-details">
-
-      <div class="profile-detail">
-        <span class="profile-icon">▣</span>
-        <strong>NIS</strong>
-        <span>${esc(s.nis || "-")}</span>
-      </div>
-
-      <div class="profile-detail">
-        <span class="profile-icon">♟</span>
-        <strong>Jenis Kelamin</strong>
-        <span>${s.gender === "L" || s.gender === "Laki-laki" ? "Laki-Laki" : s.gender === "P" || s.gender === "Perempuan" ? "Perempuan" : "-"}</span>
-      </div>
-
-      <div class="profile-detail">
-        <span class="profile-icon">⌖</span>
-        <strong>Tempat Lahir</strong>
-        <span>${esc(s.birthplace || "-")}</span>
-      </div>
-
-      <div class="profile-detail">
-        <span class="profile-icon">▦</span>
-        <strong>Tanggal Lahir</strong>
-        <span>${tanggalLahir}</span>
-      </div>
-
-      <div class="profile-detail">
-        <span class="profile-icon">📍</span>
-        <strong>Alamat</strong>
-        <span>${esc(s.address || "-")}</span>
-      </div>
-
-      <div class="profile-detail">
-        <span class="profile-icon">♙</span>
-        <strong>Nama Ayah</strong>
-        <span>${esc(s.fatherName || "-")}</span>
-      </div>
-
-      <div class="profile-detail">
-        <span class="profile-icon">♙</span>
-        <strong>Nama Ibu</strong>
-        <span>${esc(s.motherName || "-")}</span>
-      </div>
-
-      <div class="profile-detail">
-        <span class="profile-icon">☎</span>
-        <strong>No. HP Wali</strong>
-        <span>${esc(s.guardianPhone || "-")}</span>
-      </div>
-
-    </div>
-
-    <button type="button" class="profile-back">
-      ← &nbsp; Kembali
-    </button>
-
+    <strong>NIS</strong>
+    <span>${esc(s.nis || "-")}</span>
   </div>
-`;
 
+  <!-- JENIS KELAMIN -->
+  <div class="profile-v2-item">
+    <div class="profile-v2-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="8" cy="7" r="3"/>
+        <circle cx="17" cy="7" r="3"/>
+        <path d="M2.5 20v-3a5.5 5.5 0 0111 0v3z"/>
+        <path d="M14 13a5 5 0 017.5 4v3h-6"/>
+      </svg>
+    </div>
+    <strong>Jenis Kelamin</strong>
+    <span>
+      ${
+        s.gender === "L" || s.gender === "Laki-laki"
+          ? "Laki-Laki"
+          : s.gender === "P" || s.gender === "Perempuan"
+            ? "Perempuan"
+            : "-"
+      }
+    </span>
+  </div>
+
+  <!-- TEMPAT LAHIR -->
+  <div class="profile-v2-item">
+    <div class="profile-v2-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1116 0z"/>
+        <circle cx="12" cy="10" r="2.5"/>
+      </svg>
+    </div>
+    <strong>Tempat Lahir</strong>
+    <span>${esc(s.birthplace || "-")}</span>
+  </div>
+
+  <!-- TANGGAL LAHIR -->
+  <div class="profile-v2-item">
+    <div class="profile-v2-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3" y="5" width="18" height="16" rx="2"/>
+        <path d="M16 3v4M8 3v4M3 10h18"/>
+        <path d="M8 14h2M14 14h2M8 17h2"/>
+      </svg>
+    </div>
+    <strong>Tanggal Lahir</strong>
+    <span>${tanggalLahir}</span>
+  </div>
+
+  <!-- ALAMAT -->
+  <div class="profile-v2-item">
+    <div class="profile-v2-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 11l9-8 9 8"/>
+        <path d="M5 10v11h14V10"/>
+        <path d="M9 21v-7h6v7"/>
+      </svg>
+    </div>
+    <strong>Alamat</strong>
+    <span>${esc(s.address || "-")}</span>
+  </div>
+
+  <!-- NAMA AYAH -->
+  <div class="profile-v2-item">
+    <div class="profile-v2-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="7" r="4"/>
+        <path d="M4 21v-2a8 8 0 0116 0v2z"/>
+        <path d="M9 13l3 3 3-3"/>
+      </svg>
+    </div>
+    <strong>Nama Ayah</strong>
+    <span>${esc(s.fatherName || "-")}</span>
+  </div>
+
+  <!-- NAMA IBU -->
+  <div class="profile-v2-item">
+    <div class="profile-v2-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="7" r="4"/>
+        <path d="M4 21v-2a8 8 0 0116 0v2z"/>
+        <path d="M9 13l3 3 3-3"/>
+        <path d="M9 3l3-2 3 2"/>
+      </svg>
+    </div>
+    <strong>Nama Ibu</strong>
+    <span>${esc(s.motherName || "-")}</span>
+  </div>
+
+  <!-- NOMOR HP WALI -->
+  <div class="profile-v2-item">
+    <div class="profile-v2-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6 2h12a2 2 0 012 2v16a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z"/>
+        <path d="M9 5h6M10 18h4"/>
+        <path d="M8 10c1 3 3 5 6 6l2-2-3-2-1 1c-1-.5-2-1.5-2.5-2.5l1-1-2-3-2 2z"/>
+      </svg>
+    </div>
+    <strong>No. HP Wali</strong>
+    <span>${esc(s.guardianPhone || "-")}</span>
+  </div>
+
+</div>
+
+  </div>  <!-- TOMBOL KEMBALI -->  <button type="button" class="profile-v2-back">
+    <span>←</span> Kembali
+  </button>  <!-- FOOTER -->  <div class="profile-v2-footer">
+    <div class="profile-v2-footer-title">
+      📖 Madrasah Diniyah Kaligintung
+    </div>
+    <small>Religius • Berilmu • Berakhlak Mulia</small>
+  </div></div>
+`;r.querySelector(".profile-v2-back").onclick = renderStudentList;
       r.querySelector(".profile-back").onclick = renderStudentList;
     };
 
