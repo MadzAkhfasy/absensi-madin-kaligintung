@@ -939,6 +939,7 @@ footer {
     break-inside: avoid;
   }
 }
+
 /* HILANGKAN SEMUA ORNAMEN BINTANG */
 .welcome::before,
 .welcome::after,
@@ -947,6 +948,7 @@ footer {
   content: none !important;
   display: none !important;
 }
+
 /* PERBAIKAN TAMPILAN DAFTAR SANTRI */
 .list-row {
   display: flex;
@@ -976,6 +978,7 @@ font-weight: 600;
   display: block;
   margin-top: 4px;
 }
+
 /* Tombol aksi santri dua baris */
 .student-actions {
   display: grid;
@@ -1004,6 +1007,7 @@ font-weight: 600;
   background: linear-gradient(135deg, #166534, #34d399);
   transform: translateY(-1px);
 }
+
 /* DESAIN ELEGAN UNTUK SEMUA PILIHAN */
 select {
 appearance: none;
@@ -1031,6 +1035,7 @@ background: #ffffff;
 color: #104b32;
 font-weight: 500;
 }
+
 /* DROPDOWN CUSTOM MADIN */
 .custom-select-wrap {
   position: relative;
@@ -1134,7 +1139,9 @@ font-weight: 500;
   margin-left: 10px;
   color: #176b45;
   font-weight: 800;
-}/* PERBAIKAN DROPDOWN STATUS ABSENSI */
+}
+
+/* PERBAIKAN DROPDOWN STATUS ABSENSI */
 #attendancePanel .custom-select-wrap {
   width: 105px;
   min-width: 105px;
@@ -1159,4 +1166,29 @@ font-weight: 500;
   flex: 1;
   min-width: 0;
   overflow-wrap: anywhere;
+}
+/* PERBAIKAN FINAL BARIS ABSENSI */
+#attendancePanel .list-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+#attendancePanel .list-row .grow {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+#attendancePanel .custom-select-wrap {
+  width: 90px;
+  min-width: 90px;
+  flex: 0 0 90px;
+}
+
+#attendancePanel .custom-select-trigger {
+  min-height: 34px;
+  padding: 5px 7px;
+  font-size: 11px;
 }
