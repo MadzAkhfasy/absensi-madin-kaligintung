@@ -1293,3 +1293,303 @@ font-weight: 500;
   font-size: 14px;
   font-weight: 800;
 }
+/* ==========================================
+DESAIN PROFIL SANTRI
+MADRASAH DINIYAH KALIGINTUNG
+Tema Hijau Botol - Putih - Emas
+========================================== */
+
+.student-profile {
+width: 100%;
+margin: auto;
+overflow: hidden;
+border-radius: 22px;
+background: linear-gradient(
+180deg,
+#f0faf3,
+#ffffff 50%,
+#f1f8f3
+);
+box-shadow: 0 10px 30px rgba(0,70,45,.12);
+color: #17251f;
+}
+
+/* HEADER PROFIL */
+
+.profile-hero {
+position: relative;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: flex-end;
+min-height: 285px;
+padding: 25px 15px 22px;
+text-align: center;
+background:
+radial-gradient(
+ellipse at bottom,
+#ffffff 0%,
+#e6f5eb 45%,
+transparent 75%
+),
+linear-gradient(
+145deg,
+#075b3d,
+#08784f,
+#06452f
+);
+border-bottom: 4px solid #d7b653;
+}
+
+.profile-hero::after {
+content: "۞";
+position: absolute;
+top: 12px;
+right: 18px;
+color: rgba(255,255,255,.75);
+font-size: 38px;
+}
+
+/* FOTO SANTRI */
+
+.profile-photo-wrap {
+width: 140px;
+height: 140px;
+padding: 6px;
+margin-bottom: 15px;
+border: 3px solid white;
+border-radius: 30px;
+background: white;
+box-shadow: 0 8px 22px rgba(0,0,0,.2);
+overflow: hidden;
+}
+
+.profile-photo {
+width: 100%;
+height: 100%;
+display: block;
+object-fit: cover;
+border-radius: 22px;
+}
+
+.profile-photo-placeholder {
+display: grid;
+place-items: center;
+width: 100%;
+height: 100%;
+border-radius: 22px;
+background: #e4f3e8;
+color: #176b45;
+font-size: 13px;
+font-weight: bold;
+}
+
+/* NAMA SANTRI */
+
+.profile-name {
+margin: 0 0 14px;
+color: #075b3d;
+font-size: clamp(23px, 5vw, 34px);
+font-weight: 800;
+line-height: 1.2;
+overflow-wrap: anywhere;
+}
+
+/* PEMBATAS ORNAMEN */
+
+.profile-divider {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 12px;
+width: 85%;
+margin-bottom: 14px;
+color: #c9a64f;
+font-size: 25px;
+}
+
+.profile-divider::before,
+.profile-divider::after {
+content: "";
+flex: 1;
+height: 2px;
+background: #16845b;
+}
+
+/* LABEL KELAS */
+
+.profile-class {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 9px;
+padding: 10px 24px;
+border: 1px solid #a9d8bd;
+border-radius: 50px;
+background: #e0f3e6;
+color: #075b3d;
+font-size: 18px;
+font-weight: 800;
+}
+
+/* KARTU BIODATA */
+
+.profile-details {
+margin: 18px 14px;
+padding: 10px 16px;
+border: 1px solid #e4eee7;
+border-radius: 22px;
+background: #ffffff;
+box-shadow: 0 8px 25px rgba(10,64,43,.10);
+}
+
+/* BARIS BIODATA */
+
+.profile-detail {
+display: grid;
+grid-template-columns: 48px minmax(105px,.9fr) minmax(0,1.2fr);
+align-items: center;
+gap: 10px;
+min-height: 66px;
+padding: 8px 0;
+border-bottom: 1px solid #e5e9e6;
+}
+
+.profile-detail:last-child {
+border-bottom: none;
+}
+
+/* IKON BIODATA */
+
+.profile-icon {
+display: grid;
+place-items: center;
+width: 46px;
+height: 46px;
+border-radius: 50%;
+background: #e3f3e8;
+color: #08704a;
+font-size: 23px;
+font-weight: bold;
+}
+
+/* LABEL BIODATA */
+
+.profile-detail strong {
+color: #17251f;
+font-size: 14px;
+font-weight: 750;
+line-height: 1.4;
+}
+
+.profile-detail strong::after {
+content: " :";
+margin-left: 4px;
+}
+
+/* ISI BIODATA */
+
+.profile-detail > span:last-child {
+min-width: 0;
+color: #26332d;
+font-size: 14px;
+line-height: 1.5;
+overflow-wrap: anywhere;
+}
+
+/* TOMBOL KEMBALI */
+
+.profile-back {
+display: flex;
+align-items: center;
+justify-content: center;
+width: calc(100% - 44px);
+min-height: 56px;
+margin: 22px auto 28px;
+padding: 12px 20px;
+border: 1px solid #c6a64b;
+border-radius: 50px;
+background: linear-gradient(
+135deg,
+#08784f,
+#005b3b
+);
+color: white;
+font-size: 18px;
+font-weight: 800;
+box-shadow: 0 6px 16px rgba(4,82,52,.22);
+}
+
+.profile-back:active {
+transform: scale(.98);
+}
+
+/* RESPONSIVE HP */
+
+@media(max-width:480px) {
+
+.student-profile {
+border-radius: 18px;
+}
+
+.profile-hero {
+min-height: 255px;
+padding: 20px 12px;
+}
+
+.profile-photo-wrap {
+width: 120px;
+height: 120px;
+}
+
+.profile-details {
+margin: 14px 9px;
+padding: 8px 10px;
+}
+
+.profile-detail {
+grid-template-columns: 38px minmax(85px,.95fr) minmax(0,1.15fr);
+gap: 7px;
+min-height: 59px;
+}
+
+.profile-icon {
+width: 36px;
+height: 36px;
+font-size: 19px;
+}
+
+.profile-detail strong,
+.profile-detail > span:last-child {
+font-size: 12px;
+}
+
+.profile-class {
+font-size: 16px;
+padding: 9px 18px;
+}
+
+.profile-back {
+width: calc(100% - 30px);
+font-size: 16px;
+}
+}
+
+@media(max-width:360px) {
+
+.profile-detail {
+grid-template-columns: 32px minmax(76px,.95fr) minmax(0,1.05fr);
+gap: 5px;
+}
+
+.profile-icon {
+width: 31px;
+height: 31px;
+font-size: 17px;
+}
+
+.profile-detail strong,
+.profile-detail > span:last-child {
+font-size: 11px;
+}
+}
