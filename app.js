@@ -111,7 +111,7 @@ onAuthStateChanged(auth,async user=>{
   profile=p.data(); await loadClasses();
   $("authView").classList.add("hidden");$("appView").classList.remove("hidden");$("logoutBtn").classList.remove("hidden");
   $("hello").textContent="Halo, "+(profile.name||user.email);$("roleInfo").textContent=isAdmin()?"Admin/Pengurus":profile?.role==="petugas"?"Admin Absensi · Semua Kelas":"Pengajar · "+clsName(myClass());
-  document.querySelectorAll(".admin-only").forEach(x=>x.classList.toggle("hidden",!isAdmin()));
+  document.querySelectorAll(".admin-only:not(.panel)").forEach(x=>x.classList.toggle("hidden",!isAdmin()));
   $("studentAdminForm").classList.toggle("hidden",!isAdmin());
   $("attendanceClassWrap").classList.toggle("hidden",!canAccessAllClasses());
 $("reportClassWrap").classList.toggle("hidden",!canAccessAllClasses());
