@@ -546,16 +546,69 @@ async function renderAttendance(){
  list.forEach(s=>{const row=document.createElement("div");row.className="list-row";row.innerHTML=`<div class="grow"><strong>${esc(s.name)}</strong></div><select class="status-select" data-id="${s.id}">${STATUSES.map(st=>`<option ${((old.get(s.id)||"Hadir")===st)?"selected":""}>${st}</option>`).join("")}</select>`;$("attendanceList").append(row);});
  $("saveAttendanceBtn").classList.remove("hidden");
 }
-$("saveAttendanceBtn").onclick=async()=>{
- const classId=selectedClass(),date=$("attendanceDate").value;if(!date)return;
+$("saveAttendanceBtn").onclick = async () => {
+  const classId = selectedClass();
+  const date = $("attendanceDate").value;
+
+  if (!date) return;
+
   if (new Date(date + "T00:00:00").getDay() === 0) {
-  showToast("Hari Minggu adalah hari libur!", true);
-  return;
+    showToast("Hari Minggu adalah hari libur!", true);
+    return;
   }
- try{const btn=$("saveAttendanceBtn");btn.disabled=true;
-  for(const el of document.querySelectorAll("#attendanceList select")){const id=el.dataset.id,docId=`${date}_${id}`;await setDoc(doc(db,"attendance",docId),{studentId:id,classId,date,status:el.value,markedBy:currentUser.uid,updatedAt:serverTimestamp()},{merge:true});}
-  msg("attendanceMsg","Absensi berhasil disimpan.");btn.disabled=false;
- }catch(e){$("saveAttendanceBtn").disabled=false;msg("attendanceMsg",e.message,true);}
+
+  const btn = $("saveAttendanceBtn");
+
+  try {
+    btn.disabled = true;
+
+    // Periksa apakah absensi sudah pernah disimpan
+    const existingSnap = await getDocs(
+      query(
+        collection(db, "attendance"),
+        where("classId", "==", classId),
+        where("date", "==", date)
+      )
+    );
+
+    if (!existingSnap.empty) {
+      const lanjut = confirm(
+        "Absensi tanggal ini sudah pernah disimpan.\n\n" +
+        "Apakah Anda yakin ingin mengubah data absensi tersebut?"
+      );
+
+      if (!lanjut) {
+        btn.disabled = false;
+        return;
+      }
+    }
+
+    // Simpan atau perbarui absensi
+    for (const el of document.querySelectorAll("#attendanceList select")) {
+      const id = el.dataset.id;
+      const docId = `${date}_${id}`;
+
+      await setDoc(
+        doc(db, "attendance", docId),
+        {
+          studentId: id,
+          classId,
+          date,
+          status: el.value,
+          markedBy: currentUser.uid,
+          updatedAt: serverTimestamp()
+        },
+        { merge: true }
+      );
+    }
+
+    msg("attendanceMsg", "Absensi berhasil disimpan.");
+  } catch (e) {
+    console.error(e);
+    msg("attendanceMsg", "Gagal menyimpan absensi: " + e.message, true);
+  } finally {
+    btn.disabled = false;
+  }
 };
 
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("hidden",x.id!==b.dataset.tab));if(b.dataset.tab==="studentsPanel")loadStudents();});
