@@ -1133,4 +1133,29 @@ font-weight: 500;
   margin-left: 10px;
   color: #176b45;
   font-weight: 800;
+}/* PERBAIKAN DROPDOWN STATUS ABSENSI */
+#attendancePanel .custom-select-wrap {
+  width: 105px;
+  min-width: 105px;
+  flex: 0 0 105px;
+}
+
+#attendancePanel .custom-select-trigger {
+  width: 100%;
+  min-height: 34px;
+  padding: 6px 9px;
+  font-size: 12px;
+  border-radius: 9px;
+}
+
+#attendancePanel .custom-select-menu {
+  min-width: 120px;
+  right: 0;
+  left: auto;
+}
+
+#attendancePanel .list-row .grow {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
