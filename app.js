@@ -21,23 +21,60 @@ async function uploadStudentPhoto(file) {
     throw new Error("Foto harus JPG, PNG, atau WebP.");
   }
 
-  if (file.size > 1.5 * 1024 * 1024) {
-    throw new Error("Ukuran foto maksimal 1,5 MB.");
+  // Baca foto
+  const image = await new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve(img);
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("Gagal membaca foto."));
+    };
+
+    img.src = url;
+  });
+
+  // Kompres foto menggunakan Canvas
+  const canvas = document.createElement("canvas");
+  const maxSize = 1280;
+  let width = image.width;
+  let height = image.height;
+
+  if (width > maxSize || height > maxSize) {
+    const scale = maxSize / Math.max(width, height);
+    width = Math.round(width * scale);
+    height = Math.round(height * scale);
   }
 
-  const image = await new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = () => reject(new Error("Gagal membaca foto."));
-    reader.readAsDataURL(file);
-  });
+  canvas.width = width;
+  canvas.height = height;
+
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(image, 0, 0, width, height);
+
+  let quality = 0.85;
+  let compressedImage = canvas.toDataURL("image/jpeg", quality);
+
+  while (compressedImage.length > 1.9 * 1024 * 1024 && quality > 0.4) {
+    quality -= 0.1;
+    compressedImage = canvas.toDataURL("image/jpeg", quality);
+  }
 
   const idToken = await currentUser.getIdToken();
 
   const response = await fetch(PHOTO_UPLOAD_URL, {
     method: "POST",
     headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify({ idToken, image, name: file.name }),
+    body: JSON.stringify({
+      idToken,
+      image: compressedImage,
+      name: file.name.replace(/\.[^/.]+$/, "") + ".jpg"
+    }),
     redirect: "follow"
   });
 
