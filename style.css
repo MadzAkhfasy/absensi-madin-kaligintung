@@ -1192,3 +1192,20 @@ font-weight: 500;
   padding: 5px 7px;
   font-size: 11px;
 }
+/* LABEL KELAS ABSENSI SEJAJAR */
+#attendanceClassWrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+#attendanceClassWrap {
+  font-weight: 600;
+}
+
+#attendanceClassWrap .custom-select-wrap {
+  flex: 1;
+  min-width: 0;
+}
