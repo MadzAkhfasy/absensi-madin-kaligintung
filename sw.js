@@ -9,7 +9,7 @@ self.addEventListener("install", event => {
         "./",
         "./index.html",
         "./style.css?v=23",
-        "./app.js?v=20",
+        "./app.js?v=21",
         "./manifest.json",
         "./LOGO%20MADIN%20REMOVE%20BG.png"
       ])
