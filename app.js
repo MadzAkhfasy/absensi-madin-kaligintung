@@ -80,14 +80,29 @@ async function uploadStudentPhoto(file) {
 
   const result = await response.json();
 
-  if (!result.success) {
-    throw new Error(result.error || "Unggah foto gagal.");
-  }
+if (!response.ok) {
+  throw new Error("Server foto memberikan respons: " + response.status);
+}
 
-  return {
-    photoUrl: result.imageUrl,
-    photoFileId: result.fileId
-  };
+if (!result.success) {
+  throw new Error(result.error || "Unggah foto gagal.");
+}
+
+if (
+  typeof result.imageUrl !== "string" ||
+  !result.imageUrl.trim() ||
+  typeof result.fileId !== "string" ||
+  !result.fileId.trim()
+) {
+  throw new Error(
+    "Foto berhasil diunggah, tetapi alamat foto atau ID file tidak diterima dari server."
+  );
+}
+
+return {
+  photoUrl: result.imageUrl.trim(),
+  photoFileId: result.fileId.trim()
+};
 }
 const CLASS_NAMES = ["Kelas Jilid Pemula","Kelas Jilid 1","Kelas Jilid 2","Kelas Jilid 3","Kelas Jilid 4","Kelas Jilid 5"];
 const STATUSES = ["Hadir","Izin","Sakit","Alpa"];
