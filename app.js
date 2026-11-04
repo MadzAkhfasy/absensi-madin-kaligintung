@@ -653,6 +653,7 @@ r.querySelector(".history-btn").onclick = async () => {
 
       showToast("Seluruh biodata santri berhasil diperbarui.");
       await loadStudents();
+      await renderDashboard();
 
     } catch (e) {
       showToast("Gagal memperbarui data: " + e.message);
@@ -673,7 +674,12 @@ r.querySelector(".history-btn").onclick = async () => {
   });
 }
 function esc(s=""){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-async function importDeleteStudent(id){const {deleteDoc}=await import("https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js");await deleteDoc(doc(db,"students",id));await loadStudents();}
+async function importDeleteStudent(id){
+  const {deleteDoc}=await import("https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js");
+  await deleteDoc(doc(db,"students",id));
+  await loadStudents();
+  await renderDashboard();
+}
 $("studentSearch").addEventListener("input", renderStudentList);
 
 $("studentFilterClass").addEventListener("change", renderStudentList);
@@ -709,6 +715,7 @@ $("addStudentBtn").onclick=async()=>{
     msg("studentMsg", "");
 showToast("✓ Biodata santri berhasil disimpan!");
 await loadStudents();
+    await renderDashboard();
   }catch(e){
     msg("studentMsg",e.message,true);
     showToast("✕ Gagal menyimpan: " + e.message, true);
