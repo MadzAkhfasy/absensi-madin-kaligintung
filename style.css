@@ -3125,3 +3125,231 @@ border: 0 !important;
   }
 
 }
+/* =========================================
+   REDESAIN HALAMAN DATA SANTRI
+   MODERN STUDENT MANAGEMENT
+========================================= */
+
+/* Kartu utama */
+#studentsPanel > .card {
+  padding: 24px;
+  border-radius: 21px;
+}
+
+/* Judul */
+#studentsPanel > .card > h2 {
+  font-size: 23px;
+  font-weight: 850;
+  letter-spacing: -.4px;
+  margin-bottom: 7px;
+}
+
+#studentsPanel > .card > p {
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* Area pencarian dan filter */
+#studentsPanel .student-tools {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #e0ebe3;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #f1f8f3, #ffffff);
+}
+
+#studentsPanel .student-tools label {
+  margin: 0;
+  color: #315b46;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+#studentsPanel .student-tools input,
+#studentsPanel .student-tools select {
+  min-height: 46px;
+  margin-top: 7px;
+  border: 1px solid #d7e6dc;
+  border-radius: 11px;
+  background: #ffffff;
+  font-size: 13px;
+}
+
+/* Daftar santri */
+#studentsPanel #studentList {
+  display: grid;
+  gap: 11px;
+  margin-top: 15px;
+}
+
+/* Kartu individual santri */
+#studentsPanel #studentList > .list-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 13px;
+  padding: 13px;
+  margin: 0;
+  border: 1px solid #e1ebe4;
+  border-left: 4px solid #c9a64f;
+  border-radius: 15px;
+  background: linear-gradient(110deg, #ffffff, #f5faf6);
+  box-shadow: 0 4px 13px rgba(16,75,50,.055);
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+/* Informasi santri */
+#studentsPanel #studentList .grow {
+  flex: 1;
+  min-width: 0;
+}
+
+#studentsPanel #studentList .grow strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #174c34;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+#studentsPanel #studentList .grow small {
+  display: block;
+  color: #728579;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Foto santri */
+#studentsPanel #studentList .grow img {
+  display: block;
+  width: 66px !important;
+  height: 66px !important;
+  margin-top: 9px !important;
+  border: 2px solid #ffffff;
+  border-radius: 12px !important;
+  object-fit: cover;
+  box-shadow: 0 3px 10px rgba(0,0,0,.12);
+}
+
+/* Tombol tindakan */
+#studentsPanel .student-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+#studentsPanel .student-actions button {
+  min-height: 34px;
+  margin: 0;
+  padding: 7px 10px;
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 750;
+  white-space: nowrap;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+
+#studentsPanel .student-actions button:active {
+  transform: scale(.96);
+}
+
+/* Tombol hapus */
+#studentsPanel .student-actions .delete-btn {
+  background: #fff1f0;
+  border: 1px solid #f2d2cf;
+  color: #bd3731;
+}
+
+/* Tampilan tablet */
+@media (max-width: 700px) {
+  #studentsPanel .student-tools {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+/* Tampilan HP */
+@media (max-width: 600px) {
+
+  #studentsPanel > .card {
+    padding: 15px;
+    border-radius: 16px;
+  }
+
+  #studentsPanel > .card > h2 {
+    font-size: 20px;
+  }
+
+  #studentsPanel .student-tools {
+    padding: 11px;
+    border-radius: 13px;
+  }
+
+  #studentsPanel #studentList {
+    gap: 9px;
+  }
+
+  #studentsPanel #studentList > .list-row {
+    gap: 8px;
+    padding: 10px 8px;
+    border-radius: 12px;
+  }
+
+  #studentsPanel #studentList .grow strong {
+    font-size: 12px;
+  }
+
+  #studentsPanel #studentList .grow small {
+    font-size: 10px;
+  }
+
+  #studentsPanel #studentList .grow img {
+    width: 55px !important;
+    height: 55px !important;
+  }
+
+  #studentsPanel .student-actions {
+    gap: 5px;
+    max-width: 145px;
+  }
+
+  #studentsPanel .student-actions button {
+    min-height: 31px;
+    padding: 6px 8px;
+    font-size: 10px;
+  }
+}
+
+/* HP dengan layar sangat kecil */
+@media (max-width: 380px) {
+
+  #studentsPanel #studentList > .list-row {
+    align-items: flex-start;
+  }
+
+  #studentsPanel .student-actions {
+    max-width: 125px;
+  }
+
+  #studentsPanel .student-actions button {
+    padding: 5px 6px;
+    font-size: 9px;
+  }
+}
+
+/* Pertahankan hasil cetak */
+@media print {
+  #studentsPanel > .card,
+  #studentsPanel #studentList > .list-row {
+    box-shadow: none !important;
+  }
+}
