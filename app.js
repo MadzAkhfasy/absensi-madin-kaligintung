@@ -257,33 +257,37 @@ function renderStudentList() {
     r.className = "list-row";
 
    r.innerHTML = `
-  <div class="grow">
+  <div class="student-photo">
+    ${s.photoUrl
+      ? `<img src="${esc(s.photoUrl)}" alt="Foto ${esc(s.name)}">`
+      : `<div class="photo-placeholder">?</div>`
+    }
+  </div>
+
+  <div class="student-info">
     <strong>${esc(s.name)}</strong>
     <small>${esc(clsName(s.classId))}</small>
-        ${s.photoUrl ? `<img src="${esc(s.photoUrl)}" alt="Foto ${esc(s.name)}" style="width:64px;height:64px;object-fit:cover;border-radius:8px;margin-top:6px;">` : ""}
   </div>
 
   <div class="student-actions">
-
-  <button type="button" class="secondary history-btn">
-    Riwayat
-  </button>
-
-  <button type="button" class="secondary biodata-btn">
-    Profil
-  </button>
-
-  ${isAdmin() ? `
-    <button type="button" class="secondary edit-btn">
-      Edit
+    <button type="button" class="secondary history-btn">
+      Riwayat
     </button>
 
-    <button type="button" class="secondary delete-btn">
-      Hapus
+    <button type="button" class="secondary biodata-btn">
+      Profil
     </button>
-  ` : ""}
 
-</div>
+    ${isAdmin() ? `
+      <button type="button" class="secondary edit-btn">
+        Edit
+      </button>
+
+      <button type="button" class="secondary delete-btn">
+        Hapus
+      </button>
+    ` : ""}
+  </div>
 `;
 r.querySelector(".history-btn").onclick = async () => {
   r.innerHTML = `
