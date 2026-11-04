@@ -635,7 +635,7 @@ r.querySelector(".history-btn").onclick = async () => {
       const photoData = photoFile
         ? await uploadStudentPhoto(photoFile)
         : {};
-
+showToast(`Pemeriksaan foto: URL=${!!photoData.photoUrl}, ID=${!!photoData.photoFileId}`);
       await updateDoc(doc(db, "students", s.id), {
         name,
         classId,
