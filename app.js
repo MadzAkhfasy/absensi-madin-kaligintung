@@ -533,36 +533,138 @@ r.querySelector(".history-btn").onclick = async () => {
   <!-- NAMA IBU -->
   <div class="profile-v2-item">
     <div class="profile-v2-icon">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="12" cy="7" r="4"/>
-        <path d="M4 21v-2a8 8 0 0116 0v2z"/>
-        <path d="M9 13l3 3 3-3"/>
-        <path d="M9 3l3-2 3 2"/>
-      </svg>
+r.classList.add("profile-open");
+r.innerHTML = `
+<div class="student-profile-v3">
+
+  <!-- KARTU IDENTITAS -->
+  <div class="profile-v3-hero">
+
+    <div class="profile-v3-photo">
+      ${
+        s.photoUrl
+          ? `<img src="${esc(s.photoUrl)}" alt="Foto ${esc(s.name)}">`
+          : `<div class="profile-v3-placeholder">?</div>`
+      }
     </div>
-    <strong>Nama Ibu</strong>
-    <span>${esc(s.motherName || "-")}</span>
+
+    <div class="profile-v3-identity">
+      <span class="profile-v3-label">PROFIL SANTRI</span>
+      <h2>${esc(s.name)}</h2>
+
+      <div class="profile-v3-class">
+        ${esc(clsName(s.classId))}
+      </div>
+
+      <div class="profile-v3-nis">
+        NIS: ${esc(s.nis || "-")}
+      </div>
+    </div>
+
+    <div class="profile-v3-decoration">۞</div>
   </div>
 
-  <!-- NOMOR HP WALI -->
-  <div class="profile-v2-item">
-    <div class="profile-v2-icon">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M6 2h12a2 2 0 012 2v16a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z"/>
-        <path d="M9 5h6M10 18h4"/>
-        <path d="M8 10c1 3 3 5 6 6l2-2-3-2-1 1c-1-.5-2-1.5-2.5-2.5l1-1-2-3-2 2z"/>
-      </svg>
+
+  <!-- INFORMASI PRIBADI -->
+  <div class="profile-v3-section">
+
+    <div class="profile-v3-heading">
+      <span class="profile-v3-heading-icon">01</span>
+      <div>
+        <h3>Informasi Pribadi</h3>
+        <p>Identitas dan data diri santri</p>
+      </div>
     </div>
-    <strong>No. HP Wali</strong>
-    <span>${esc(s.guardianPhone || "-")}</span>
+
+    <div class="profile-v3-card">
+
+      <div class="profile-v3-row">
+        <span>Jenis Kelamin</span>
+        <strong>
+          ${
+            s.gender === "L" || s.gender === "Laki-laki"
+              ? "Laki-Laki"
+              : s.gender === "P" || s.gender === "Perempuan"
+                ? "Perempuan"
+                : "-"
+          }
+        </strong>
+      </div>
+
+      <div class="profile-v3-row">
+        <span>Tempat Lahir</span>
+        <strong>${esc(s.birthplace || "-")}</strong>
+      </div>
+
+      <div class="profile-v3-row">
+        <span>Tanggal Lahir</span>
+        <strong>${tanggalLahir}</strong>
+      </div>
+
+    </div>
   </div>
+
+
+  <!-- INFORMASI KELUARGA -->
+  <div class="profile-v3-section">
+
+    <div class="profile-v3-heading">
+      <span class="profile-v3-heading-icon">02</span>
+      <div>
+        <h3>Informasi Keluarga</h3>
+        <p>Data orang tua dan wali santri</p>
+      </div>
+    </div>
+
+    <div class="profile-v3-card">
+
+      <div class="profile-v3-row">
+        <span>Nama Ayah</span>
+        <strong>${esc(s.fatherName || "-")}</strong>
+      </div>
+
+      <div class="profile-v3-row">
+        <span>Nama Ibu</span>
+        <strong>${esc(s.motherName || "-")}</strong>
+      </div>
+
+      <div class="profile-v3-row">
+        <span>No. HP Wali</span>
+        <strong>${esc(s.guardianPhone || "-")}</strong>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ALAMAT -->
+  <div class="profile-v3-section">
+
+    <div class="profile-v3-heading">
+      <span class="profile-v3-heading-icon">03</span>
+      <div>
+        <h3>Alamat Santri</h3>
+        <p>Tempat tinggal santri</p>
+      </div>
+    </div>
+
+    <div class="profile-v3-address">
+      ${esc(s.address || "Alamat belum diisi")}
+    </div>
+
+  </div>
+
+
+  <!-- TOMBOL KEMBALI -->
+  <button type="button" class="profile-v3-back">
+    ← Kembali ke Data Santri
+  </button>
 
 </div>
+`;
 
-  </div>  <!-- TOMBOL KEMBALI -->  <button type="button" class="profile-v2-back">
-    <span>←</span> Kembali
-  </button>  </div>
-`;r.querySelector(".profile-v2-back").onclick = renderStudentList;
+r.querySelector(".profile-v3-back").onclick = renderStudentList;
+      r.querySelector(".profile-v2-back").onclick = renderStudentList;
     };
 
     if (isAdmin()) {
