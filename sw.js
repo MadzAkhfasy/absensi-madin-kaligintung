@@ -8,7 +8,7 @@ self.addEventListener("install", event => {
       cache.addAll([
         "./",
         "./index.html",
-        "./style.css",
+        "./style.css?v=23",
         "./app.js?v=20",
         "./manifest.json",
         "./LOGO%20MADIN%20REMOVE%20BG.png"
