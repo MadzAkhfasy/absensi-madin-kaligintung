@@ -404,268 +404,144 @@ r.querySelector(".history-btn").onclick = async () => {
   }
 };
     r.querySelector(".biodata-btn").onclick = () => {
-      const tanggalLahir = s.birthdate
-        ? new Date(s.birthdate + "T00:00:00").toLocaleDateString("id-ID", {
-            day: "numeric",
-            month: "long",
-            year: "numeric"
-          })
-        : "-";
+  const tanggalLahir = s.birthdate
+    ? new Date(s.birthdate + "T00:00:00").toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      })
+    : "-";
 
-      r.classList.add("profile-open");
-      r.innerHTML = `
+  r.classList.add("profile-open");
 
-<div class="student-profile-v2">  <!-- HEADER PROFIL -->  <div class="profile-v2-header"><div class="profile-v2-ornament">۞</div>
+  r.innerHTML = `
+    <div class="student-profile-v3">
 
-<div class="profile-v2-photo">
-  ${
-    s.photoUrl
-      ? `<img src="${esc(s.photoUrl)}" alt="Foto ${esc(s.name)}">`
-      : `<div class="profile-v2-placeholder">Foto Santri</div>`
-  }
-</div>
+      <!-- KARTU IDENTITAS -->
+      <div class="profile-v3-hero">
 
-<h2 class="profile-v2-name">${esc(s.name)}</h2>
-
-<div class="profile-v2-divider">
-  <span></span>
-  <b>✦</b>
-  <span></span>
-</div>
-
-<div class="profile-v2-class">
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M2 9l10-5 10 5-10 5-10-5z"/>
-    <path d="M6 11v5c3 3 9 3 12 0v-5"/>
-    <path d="M22 9v6"/>
-  </svg>
-  ${esc(clsName(s.classId))}
-</div>
-
-  </div>  <!-- BIODATA SANTRI -->  <div class="profile-v2-content">
-    <div class="profile-v2-card">  <!-- NIS -->
-  <div class="profile-v2-item">
-    <div class="profile-v2-icon">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <rect x="3" y="4" width="18" height="16" rx="2"/>
-        <circle cx="9" cy="10" r="2"/>
-        <path d="M6 16c.5-2 5.5-2 6 0"/>
-        <path d="M15 9h3M15 13h3"/>
-      </svg>
-    </div>
-    <strong>NIS</strong>
-    <span>${esc(s.nis || "-")}</span>
-  </div>
-
-  <!-- JENIS KELAMIN -->
-  <div class="profile-v2-item">
-    <div class="profile-v2-icon">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="8" cy="7" r="3"/>
-        <circle cx="17" cy="7" r="3"/>
-        <path d="M2.5 20v-3a5.5 5.5 0 0111 0v3z"/>
-        <path d="M14 13a5 5 0 017.5 4v3h-6"/>
-      </svg>
-    </div>
-    <strong>Jenis Kelamin</strong>
-    <span>
-      ${
-        s.gender === "L" || s.gender === "Laki-laki"
-          ? "Laki-Laki"
-          : s.gender === "P" || s.gender === "Perempuan"
-            ? "Perempuan"
-            : "-"
-      }
-    </span>
-  </div>
-
-  <!-- TEMPAT LAHIR -->
-  <div class="profile-v2-item">
-    <div class="profile-v2-icon">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1116 0z"/>
-        <circle cx="12" cy="10" r="2.5"/>
-      </svg>
-    </div>
-    <strong>Tempat Lahir</strong>
-    <span>${esc(s.birthplace || "-")}</span>
-  </div>
-
-  <!-- TANGGAL LAHIR -->
-  <div class="profile-v2-item">
-    <div class="profile-v2-icon">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <rect x="3" y="5" width="18" height="16" rx="2"/>
-        <path d="M16 3v4M8 3v4M3 10h18"/>
-        <path d="M8 14h2M14 14h2M8 17h2"/>
-      </svg>
-    </div>
-    <strong>Tanggal Lahir</strong>
-    <span>${tanggalLahir}</span>
-  </div>
-
-  <!-- ALAMAT -->
-  <div class="profile-v2-item">
-    <div class="profile-v2-icon">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M3 11l9-8 9 8"/>
-        <path d="M5 10v11h14V10"/>
-        <path d="M9 21v-7h6v7"/>
-      </svg>
-    </div>
-    <strong>Alamat</strong>
-    <span>${esc(s.address || "-")}</span>
-  </div>
-
-  <!-- NAMA AYAH -->
-  <div class="profile-v2-item">
-    <div class="profile-v2-icon">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="12" cy="7" r="4"/>
-        <path d="M4 21v-2a8 8 0 0116 0v2z"/>
-        <path d="M9 13l3 3 3-3"/>
-      </svg>
-    </div>
-    <strong>Nama Ayah</strong>
-    <span>${esc(s.fatherName || "-")}</span>
-  </div>
-
-  <!-- NAMA IBU -->
-  <div class="profile-v2-item">
-    <div class="profile-v2-icon">
-r.classList.add("profile-open");
-r.innerHTML = `
-<div class="student-profile-v3">
-
-  <!-- KARTU IDENTITAS -->
-  <div class="profile-v3-hero">
-
-    <div class="profile-v3-photo">
-      ${
-        s.photoUrl
-          ? `<img src="${esc(s.photoUrl)}" alt="Foto ${esc(s.name)}">`
-          : `<div class="profile-v3-placeholder">?</div>`
-      }
-    </div>
-
-    <div class="profile-v3-identity">
-      <span class="profile-v3-label">PROFIL SANTRI</span>
-      <h2>${esc(s.name)}</h2>
-
-      <div class="profile-v3-class">
-        ${esc(clsName(s.classId))}
-      </div>
-
-      <div class="profile-v3-nis">
-        NIS: ${esc(s.nis || "-")}
-      </div>
-    </div>
-
-    <div class="profile-v3-decoration">۞</div>
-  </div>
-
-
-  <!-- INFORMASI PRIBADI -->
-  <div class="profile-v3-section">
-
-    <div class="profile-v3-heading">
-      <span class="profile-v3-heading-icon">01</span>
-      <div>
-        <h3>Informasi Pribadi</h3>
-        <p>Identitas dan data diri santri</p>
-      </div>
-    </div>
-
-    <div class="profile-v3-card">
-
-      <div class="profile-v3-row">
-        <span>Jenis Kelamin</span>
-        <strong>
+        <div class="profile-v3-photo">
           ${
-            s.gender === "L" || s.gender === "Laki-laki"
-              ? "Laki-Laki"
-              : s.gender === "P" || s.gender === "Perempuan"
-                ? "Perempuan"
-                : "-"
+            s.photoUrl
+              ? `<img src="${esc(s.photoUrl)}" alt="Foto ${esc(s.name)}">`
+              : `<div class="profile-v3-placeholder">?</div>`
           }
-        </strong>
+        </div>
+
+        <div class="profile-v3-identity">
+          <span class="profile-v3-label">PROFIL SANTRI</span>
+          <h2>${esc(s.name)}</h2>
+
+          <div class="profile-v3-class">
+            ${esc(clsName(s.classId))}
+          </div>
+
+          <div class="profile-v3-nis">
+            NIS: ${esc(s.nis || "-")}
+          </div>
+        </div>
+
+        <div class="profile-v3-decoration">۞</div>
       </div>
 
-      <div class="profile-v3-row">
-        <span>Tempat Lahir</span>
-        <strong>${esc(s.birthplace || "-")}</strong>
+      <!-- INFORMASI PRIBADI -->
+      <div class="profile-v3-section">
+
+        <div class="profile-v3-heading">
+          <span class="profile-v3-heading-icon">01</span>
+          <div>
+            <h3>Informasi Pribadi</h3>
+            <p>Identitas dan data diri santri</p>
+          </div>
+        </div>
+
+        <div class="profile-v3-card">
+
+          <div class="profile-v3-row">
+            <span>Jenis Kelamin</span>
+            <strong>
+              ${
+                s.gender === "L" || s.gender === "Laki-laki"
+                  ? "Laki-Laki"
+                  : s.gender === "P" || s.gender === "Perempuan"
+                    ? "Perempuan"
+                    : "-"
+              }
+            </strong>
+          </div>
+
+          <div class="profile-v3-row">
+            <span>Tempat Lahir</span>
+            <strong>${esc(s.birthplace || "-")}</strong>
+          </div>
+
+          <div class="profile-v3-row">
+            <span>Tanggal Lahir</span>
+            <strong>${tanggalLahir}</strong>
+          </div>
+
+        </div>
       </div>
 
-      <div class="profile-v3-row">
-        <span>Tanggal Lahir</span>
-        <strong>${tanggalLahir}</strong>
+      <!-- INFORMASI KELUARGA -->
+      <div class="profile-v3-section">
+
+        <div class="profile-v3-heading">
+          <span class="profile-v3-heading-icon">02</span>
+          <div>
+            <h3>Informasi Keluarga</h3>
+            <p>Data orang tua dan wali santri</p>
+          </div>
+        </div>
+
+        <div class="profile-v3-card">
+
+          <div class="profile-v3-row">
+            <span>Nama Ayah</span>
+            <strong>${esc(s.fatherName || "-")}</strong>
+          </div>
+
+          <div class="profile-v3-row">
+            <span>Nama Ibu</span>
+            <strong>${esc(s.motherName || "-")}</strong>
+          </div>
+
+          <div class="profile-v3-row">
+            <span>No. HP Wali</span>
+            <strong>${esc(s.guardianPhone || "-")}</strong>
+          </div>
+
+        </div>
       </div>
+
+      <!-- ALAMAT -->
+      <div class="profile-v3-section">
+
+        <div class="profile-v3-heading">
+          <span class="profile-v3-heading-icon">03</span>
+          <div>
+            <h3>Alamat Santri</h3>
+            <p>Tempat tinggal santri</p>
+          </div>
+        </div>
+
+        <div class="profile-v3-address">
+          ${esc(s.address || "Alamat belum diisi")}
+        </div>
+
+      </div>
+
+      <!-- TOMBOL KEMBALI -->
+      <button type="button" class="profile-v3-back">
+        ← Kembali ke Data Santri
+      </button>
 
     </div>
-  </div>
+  `;
 
+  r.querySelector(".profile-v3-back").onclick = renderStudentList;
+};
 
-  <!-- INFORMASI KELUARGA -->
-  <div class="profile-v3-section">
-
-    <div class="profile-v3-heading">
-      <span class="profile-v3-heading-icon">02</span>
-      <div>
-        <h3>Informasi Keluarga</h3>
-        <p>Data orang tua dan wali santri</p>
-      </div>
-    </div>
-
-    <div class="profile-v3-card">
-
-      <div class="profile-v3-row">
-        <span>Nama Ayah</span>
-        <strong>${esc(s.fatherName || "-")}</strong>
-      </div>
-
-      <div class="profile-v3-row">
-        <span>Nama Ibu</span>
-        <strong>${esc(s.motherName || "-")}</strong>
-      </div>
-
-      <div class="profile-v3-row">
-        <span>No. HP Wali</span>
-        <strong>${esc(s.guardianPhone || "-")}</strong>
-      </div>
-
-    </div>
-  </div>
-
-
-  <!-- ALAMAT -->
-  <div class="profile-v3-section">
-
-    <div class="profile-v3-heading">
-      <span class="profile-v3-heading-icon">03</span>
-      <div>
-        <h3>Alamat Santri</h3>
-        <p>Tempat tinggal santri</p>
-      </div>
-    </div>
-
-    <div class="profile-v3-address">
-      ${esc(s.address || "Alamat belum diisi")}
-    </div>
-
-  </div>
-
-
-  <!-- TOMBOL KEMBALI -->
-  <button type="button" class="profile-v3-back">
-    ← Kembali ke Data Santri
-  </button>
-
-</div>
-`;
-
-r.querySelector(".profile-v3-back").onclick = renderStudentList;
-      r.querySelector(".profile-v2-back").onclick = renderStudentList;
-    };
 
     if (isAdmin()) {
       r.querySelector(".edit-btn").onclick = () => {
