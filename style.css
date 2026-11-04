@@ -2311,3 +2311,400 @@ padding: 5px 0 !important;
     font-size: 13px !important;
   }
 }
+/* =========================================
+REDESAIN VISUAL MADIN KALIGINTUNG
+MODERN ISLAMIC DASHBOARD
+========================================= */
+
+/* LATAR UTAMA APLIKASI */
+
+#appView {
+background:
+radial-gradient(ellipse at 8% 5%, rgba(207,177,92,.16), transparent 28%),
+radial-gradient(ellipse at 94% 35%, rgba(20,112,73,.13), transparent 32%),
+linear-gradient(145deg, #e4f1e8 0%, #f4f8f3 48%, #e5efe7 100%);
+border-radius: 26px;
+padding: 18px;
+}
+
+/* HEADER / SAMBUTAN */
+
+#appView > .welcome {
+position: relative;
+isolation: isolate;
+overflow: hidden;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 18px;
+min-height: 175px;
+padding: 25px 28px;
+margin-bottom: 18px;
+
+border: 1px solid rgba(225,195,111,.55);
+border-radius: 24px;
+
+background:
+radial-gradient(circle at 85% 15%, rgba(255,255,255,.15), transparent 28%),
+linear-gradient(125deg, #03452f 0%, #08764e 58%, #0d8a5b 100%);
+
+box-shadow: 0 12px 30px rgba(3,69,47,.20);
+color: #fff;
+}
+
+#appView > .welcome::before,
+#appView > .welcome::after {
+content: "";
+position: absolute;
+z-index: -1;
+border: 1px solid rgba(230,198,112,.28);
+border-radius: 50%;
+pointer-events: none;
+}
+
+#appView > .welcome::before {
+width: 230px;
+height: 230px;
+right: 72px;
+top: -145px;
+box-shadow:
+0 0 0 18px rgba(255,255,255,.035),
+0 0 0 38px rgba(255,255,255,.025);
+}
+
+#appView > .welcome::after {
+width: 145px;
+height: 145px;
+right: -48px;
+bottom: -95px;
+box-shadow:
+0 0 0 15px rgba(255,255,255,.035),
+0 0 0 32px rgba(255,255,255,.025);
+}
+
+#appView > .welcome h1 {
+color: #fff;
+margin: 7px 0;
+font-size: clamp(25px,4vw,34px);
+font-weight: 850;
+letter-spacing: -.5px;
+}
+
+#appView > .welcome .eyebrow {
+color: #f0d78e;
+font-size: 11px;
+font-weight: 800;
+letter-spacing: 2px;
+}
+
+#appView > .welcome p,
+#appView > .welcome .muted {
+color: rgba(255,255,255,.82);
+}
+
+#appView .today-pill {
+border: 1px solid rgba(241,215,145,.65);
+border-radius: 30px;
+background: rgba(255,255,255,.12);
+color: #fff;
+padding: 8px 13px;
+font-weight: 700;
+backdrop-filter: blur(8px);
+}
+
+#appView > .welcome img {
+filter: drop-shadow(0 5px 9px rgba(0,0,0,.18));
+}
+
+/* NAVIGASI MENU */
+
+#appView > .tabs {
+display: flex;
+gap: 8px;
+padding: 9px;
+margin: 0 0 18px;
+border: 1px solid rgba(10,91,59,.12);
+border-radius: 17px;
+background: rgba(255,255,255,.82);
+box-shadow: 0 5px 18px rgba(16,75,50,.07);
+backdrop-filter: blur(10px);
+}
+
+#appView > .tabs .tab {
+border-radius: 11px;
+font-weight: 750;
+transition: transform .18s ease, box-shadow .18s ease;
+}
+
+#appView > .tabs .tab.active {
+background: linear-gradient(135deg,#08784f,#034b33);
+color: #fff;
+box-shadow: 0 4px 11px rgba(3,75,51,.22);
+}
+
+#appView > .tabs .tab:active {
+transform: scale(.97);
+}
+
+/* PANEL SETIAP HALAMAN */
+
+#appView > .panel {
+position: relative;
+isolation: isolate;
+overflow: visible;
+padding: 20px;
+
+border: 1px solid rgba(11,101,65,.16);
+border-radius: 23px;
+
+background:
+radial-gradient(circle at 100% 0%, rgba(211,180,94,.20), transparent 24%),
+radial-gradient(circle at 0% 100%, rgba(36,133,86,.12), transparent 30%),
+linear-gradient(145deg,#e2f0e6 0%,#f1f7f2 52%,#e4f0e7 100%);
+
+box-shadow: 0 10px 28px rgba(16,75,50,.09);
+}
+
+#appView > .panel::before {
+content: "";
+position: absolute;
+z-index: -1;
+top: 14px;
+right: 18px;
+width: 92px;
+height: 92px;
+border: 1px solid rgba(181,145,55,.20);
+border-radius: 26px;
+transform: rotate(45deg);
+pointer-events: none;
+}
+
+/* KARTU KONTEN */
+
+#appView > .panel > .card {
+position: relative;
+z-index: 1;
+padding: 22px;
+
+border: 1px solid rgba(255,255,255,.95);
+border-radius: 19px;
+
+background: rgba(255,255,255,.94);
+
+box-shadow: 0 7px 22px rgba(16,75,50,.075);
+}
+
+/* JUDUL HALAMAN */
+
+#appView > .panel > .card > h2,
+#appView > .panel > .card .section-head h2 {
+position: relative;
+margin-top: 0;
+padding-bottom: 13px;
+color: #07583b;
+font-weight: 850;
+letter-spacing: -.25px;
+}
+
+#appView > .panel > .card > h2::after,
+#appView > .panel > .card .section-head h2::after {
+content: "";
+display: block;
+width: 58px;
+height: 4px;
+margin-top: 10px;
+border-radius: 5px;
+background: linear-gradient(90deg,#08784f 0 65%,#d2ad50 65% 100%);
+}
+
+#appView > .panel > .card .muted {
+color: #66796e;
+}
+
+/* DASHBOARD */
+
+#dashboardPanel > .card:first-child {
+overflow: hidden;
+border: 1px solid rgba(221,190,111,.7);
+
+background:
+radial-gradient(circle at 95% 0%, rgba(255,255,255,.15), transparent 30%),
+linear-gradient(125deg,#064a34,#08744d);
+
+color: #fff;
+}
+
+#dashboardPanel > .card:first-child h2 {
+color: #fff;
+}
+
+#dashboardPanel > .card:first-child h2::after {
+background: linear-gradient(90deg,#e5c66f 0 65%,rgba(255,255,255,.7) 65% 100%);
+}
+
+#dashboardPanel > .card:first-child .muted {
+color: rgba(255,255,255,.78);
+}
+
+#dashboardPanel .summary-grid {
+gap: 12px;
+}
+
+#dashboardPanel .stat {
+border: 1px solid rgba(229,198,111,.65);
+border-radius: 16px;
+background: linear-gradient(145deg,#fffdf5,#eaf5ed);
+box-shadow: 0 5px 15px rgba(0,0,0,.10);
+}
+
+#dashboardPanel .stat strong {
+color: #07583b;
+font-size: 30px;
+font-weight: 850;
+}
+
+#dashboardPanel .stat span {
+color: #536b5d;
+font-weight: 700;
+}
+
+#dashboardPanel > .card:nth-child(2) {
+border-top: 4px solid #c9a64f;
+}
+
+/* INPUT DAN FORMULIR */
+
+#appView > .panel input,
+#appView > .panel select,
+#appView > .panel textarea {
+border-color: #d5e3d9;
+border-radius: 11px;
+background-color: #fbfdfb;
+}
+
+#appView > .panel input:focus,
+#appView > .panel select:focus,
+#appView > .panel textarea:focus {
+border-color: #16845a;
+box-shadow: 0 0 0 3px rgba(22,132,90,.12);
+}
+
+#appView > .panel button.primary {
+box-shadow: 0 5px 13px rgba(5,102,65,.16);
+}
+
+#appView > .panel hr {
+border: 0;
+border-top: 1px solid #e0eae3;
+}
+
+/* KARTU BERTINGKAT MENU BACKUP */
+
+#backupPanel .card .card {
+border: 1px solid #e0ebe3;
+background: #f8fcf9;
+box-shadow: none;
+}
+
+/* RESPONSIVE HP */
+
+@media (max-width:600px) {
+
+#appView {
+padding: 10px;
+border-radius: 19px;
+}
+
+#appView > .welcome {
+min-height: 138px;
+padding: 18px 15px;
+gap: 8px;
+border-radius: 19px;
+}
+
+#appView > .welcome img {
+width: 76px !important;
+height: 76px !important;
+}
+
+#appView > .welcome h1 {
+font-size: 23px;
+}
+
+#appView > .welcome .eyebrow {
+font-size: 9px;
+letter-spacing: 1.4px;
+}
+
+#appView > .welcome .today-pill {
+font-size: 10px;
+padding: 6px 9px;
+}
+
+#appView > .tabs {
+gap: 6px;
+padding: 7px;
+margin-bottom: 12px;
+border-radius: 14px;
+}
+
+#appView > .tabs .tab {
+padding: 9px 11px;
+font-size: 12px;
+}
+
+#appView > .panel {
+padding: 10px;
+border-radius: 18px;
+}
+
+#appView > .panel > .card {
+padding: 16px;
+border-radius: 15px;
+}
+
+#appView > .panel::before {
+width: 60px;
+height: 60px;
+top: 12px;
+right: 12px;
+}
+
+#dashboardPanel .stat strong {
+font-size: 25px;
+}
+}
+
+@media (max-width:380px) {
+
+#appView > .welcome {
+padding: 15px 11px;
+}
+
+#appView > .welcome img {
+width: 64px !important;
+height: 64px !important;
+}
+
+#appView > .tabs .tab {
+padding: 8px 9px;
+font-size: 11px;
+}
+
+#appView > .panel > .card {
+padding: 13px;
+}
+}
+
+/* TAMPILAN CETAK */
+
+@media print {
+
+#appView,
+#appView > .panel {
+background: #fff !important;
+box-shadow: none !important;
+border: 0 !important;
+}
+
+}
