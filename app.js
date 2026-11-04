@@ -650,7 +650,7 @@ showToast(`Pemeriksaan foto: URL=${!!photoData.photoUrl}, ID=${!!photoData.photo
         ...photoData
       });
 
-      showToast("Seluruh biodata santri berhasil diperbarui.");
+      showToast(`Data tersimpan. Foto: URL=${!!photoData.photoUrl}, ID=${!!photoData.photoFileId}`);
       await loadStudents();
       await renderDashboard();
 
