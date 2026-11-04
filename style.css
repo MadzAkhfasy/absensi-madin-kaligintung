@@ -2311,3 +2311,92 @@ padding: 5px 0 !important;
     font-size: 13px !important;
   }
 }
+/* =========================================
+PREMIUM PAGE BACKGROUND
+ABSENSI MADIN KALIGINTUNG
+========================================= */
+
+#appView > .panel {
+position: relative;
+isolation: isolate;
+overflow: hidden;
+
+background:
+radial-gradient(
+circle at 95% 5%,
+rgba(201, 166, 79, .13),
+transparent 25%
+),
+radial-gradient(
+circle at 5% 90%,
+rgba(23, 107, 69, .10),
+transparent 30%
+),
+linear-gradient(
+145deg,
+#eaf5ed,
+#f5faf6 48%,
+#e6f1e9
+);
+
+border: 1px solid rgba(23, 107, 69, .13);
+border-radius: 22px;
+box-shadow: 0 8px 28px rgba(16, 75, 50, .07);
+}
+
+/* Ornamen dekoratif background */
+
+#appView > .panel::before {
+content: "";
+position: absolute;
+width: 230px;
+height: 230px;
+top: -110px;
+right: -80px;
+
+border-radius: 50%;
+background: radial-gradient(
+circle,
+rgba(201, 166, 79, .13),
+rgba(201, 166, 79, 0)
+);
+
+pointer-events: none;
+z-index: -1;
+}
+
+/* Kartu konten */
+
+#appView > .panel > .card {
+position: relative;
+z-index: 1;
+
+background: rgba(255, 255, 255, .94);
+border: 1px solid rgba(255, 255, 255, .95);
+border-radius: 18px;
+
+box-shadow:
+0 5px 18px rgba(16, 75, 50, .055),
+0 1px 3px rgba(16, 75, 50, .035);
+}
+
+/* Penyesuaian layar HP */
+
+@media (max-width: 600px) {
+#appView > .panel {
+padding: 11px;
+border-radius: 18px;
+}
+
+#appView > .panel > .card {
+border-radius: 15px;
+padding: 16px;
+}
+
+#appView > .panel::before {
+width: 170px;
+height: 170px;
+top: -85px;
+right: -65px;
+}
+}
