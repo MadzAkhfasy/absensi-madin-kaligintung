@@ -3943,3 +3943,342 @@ border: 0 !important;
     min-height: 27px;
   }
 }
+/* =========================================
+   PROFIL SANTRI V3
+   MODERN PREMIUM DASHBOARD
+========================================= */
+
+.student-profile-v3 {
+  --v3-green: #075b3d;
+  --v3-dark: #03452f;
+  --v3-gold: #c9a64f;
+
+  width: 100%;
+  padding: 12px;
+  background: #f4f8f5;
+  border: 1px solid #e2ebe4;
+  border-radius: 20px;
+  box-sizing: border-box;
+}
+
+
+/* KARTU IDENTITAS */
+
+.profile-v3-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  padding: 20px 16px;
+  overflow: hidden;
+
+  background: linear-gradient(
+    125deg,
+    #03452f,
+    #08704a
+  );
+
+  border-radius: 16px;
+  border-bottom: 4px solid var(--v3-gold);
+  box-shadow: 0 6px 16px rgba(3,69,47,.16);
+}
+
+.profile-v3-photo {
+  flex-shrink: 0;
+  width: 92px;
+  height: 108px;
+  padding: 4px;
+
+  background: #fff;
+  border: 2px solid #d7bd72;
+  border-radius: 13px;
+  overflow: hidden;
+}
+
+.profile-v3-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 9px;
+}
+
+.profile-v3-placeholder {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+
+  color: #075b3d;
+  background: #eaf3ed;
+  font-size: 35px;
+  font-weight: 800;
+}
+
+.profile-v3-identity {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+  flex: 1;
+}
+
+.profile-v3-label {
+  display: inline-block;
+  margin-bottom: 7px;
+  color: #e4d39e;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.profile-v3-identity h2 {
+  margin: 0 0 9px !important;
+  color: #ffffff !important;
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.profile-v3-class {
+  display: inline-block;
+  padding: 5px 11px;
+
+  color: #075b3d;
+  background: #f1e5bd;
+  border-radius: 30px;
+
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.profile-v3-nis {
+  margin-top: 9px;
+  color: #e1eee5;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.profile-v3-decoration {
+  position: absolute;
+  right: 10px;
+  top: -15px;
+  color: rgba(255,255,255,.08);
+  font-size: 100px;
+  pointer-events: none;
+}
+
+
+/* BAGIAN INFORMASI */
+
+.profile-v3-section {
+  margin-top: 20px;
+}
+
+.profile-v3-heading {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 10px;
+}
+
+.profile-v3-heading-icon {
+  display: flex;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+
+  color: #ffffff;
+  background: var(--v3-green);
+  border-radius: 10px;
+
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.profile-v3-heading h3 {
+  margin: 0 !important;
+  color: #174c34 !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+}
+
+.profile-v3-heading p {
+  margin: 3px 0 0 !important;
+  color: #839187;
+  font-size: 10px;
+}
+
+
+/* KARTU BIODATA */
+
+.profile-v3-card {
+  padding: 5px 14px;
+
+  background: #ffffff;
+  border: 1px solid #e4ece6;
+  border-radius: 13px;
+
+  box-shadow: 0 3px 10px rgba(16,75,50,.04);
+}
+
+.profile-v3-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+
+  padding: 12px 0;
+  border-bottom: 1px solid #edf1ee;
+}
+
+.profile-v3-row:last-child {
+  border-bottom: none;
+}
+
+.profile-v3-row span {
+  flex: 0 0 40%;
+  color: #7b8b80;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.profile-v3-row strong {
+  flex: 1;
+  color: #263d30;
+  font-size: 12px;
+  font-weight: 750;
+  text-align: right;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+
+
+/* ALAMAT */
+
+.profile-v3-address {
+  padding: 15px;
+
+  color: #34483a;
+  background: #ffffff;
+  border: 1px solid #e4ece6;
+  border-left: 4px solid var(--v3-gold);
+  border-radius: 12px;
+
+  font-size: 12px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+
+/* TOMBOL KEMBALI */
+
+.profile-v3-back {
+  display: block;
+  width: 100%;
+  min-height: 43px;
+  margin-top: 22px;
+  padding: 10px;
+
+  color: #ffffff;
+  background: linear-gradient(120deg, #075b3d, #08704a);
+  border: none;
+  border-radius: 11px;
+
+  font-size: 12px;
+  font-weight: 750;
+
+  box-shadow: 0 4px 10px rgba(3,69,47,.13);
+}
+
+
+/* RESPONSIVE HP */
+
+@media (max-width: 480px) {
+
+  .student-profile-v3 {
+    padding: 9px;
+    border-radius: 15px;
+  }
+
+  .profile-v3-hero {
+    gap: 11px;
+    padding: 15px 11px;
+    border-radius: 13px;
+  }
+
+  .profile-v3-photo {
+    width: 76px;
+    height: 91px;
+  }
+
+  .profile-v3-identity h2 {
+    font-size: 15px !important;
+  }
+
+  .profile-v3-label {
+    font-size: 8px;
+  }
+
+  .profile-v3-class {
+    font-size: 10px;
+  }
+
+  .profile-v3-nis {
+    font-size: 10px;
+  }
+
+  .profile-v3-section {
+    margin-top: 16px;
+  }
+
+  .profile-v3-heading h3 {
+    font-size: 13px !important;
+  }
+
+  .profile-v3-row {
+    gap: 7px;
+    padding: 11px 0;
+  }
+
+  .profile-v3-row span {
+    flex-basis: 39%;
+    font-size: 10px;
+  }
+
+  .profile-v3-row strong {
+    font-size: 11px;
+  }
+
+  .profile-v3-address {
+    font-size: 11px;
+  }
+}
+
+
+/* HP LAYAR KECIL */
+
+@media (max-width: 350px) {
+
+  .profile-v3-photo {
+    width: 65px;
+    height: 80px;
+  }
+
+  .profile-v3-hero {
+    gap: 9px;
+    padding: 12px 9px;
+  }
+
+  .profile-v3-identity h2 {
+    font-size: 13px !important;
+  }
+
+  .profile-v3-row span {
+    flex-basis: 36%;
+  }
+}
