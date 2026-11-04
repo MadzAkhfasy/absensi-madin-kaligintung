@@ -3353,3 +3353,229 @@ border: 0 !important;
     box-shadow: none !important;
   }
 }
+/* =========================================
+   REDESAIN HALAMAN REKAP ABSENSI
+   PROFESSIONAL REPORT INTERFACE
+========================================= */
+
+/* Kartu utama */
+#reportsPanel > .card {
+  padding: 24px;
+  border-radius: 21px;
+}
+
+/* Judul */
+#reportsPanel > .card > h2 {
+  margin-bottom: 20px;
+  font-size: 23px;
+  font-weight: 850;
+  letter-spacing: -.4px;
+}
+
+/* Area filter */
+#reportsPanel .grid2 {
+  gap: 13px;
+  margin-bottom: 16px;
+  padding: 16px;
+  border: 1px solid #e0ebe3;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #f0f8f2, #ffffff);
+}
+
+#reportsPanel .grid2 label {
+  color: #315b46;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+#reportsPanel .grid2 select {
+  min-height: 46px;
+  margin-top: 7px;
+  border: 1px solid #d5e5da;
+  border-radius: 11px;
+  background: #ffffff;
+  color: #174c34;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+/* Tombol tampilkan rekap */
+#reportsPanel #loadReportBtn {
+  min-height: 49px;
+  margin-bottom: 18px;
+  border-radius: 13px;
+  background: linear-gradient(120deg, #08784f, #034b33);
+  box-shadow: 0 6px 15px rgba(3,75,51,.16);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+/* Statistik rekap */
+#reportsPanel #reportSummary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 11px;
+  margin: 18px 0 22px;
+}
+
+#reportsPanel #reportSummary .stat {
+  min-height: 105px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 8px;
+  border: 1px solid #e0ebe3;
+  border-left: 4px solid #c9a64f;
+  border-radius: 15px;
+  background: linear-gradient(145deg, #ffffff, #f0f8f2);
+  box-shadow: 0 4px 12px rgba(16,75,50,.06);
+}
+
+#reportsPanel #reportSummary .stat strong {
+  color: #08734c;
+  font-size: 29px;
+  font-weight: 850;
+  line-height: 1;
+}
+
+#reportsPanel #reportSummary .stat span {
+  color: #597565;
+  font-size: 11px;
+  font-weight: 750;
+  text-align: center;
+}
+
+/* Area tabel */
+#reportsPanel #reportTable {
+  width: 100%;
+  margin-top: 16px;
+}
+
+#reportsPanel #reportTable .table-wrap {
+  overflow-x: auto;
+}
+
+#reportsPanel #reportTable table {
+  width: 100%;
+  min-width: 650px;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border: 1px solid #dce9e0;
+  border-radius: 13px;
+  background: #ffffff;
+  font-size: 12px;
+}
+
+/* Header tabel */
+#reportsPanel #reportTable thead th {
+  padding: 13px 11px;
+  background: linear-gradient(120deg, #075b3d, #08784f);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+  border: none;
+}
+
+/* Isi tabel */
+#reportsPanel #reportTable tbody td {
+  padding: 12px 10px;
+  color: #365545;
+  border-bottom: 1px solid #e8efe9;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+#reportsPanel #reportTable tbody tr:nth-child(even) {
+  background: #f4f9f5;
+}
+
+#reportsPanel #reportTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+#reportsPanel #reportTable tbody td:first-child {
+  font-weight: 700;
+}
+
+#reportsPanel #reportTable tbody td strong {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 8px;
+  background: #e5f4e9;
+  color: #08734c;
+  font-size: 11px;
+}
+
+/* Keterangan tabel */
+#reportsPanel #reportTable > p {
+  margin-top: 12px;
+  color: #748579;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* Tombol ekspor, cetak, dan gambar */
+#reportsPanel #exportBtn,
+#reportsPanel #printReportBtn,
+#reportsPanel #shareImageBtn {
+  min-height: 46px;
+  margin-top: 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* Pesan */
+#reportsPanel #reportMsg {
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #f0f8f2;
+  color: #176b45;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* Tampilan HP */
+@media (max-width: 600px) {
+
+  #reportsPanel > .card {
+    padding: 15px;
+    border-radius: 16px;
+  }
+
+  #reportsPanel > .card > h2 {
+    font-size: 20px;
+  }
+
+  #reportsPanel .grid2 {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  #reportsPanel #reportSummary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin: 15px 0 18px;
+  }
+
+  #reportsPanel #reportSummary .stat {
+    min-height: 88px;
+    padding: 10px 6px;
+    border-radius: 12px;
+  }
+
+  #reportsPanel #reportSummary .stat strong {
+    font-size: 25px;
+  }
+
+  #reportsPanel #reportSummary .stat span {
+    font-size: 10px;
+  }
+
+  #reportsPanel #reportTable
