@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
-import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, query, where, orderBy, serverTimestamp, Timestamp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, query, where, orderBy, serverTimestamp, Timestamp, writeBatch } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
 // GANTI konfigurasi di bawah dengan konfigurasi aplikasi Firebase milik Madin.
 const firebaseConfig = {
   apiKey: "AIzaSyCpZa_NnbTRGL1GxWS3ti6AKibBLs4rzcU",
@@ -779,26 +779,43 @@ $("saveAttendanceBtn").onclick = async () => {
       }
     }
 
-    // Simpan atau perbarui absensi
-    for (const el of document.querySelectorAll("#attendanceList select")) {
-      const id = el.dataset.id;
-      const docId = `${date}_${id}`;
+    // Simpan seluruh absensi menggunakan Firestore Batch
+const attendanceInputs = [
+  ...document.querySelectorAll("#attendanceList select")
+];
 
-      await setDoc(
-        doc(db, "attendance", docId),
-        {
-          studentId: id,
-          classId,
-          date,
-          status: el.value,
-          markedBy: currentUser.uid,
-          updatedAt: serverTimestamp()
-        },
-        { merge: true }
-      );
-    }
+if (attendanceInputs.length > 500) {
+  throw new Error(
+    "Jumlah santri melebihi batas 500 data dalam satu penyimpanan."
+  );
+}
 
-    msg("attendanceMsg", "Absensi berhasil disimpan.");
+const batch = writeBatch(db);
+
+attendanceInputs.forEach(el => {
+  const id = el.dataset.id;
+  const docId = `${date}_${id}`;
+
+  batch.set(
+    doc(db, "attendance", docId),
+    {
+      studentId: id,
+      classId,
+      date,
+      status: el.value,
+      markedBy: currentUser.uid,
+      updatedAt: serverTimestamp()
+    },
+    { merge: true }
+  );
+});
+
+await batch.commit();
+
+msg(
+  "attendanceMsg",
+  `Absensi berhasil disimpan untuk ${attendanceInputs.length} santri.`
+);
   } catch (e) {
     console.error(e);
     msg("attendanceMsg", "Gagal menyimpan absensi: " + e.message, true);
