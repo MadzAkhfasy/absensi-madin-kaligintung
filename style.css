@@ -940,13 +940,18 @@ footer {
   }
 }
 
-/* HILANGKAN SEMUA ORNAMEN BINTANG */
-.welcome::before,
-.welcome::after,
+/* HILANGKAN ORNAMEN LAMA PADA STATISTIK */
 .stat::before,
 .stat::after {
   content: none !important;
   display: none !important;
+}
+
+/* AKTIFKAN ORNAMEN HEADER BARU */
+#appView > .welcome::before,
+#appView > .welcome::after {
+  content: "";
+  display: block;
 }
 
 /* PERBAIKAN TAMPILAN DAFTAR SANTRI */
