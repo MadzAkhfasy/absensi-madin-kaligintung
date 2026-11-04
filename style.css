@@ -3804,3 +3804,142 @@ border: 0 !important;
     font-size: 12px;
   }
 }
+/* =========================================
+   REDESAIN KARTU DATA SANTRI
+   FOTO KIRI - TOMBOL VERTIKAL KANAN
+========================================= */
+
+#studentsPanel #studentList > .list-row {
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr) 92px;
+  align-items: center;
+  gap: 12px;
+  padding: 13px;
+}
+
+/* Foto santri di sebelah kiri */
+#studentsPanel .student-photo {
+  width: 68px;
+  height: 68px;
+  overflow: hidden;
+  border-radius: 13px;
+  background: #eaf2ec;
+  border: 2px solid #ffffff;
+  box-shadow: 0 3px 10px rgba(0,0,0,.12);
+}
+
+#studentsPanel .student-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  object-fit: cover;
+}
+
+#studentsPanel .photo-placeholder {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  color: #64836e;
+  font-size: 25px;
+  font-weight: 800;
+}
+
+/* Informasi nama dan kelas */
+#studentsPanel .student-info {
+  min-width: 0;
+}
+
+#studentsPanel .student-info strong {
+  display: block;
+  color: #174c34;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  margin-bottom: 5px;
+}
+
+#studentsPanel .student-info small {
+  display: block;
+  color: #728579;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Tombol disusun vertikal */
+#studentsPanel .student-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  width: 100%;
+  max-width: none;
+  gap: 6px;
+}
+
+#studentsPanel .student-actions button {
+  width: 100%;
+  min-height: 31px;
+  padding: 6px 4px;
+  margin: 0;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+/* Tampilan HP */
+@media (max-width: 600px) {
+  #studentsPanel #studentList > .list-row {
+    grid-template-columns: 55px minmax(0, 1fr) 82px;
+    gap: 8px;
+    padding: 10px 8px;
+  }
+
+  #studentsPanel .student-photo {
+    width: 55px;
+    height: 55px;
+    border-radius: 10px;
+  }
+
+  #studentsPanel .student-info strong {
+    font-size: 11px;
+  }
+
+  #studentsPanel .student-info small {
+    font-size: 10px;
+  }
+
+  #studentsPanel .student-actions {
+    gap: 5px;
+  }
+
+  #studentsPanel .student-actions button {
+    min-height: 29px;
+    padding: 5px 3px;
+    font-size: 9px;
+  }
+}
+
+/* HP layar kecil */
+@media (max-width: 380px) {
+  #studentsPanel #studentList > .list-row {
+    grid-template-columns: 48px minmax(0, 1fr) 76px;
+    gap: 6px;
+    padding: 9px 6px;
+  }
+
+  #studentsPanel .student-photo {
+    width: 48px;
+    height: 48px;
+  }
+
+  #studentsPanel .student-actions button {
+    font-size: 8px;
+    min-height: 27px;
+  }
+}
