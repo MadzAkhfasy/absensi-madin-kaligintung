@@ -4282,3 +4282,245 @@ border: 0 !important;
     flex-basis: 36%;
   }
 }
+/* =========================================
+   PERBAIKAN HALAMAN RIWAYAT DAN EDIT SANTRI
+========================================= */
+
+/* Lepaskan layout grid daftar santri */
+#studentsPanel #studentList > .student-detail-open {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* KONTENER RIWAYAT */
+.student-history-v1 {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 18px;
+  box-sizing: border-box;
+  border: 1px solid #e2ebe4;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #ffffff, #f3f8f4);
+  box-shadow: 0 5px 18px rgba(15, 75, 48, .07);
+}
+
+.student-history-v1 h3 {
+  color: #075b3d;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.student-history-v1 img {
+  display: block;
+  margin: auto;
+  border: 3px solid #d7bd72;
+}
+
+.history-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+  margin: 12px 0;
+}
+
+.history-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 12px 4px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, .05);
+}
+
+.history-stat strong {
+  color: #174c34;
+  font-size: 21px;
+}
+
+.history-stat span {
+  margin-top: 4px;
+  color: #718078;
+  font-size: 10px;
+}
+
+.history-percent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  margin-top: 12px;
+  border-radius: 13px;
+  background: #eaf5ed;
+  color: #075b3d;
+}
+
+.history-percent strong {
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.history-percent span {
+  font-size: 11px;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid #e7eee8;
+  border-radius: 11px;
+  background: #ffffff;
+}
+
+.history-item strong {
+  color: #34483a;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.history-item > span {
+  flex-shrink: 0;
+  padding: 5px 10px;
+  border-radius: 20px;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* FORM EDIT PROFIL */
+.student-edit-v1 {
+  width: 100%;
+  min-width: 0;
+  padding: 18px;
+  box-sizing: border-box;
+  border: 1px solid #e2ebe4;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #ffffff, #f4f8f5);
+  box-shadow: 0 5px 18px rgba(15, 75, 48, .07);
+}
+
+.student-edit-v1 label {
+  display: block;
+  margin: 15px 0 6px;
+  color: #24563c;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.student-edit-v1 input,
+.student-edit-v1 select,
+.student-edit-v1 textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 43px;
+  margin: 0;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  border: 1px solid #d5e3d8;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #263d30;
+  font-size: 13px;
+}
+
+.student-edit-v1 textarea {
+  min-height: 85px;
+  resize: vertical;
+}
+
+.student-edit-v1 input:focus,
+.student-edit-v1 select:focus,
+.student-edit-v1 textarea:focus {
+  outline: none;
+  border-color: #16845b;
+  box-shadow: 0 0 0 3px rgba(22, 132, 91, .10);
+}
+
+.student-edit-v1 input[type="file"] {
+  min-height: auto;
+  padding: 10px;
+  background: #f4f8f5;
+}
+
+.student-edit-v1 img {
+  display: block;
+  width: 90px;
+  height: 90px;
+  margin-top: 12px;
+  object-fit: cover;
+  border: 3px solid #d7bd72;
+  border-radius: 12px;
+}
+
+.student-edit-v1 button {
+  width: 100%;
+  min-height: 43px;
+  margin: 12px 0 0;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.student-edit-v1 .edit-save {
+  color: #ffffff;
+  background: linear-gradient(120deg, #075b3d, #16845b);
+}
+
+.student-edit-v1 .edit-cancel {
+  color: #075b3d;
+  background: #eaf3ed;
+  border: 1px solid #cbded0;
+}
+
+/* PENYESUAIAN HP */
+@media (max-width: 480px) {
+  .student-history-v1,
+  .student-edit-v1 {
+    padding: 13px;
+    border-radius: 14px;
+  }
+
+  .history-summary {
+    gap: 5px;
+  }
+
+  .history-stat {
+    padding: 10px 3px;
+  }
+
+  .history-stat strong {
+    font-size: 18px;
+  }
+
+  .history-stat span {
+    font-size: 9px;
+  }
+
+  .history-item {
+    padding: 10px;
+  }
+
+  .history-item strong {
+    font-size: 11px;
+  }
+}
