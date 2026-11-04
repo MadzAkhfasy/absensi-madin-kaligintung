@@ -1,13 +1,15 @@
 const CACHE = "absensi-madin-v20";
 
 self.addEventListener("install", event => {
+  self.skipWaiting();
+
   event.waitUntil(
     caches.open(CACHE).then(cache =>
       cache.addAll([
         "./",
         "./index.html",
         "./style.css",
-        "./app.js",
+        "./app.js?v=20",
         "./manifest.json",
         "./LOGO%20MADIN%20REMOVE%20BG.png"
       ])
@@ -17,11 +19,14 @@ self.addEventListener("install", event => {
 
 self.addEventListener("activate", event => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys.filter(key => key !== CACHE).map(key => caches.delete(key))
-      )
-    )
+    Promise.all([
+      caches.keys().then(keys =>
+        Promise.all(
+          keys.filter(key => key !== CACHE).map(key => caches.delete(key))
+        )
+      ),
+      self.clients.claim()
+    ])
   );
 });
 
