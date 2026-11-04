@@ -1458,17 +1458,7 @@ $("dashTotalClasses").textContent = canAccessAllClasses() ? classes.length : 1;
     `;
   }).join("");
 
-  const attendanceSnap = await getDocs(
-    query(collection(db, "attendance"), where("date", "==", today))
-  );
-
-  const records = attendanceSnap.docs
-    .map(d => d.data())
-    .filter(r => canAccessAllClasses() || r.classId === myClass());
-  $("dashHadir").textContent = records.filter(r => r.status === "Hadir").length;
-  $("dashIzin").textContent = records.filter(r => r.status === "Izin").length;
-  $("dashSakit").textContent = records.filter(r => r.status === "Sakit").length;
-  $("dashAlpa").textContent = records.filter(r => r.status === "Alpa").length;
+  
 }// DROPDOWN CUSTOM MADIN
 function enhanceCustomDropdown(select) {
   if (select.dataset.customized === "true") return;
