@@ -290,6 +290,7 @@ function renderStudentList() {
   </div>
 `;
 r.querySelector(".history-btn").onclick = async () => {
+    r.classList.add("student-detail-open");
   r.innerHTML = `
     <div style="width:100%;text-align:center;padding:15px;">
       <h3>Memuat Riwayat Absensi...</h3>
@@ -338,7 +339,7 @@ r.querySelector(".history-btn").onclick = async () => {
     };
 
     r.innerHTML = `
-      <div style="width:100%;">
+      <div class="student-history-v1">
 
         <div style="text-align:center;padding:12px;">
           ${
@@ -545,8 +546,9 @@ r.querySelector(".history-btn").onclick = async () => {
 
     if (isAdmin()) {
       r.querySelector(".edit-btn").onclick = () => {
+          r.classList.add("student-detail-open");
   r.innerHTML = `
-    <div style="width:100%">
+    <div class="student-edit-v1">
       <label>Nama Santri</label>
       <input class="edit-name" value="${esc(s.name)}">
 
