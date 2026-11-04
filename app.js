@@ -2227,21 +2227,20 @@ ctx.fillText(
       { type: "image/png" }
     );
 
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({
-        files: [file],
-        title: "Rekap Kehadiran Madin Kaligintung"
-      });
-    } else {
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = file.name;
-      link.click();
+    // Simpan gambar langsung ke perangkat
+const url = URL.createObjectURL(blob);
+const link = document.createElement("a");
 
-      setTimeout(() => URL.revokeObjectURL(url), 3000);
-      msg("reportMsg", "Gambar rekap berhasil disimpan.");
-    }
+link.href = url;
+link.download = file.name;
+
+document.body.appendChild(link);
+link.click();
+link.remove();
+
+setTimeout(() => URL.revokeObjectURL(url), 3000);
+
+msg("reportMsg", "Gambar rekap berhasil disimpan.");
 
   } catch (e) {
     console.error(e);
