@@ -3579,3 +3579,229 @@ border: 0 !important;
   }
 
   #reportsPanel #reportTable
+
+   /* =========================================
+   REDESAIN HALAMAN BACKUP DATA
+   PROFESSIONAL ADMIN INTERFACE
+========================================= */
+
+/* Kartu utama */
+#backupPanel > .card {
+  padding: 24px;
+  border: 1px solid #dce9df;
+  border-radius: 21px;
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(201,166,79,.10),
+      transparent 30%
+    ),
+    linear-gradient(145deg, #ffffff, #f8fcf9);
+  box-shadow: 0 9px 26px rgba(16,75,50,.08);
+}
+
+/* Judul utama */
+#backupPanel > .card > h2 {
+  position: relative;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  color: #104b32;
+  font-size: 23px;
+  font-weight: 850;
+  letter-spacing: -.4px;
+}
+
+#backupPanel > .card > h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 65px;
+  height: 4px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #176b45, #c9a64f);
+}
+
+/* Garis pemisah */
+#backupPanel hr {
+  margin: 24px 0;
+  border: 0;
+  border-top: 1px solid #e1ebe4;
+}
+
+/* Judul setiap bagian */
+#backupPanel h3 {
+  margin: 20px 0 12px;
+  color: #145638;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+/* Kartu pemantauan foto */
+#backupPanel > .card > .card {
+  position: relative;
+  overflow: hidden;
+  padding: 17px;
+  margin: 12px 0 24px;
+  border: 1px solid #dcebe0;
+  border-top: 4px solid #c9a64f;
+  border-radius: 17px;
+  background: linear-gradient(145deg, #f5faf6, #ffffff);
+  box-shadow: 0 5px 15px rgba(16,75,50,.05);
+}
+
+/* Informasi statistik foto */
+#backupPanel > .card > .card > p {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  padding: 12px 3px;
+  border-bottom: 1px solid #e5eee7;
+  color: #52685a;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+#backupPanel > .card > .card > p:last-of-type {
+  border-bottom: none;
+}
+
+#backupPanel > .card > .card > p strong {
+  color: #08734c;
+  font-size: 17px;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+/* Persentase kelengkapan foto */
+#backupPanel #photoPercentage {
+  color: #a47d20;
+  font-size: 20px;
+}
+
+/* Tombol perbarui statistik */
+#backupPanel #refreshPhotoStatsBtn {
+  min-height: 44px;
+  margin-top: 14px;
+  border-radius: 11px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* Keterangan backup */
+#backupPanel > .card > .muted {
+  margin: 15px 0 10px;
+  color: #718177;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+/* Tombol unduh backup */
+#backupPanel #backupDataBtn {
+  min-height: 54px;
+  margin-top: 8px;
+  border: 1px solid #075638;
+  border-radius: 13px;
+  background: linear-gradient(120deg, #08784f, #06452f);
+  box-shadow: 0 6px 15px rgba(5,102,65,.17);
+  font-size: 14px;
+  font-weight: 850;
+  letter-spacing: .2px;
+}
+
+#backupPanel #backupDataBtn:active {
+  transform: scale(.98);
+}
+
+/* Bagian restore */
+#backupPanel > .card > h3:last-of-type {
+  margin-top: 22px;
+}
+
+/* Area keterangan restore */
+#backupPanel > .card > h3:last-of-type ~ .muted {
+  padding: 10px 12px;
+  border-left: 3px solid #c9a64f;
+  border-radius: 0 9px 9px 0;
+  background: #f4f8f5;
+  color: #66786c;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+/* Input file backup */
+#backupPanel #restoreFile {
+  min-height: 48px;
+  margin-top: 12px;
+  padding: 10px;
+  border: 1px dashed #9dbba7;
+  border-radius: 12px;
+  background: #f5faf6;
+  color: #456451;
+  font-size: 12px;
+}
+
+/* Tombol restore */
+#backupPanel #restoreDataBtn {
+  min-height: 50px;
+  margin-top: 12px;
+  border: 1px solid #c5a34d;
+  border-radius: 12px;
+  background: linear-gradient(120deg, #f5edda, #eee1bd);
+  color: #69521c;
+  box-shadow: 0 4px 11px rgba(145,112,35,.09);
+  font-size: 13px;
+  font-weight: 850;
+}
+
+/* Pesan proses */
+#backupPanel .message {
+  margin-top: 13px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* Tampilan HP */
+@media (max-width: 600px) {
+
+  #backupPanel > .card {
+    padding: 15px;
+    border-radius: 17px;
+  }
+
+  #backupPanel > .card > h2 {
+    font-size: 20px;
+  }
+
+  #backupPanel h3 {
+    font-size: 14px;
+  }
+
+  #backupPanel > .card > .card {
+    padding: 13px;
+    border-radius: 14px;
+  }
+
+  #backupPanel > .card > .card > p {
+    padding: 11px 2px;
+    font-size: 12px;
+  }
+
+  #backupPanel > .card > .card > p strong {
+    font-size: 15px;
+  }
+
+  #backupPanel #photoPercentage {
+    font-size: 18px;
+  }
+
+  #backupPanel #backupDataBtn,
+  #backupPanel #restoreDataBtn {
+    min-height: 48px;
+    font-size: 12px;
+  }
+}
