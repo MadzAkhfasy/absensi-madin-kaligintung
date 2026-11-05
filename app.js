@@ -1638,10 +1638,9 @@ async function renderDashboard() {
           '<p class="muted">Gagal memuat statistik.</p>';
       }
     });
-  }
-}
-  
-}// DROPDOWN CUSTOM MADIN
+  } 
+
+// DROPDOWN CUSTOM MADIN
 function enhanceCustomDropdown(select) {
   if (select.dataset.customized === "true") return;
   select.dataset.customized = "true";
