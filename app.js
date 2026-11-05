@@ -1503,9 +1503,16 @@ async function renderDashboard() {
       visibleClasses.map(c => c.id)
     );
 
-    const attendance = snap.docs
-      .map(d => d.data())
-      .filter(a => classIds.has(a.classId));
+    const activeStudentIds = new Set(
+  students.map(s => s.id)
+);
+
+const attendance = snap.docs
+  .map(d => d.data())
+  .filter(a =>
+    classIds.has(a.classId) &&
+    activeStudentIds.has(a.studentId)
+  );
 
     const todayData = attendance.filter(
       a => a.date === todayStr
