@@ -1989,13 +1989,276 @@ $("printStudentsPdfBtn").onclick = () => {
       <html lang="id">
       <head>
         <meta charset="UTF-8">
+// ================= CETAK DATA SANTRI =================
+
+function fillStudentPdfClass() {
+  const select = $("studentPdfClass");
+  if (!select) return;
+
+  select.innerHTML = '<option value="__all__">Semua Kelas</option>';
+
+  classes.forEach(c => {
+    const option = document.createElement("option");
+    option.value = c.id;
+    option.textContent = c.name;
+    select.appendChild(option);
+  });
+}
+
+function fillStudentPdfStudent() {
+  const select = $("studentPdfStudent");
+  if (!select) return;
+
+  const selectedClass = $("studentPdfClass").value;
+
+  const filtered = students
+    .filter(s =>
+      selectedClass === "__all__" || s.classId === selectedClass
+    )
+    .sort((a, b) =>
+      String(a.name || "").localeCompare(String(b.name || ""), "id")
+    );
+
+  select.innerHTML = '<option value="__all__">Semua Santri</option>';
+
+  filtered.forEach(s => {
+    const option = document.createElement("option");
+    option.value = s.id;
+    option.textContent = s.name;
+    select.appendChild(option);
+  });
+}
+
+$("studentPdfType").addEventListener("change", () => {
+  const isBiodata = $("studentPdfType").value === "biodata";
+
+  $("studentPdfStudentWrap").classList.toggle(
+    "hidden",
+    !isBiodata
+  );
+
+  fillStudentPdfStudent();
+});
+
+$("studentPdfClass").addEventListener("change", fillStudentPdfStudent);
+
+function pdfDate(value) {
+  if (!value) return "-";
+
+  const date = new Date(value + "T00:00:00");
+
+  if (isNaN(date.getTime())) return value;
+
+  return date.toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+}
+
+$("printStudentsPdfBtn").onclick = () => {
+  try {
+    if (!isAdmin()) {
+      msg("studentPdfMsg", "Fitur ini hanya untuk admin.", true);
+      return;
+    }
+
+    const type = $("studentPdfType").value;
+    const selectedClass = $("studentPdfClass").value;
+    const selectedStudent = $("studentPdfStudent").value;
+
+    const selectedStudents = students
+      .filter(s =>
+        selectedClass === "__all__" || s.classId === selectedClass
+      )
+      .filter(s =>
+        type !== "biodata" ||
+        selectedStudent === "__all__" ||
+        s.id === selectedStudent
+      )
+      .sort((a, b) =>
+        clsName(a.classId).localeCompare(clsName(b.classId), "id") ||
+        String(a.name || "").localeCompare(String(b.name || ""), "id")
+      );
+
+    if (!selectedStudents.length) {
+      msg("studentPdfMsg", "Tidak ada data santri untuk dicetak.", true);
+      return;
+    }
+
+    const printWindow = window.open("", "_blank");
+
+    if (!printWindow) {
+      msg(
+        "studentPdfMsg",
+        "Popup diblokir. Izinkan pop-up lalu coba lagi.",
+        true
+      );
+      return;
+    }
+
+    const logo = "https://madzakhfasy.github.io/absensi-madin-kaligintung/LOGO%20MADIN%20REMOVE%20BG.png";
+
+    const header = `
+      <div class="letterhead">
+        <img src="${logo}" alt="Logo Madin">
+        <div>
+          <h2>MADRASAH DINIYAH KALIGINTUNG</h2>
+          <p>Dusun Kaligintung, Desa Cilibang</p>
+          <p>Kec. Jeruklegi, Kab. Cilacap</p>
+        </div>
+      </div>
+    `;
+
+    let content = "";
+    let title = "";
+
+    // CETAK DAFTAR NAMA
+    if (type === "list") {
+      title = "DAFTAR NAMA SANTRI";
+
+      const grouped = classes
+        .filter(c =>
+          selectedClass === "__all__" || c.id === selectedClass
+        )
+        .map(c => ({
+          name: c.name,
+          students: selectedStudents.filter(s => s.classId === c.id)
+        }))
+        .filter(g => g.students.length);
+
+      content = grouped.map(group => `
+        <div class="class-group">
+          <h3>${esc(group.name)}</h3>
+          <table>
+            <thead>
+              <tr>
+                <th width="60">No.</th>
+                <th>Nama Santri</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${group.students.map((s, i) => `
+                <tr>
+                  <td>${i + 1}</td>
+                  <td>${esc(s.name)}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `).join("");
+    }
+
+    // CETAK BIODATA PER SANTRI
+    if (type === "biodata") {
+      title = "BIODATA SANTRI";
+
+      content = selectedStudents.map(s => `
+        <div class="biodata-page">
+          ${header}
+
+          <h2 class="document-title">BIODATA SANTRI</h2>
+
+          <div class="biodata-layout">
+            <div class="photo-box">
+              ${s.photoUrl
+                ? `<img src="${esc(s.photoUrl)}" alt="Foto Santri">`
+                : `<span>FOTO<br>SANTRI</span>`
+              }
+            </div>
+
+            <div class="biodata-details">
+              <table>
+                <tr><th>NIS</th><td>${esc(s.nis || "-")}</td></tr>
+                <tr><th>Nama Lengkap</th><td>${esc(s.name || "-")}</td></tr>
+                <tr><th>Kelas/Jilid</th><td>${esc(clsName(s.classId))}</td></tr>
+                <tr><th>Jenis Kelamin</th><td>${esc(s.gender === "L" ? "Laki-laki" : s.gender === "P" ? "Perempuan" : s.gender || "-")}</td></tr>
+                <tr><th>Tempat Lahir</th><td>${esc(s.birthplace || "-")}</td></tr>
+                <tr><th>Tanggal Lahir</th><td>${esc(pdfDate(s.birthdate))}</td></tr>
+                <tr><th>Nama Ayah</th><td>${esc(s.fatherName || "-")}</td></tr>
+                <tr><th>Nama Ibu</th><td>${esc(s.motherName || "-")}</td></tr>
+                <tr><th>Alamat</th><td>${esc(s.address || "-")}</td></tr>
+                <tr><th>Nomor HP Wali</th><td>${esc(s.guardianPhone || "-")}</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    // CETAK TABEL BIODATA
+    if (type === "table") {
+      title = "TABEL BIODATA SANTRI";
+
+      const grouped = classes
+        .filter(c =>
+          selectedClass === "__all__" || c.id === selectedClass
+        )
+        .map(c => ({
+          name: c.name,
+          students: selectedStudents.filter(s => s.classId === c.id)
+        }))
+        .filter(g => g.students.length);
+
+      content = grouped.map(group => `
+        <div class="class-group">
+          <h3>${esc(group.name)}</h3>
+
+          <table class="biodata-table">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>NIS</th>
+                <th>Nama Santri</th>
+                <th>JK</th>
+                <th>Tempat, Tanggal Lahir</th>
+                <th>Nama Ayah</th>
+                <th>Nama Ibu</th>
+                <th>Alamat</th>
+                <th>HP Wali</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              ${group.students.map((s, i) => `
+                <tr>
+                  <td>${i + 1}</td>
+                  <td>${esc(s.nis || "-")}</td>
+                  <td>${esc(s.name || "-")}</td>
+                  <td>${esc(s.gender === "L" ? "L" : s.gender === "P" ? "P" : "-")}</td>
+                  <td>${esc([s.birthplace, pdfDate(s.birthdate)].filter(Boolean).join(", ") || "-")}</td>
+                  <td>${esc(s.fatherName || "-")}</td>
+                  <td>${esc(s.motherName || "-")}</td>
+                  <td>${esc(s.address || "-")}</td>
+                  <td>${esc(s.guardianPhone || "-")}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `).join("");
+    }
+
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html lang="id">
+      <head>
+        <meta charset="UTF-8">
         <title>${title}</title>
+
         <style>
+          * {
+            box-sizing: border-box;
+          }
+
           body {
             font-family: Arial, sans-serif;
             color: #222;
-            margin: 25px;
+            margin: 20px;
+            font-size: 12px;
           }
+
           .letterhead {
             display: flex;
             align-items: center;
@@ -2006,66 +2269,156 @@ $("printStudentsPdfBtn").onclick = () => {
             margin-bottom: 25px;
             text-align: center;
           }
-          .letterhead img { width: 75px; height: 75px; object-fit: contain; }
-          .letterhead h2 { margin: 0; font-size: 19px; }
-          .letterhead p { margin: 5px 0 0; font-size: 12px; }
-          h3 { margin: 22px 0 8px; font-size: 15px; }
-          .title { text-align: center; margin: 20px 0; }
-          .date { text-align: right; margin: 20px 0; }
-          table { width: 100%; border-collapse: collapse; }
-          th, td { border: 1px solid #555; padding: 7px; text-align: left; }
-          th { background: #eee; }
-          td:first-child { text-align: center; }
-          .class-group { margin-bottom: 18px; }
+
+          .letterhead img {
+            width: 75px;
+            height: 75px;
+            object-fit: contain;
+          }
+
+          .letterhead h2 {
+            margin: 0 0 5px;
+            font-size: 19px;
+          }
+
+          .letterhead p {
+            margin: 3px;
+          }
+
+          .document-title {
+            text-align: center;
+            margin: 25px 0;
+          }
+
+          h3 {
+            margin: 18px 0 8px;
+          }
+
+          table {
+            width: 100%;
+            border-collapse: collapse;
+          }
+
+          th, td {
+            border: 1px solid #555;
+            padding: 7px;
+            text-align: left;
+            vertical-align: top;
+          }
+
+          th {
+            background: #eee;
+          }
+
+          .class-group {
+            margin-bottom: 20px;
+          }
+
+          .biodata-layout {
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+          }
+
+          .photo-box {
+            width: 120px;
+            height: 150px;
+            border: 1px solid #777;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            flex-shrink: 0;
+          }
+
+          .photo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+
+          .biodata-details {
+            flex: 1;
+          }
+
+          .biodata-details th {
+            width: 145px;
+          }
+
+          .biodata-page {
+            page-break-after: always;
+            break-after: page;
+          }
+
+          .biodata-page:last-child {
+            page-break-after: auto;
+            break-after: auto;
+          }
+
           @media print {
-            body { margin: 15mm; }
-            .class-group { page-break-inside: avoid; }
+            body {
+              margin: 12mm;
+            }
+
+            @page {
+              size: A4 portrait;
+              margin: 12mm;
+            }
+
+            body:has(.biodata-table) {
+              font-size: 9px;
+            }
+
+            body:has(.biodata-table) table {
+              font-size: 8px;
+            }
+
+            body:has(.biodata-table) th,
+            body:has(.biodata-table) td {
+              padding: 4px;
+            }
+          }
+
+          @page landscape {
+            size: A4 landscape;
+            margin: 10mm;
+          }
+
+          body:has(.biodata-table) {
+            page: landscape;
           }
         </style>
       </head>
+
       <body>
-        <div class="letterhead">
-          <img src="https://madzakhfasy.github.io/absensi-madin-kaligintung/LOGO%20MADIN%20REMOVE%20BG.png">
-          <div>
-            <h2>MADRASAH DINIYAH KALIGINTUNG</h2>
-            <p>Sekretariat: Dusun Kaligintung, Desa Cilibang</p>
-          </div>
-        </div>
+        ${type === "biodata" ? "" : header}
 
-        <h3 class="title">${title}</h3>
-
-        ${type === "announcement" ? `
-          <p>
-            Diberitahukan kepada seluruh wali santri bahwa pembagian kelas
-            santri Madrasah Diniyah Kaligintung adalah sebagai berikut:
-          </p>
-          <p class="date">Tanggal: ${dateText}</p>
+        ${type !== "biodata" ? `
+          <h2 class="document-title">${title}</h2>
         ` : ""}
 
-        ${rows}
+        ${content}
 
-        <p style="margin-top:25px">
-          Jumlah seluruh santri: <strong>${selectedStudents.length} santri</strong>
-        </p>
-
-        ${type === "announcement" ? `
-          <p>Demikian pengumuman ini disampaikan. Terima kasih atas perhatian dan kerja samanya.</p>
-        ` : ""}
         <script>
-          window.onload = () => window.print();
+          window.onload = () => {
+            setTimeout(() => window.print(), 500);
+          };
         <\/script>
       </body>
       </html>
     `);
 
     printWindow.document.close();
-    msg("studentPdfMsg", "Dokumen siap dicetak atau disimpan sebagai PDF.");
+
+    msg("studentPdfMsg", "Dokumen berhasil disiapkan.");
+
   } catch (error) {
     console.error(error);
-    msg("studentPdfMsg", "Gagal membuat PDF: " + error.message, true);
+    msg("studentPdfMsg", "Gagal mencetak: " + error.message, true);
   }
 };
 
+// ================= AKHIR CETAK DATA SANTRI =================
 // ================= BACKUP DAN RESTORE DATA =================
 
 function serializeBackupValue(value) {
