@@ -679,6 +679,97 @@ async function importDeleteStudent(id){
   await loadStudents();
   await renderDashboard();
 }
+function nextAvailableNis(usedValues) {
+  const used = new Set(
+    usedValues.map(value => String(value || "").trim()).filter(Boolean)
+  );
+
+  let number = 301;
+  while (used.has(String(number).padStart(4, "0"))) {
+    number++;
+  }
+
+  return String(number).padStart(4, "0");
+}
+
+async function generateNisForAllStudents() {
+  if (!isAdmin()) throw new Error("Hanya admin yang dapat membuat NIS.");
+
+  const snapshot = await getDocs(collection(db, "students"));
+
+  const records = snapshot.docs.map(item => ({
+    ref: item.ref,
+    ...item.data()
+  }));
+
+  const used = new Set(
+    records.map(student => String(student.nis || "").trim()).filter(Boolean)
+  );
+
+  const classOrder = new Map(classes.map(c => [c.id, Number(c.order) || 0]));
+
+  const pending = records
+    .filter(student => !String(student.nis || "").trim())
+    .sort((a, b) =>
+      (classOrder.get(b.classId) || 0) - (classOrder.get(a.classId) || 0) ||
+      String(a.name || "").localeCompare(String(b.name || ""), "id")
+    );
+
+  let number = 301;
+  let batch = writeBatch(db);
+  let count = 0;
+  let updated = 0;
+
+  for (const student of pending) {
+    let nis = String(number).padStart(4, "0");
+
+    while (used.has(nis)) {
+      number++;
+      nis = String(number).padStart(4, "0");
+    }
+
+    used.add(nis);
+    batch.update(student.ref, { nis });
+    number++;
+    count++;
+    updated++;
+
+    if (count === 450) {
+      await batch.commit();
+      batch = writeBatch(db);
+      count = 0;
+    }
+  }
+
+  if (count > 0) await batch.commit();
+
+  return { updated, total: records.length };
+}
+
+$("generateNisBtn")?.addEventListener("click", async () => {
+  if (!isAdmin()) return;
+
+  const button = $("generateNisBtn");
+
+  if (!confirm("Buat NIS otomatis mulai 0301 untuk santri yang belum memiliki NIS? NIS lama tidak akan diubah.")) return;
+
+  button.disabled = true;
+  msg("generateNisMsg", "Sedang membuat NIS...");
+
+  try {
+    const result = await generateNisForAllStudents();
+    await loadStudents();
+    await renderDashboard();
+
+    msg("generateNisMsg", result.updated
+      ? result.updated + " NIS berhasil dibuat."
+      : "Semua santri sudah memiliki NIS.");
+  } catch (error) {
+    msg("generateNisMsg", "Gagal: " + error.message, true);
+  } finally {
+    button.disabled = false;
+  }
+});
 $("studentSearch").addEventListener("input", renderStudentList);
 
 $("studentFilterClass").addEventListener("change", renderStudentList);
