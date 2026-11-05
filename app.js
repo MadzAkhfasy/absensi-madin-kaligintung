@@ -1579,26 +1579,46 @@ const attendance = snap.docs
       '<p class="muted">Belum ada data kelas.</p>';
     }
 
-    // 5 SANTRI PALING RAJIN
-    const ranking = students.map(s => {
-      const jumlah = attendance.filter(a =>
-        a.studentId === s.id &&
-        a.status === "Hadir"
-      ).length;
+        // SANTRI PALING RAJIN SETIAP KELAS
+    const rankingByClass = visibleClasses.map(c => {
+      const ranked = students
+        .filter(s => s.classId === c.id)
+        .map(s => ({
+          ...s,
+          jumlah: attendance.filter(a =>
+            a.studentId === s.id &&
+            a.status === "Hadir"
+          ).length
+        }));
 
-      return { ...s, jumlah };
-    })
-    .filter(s => s.jumlah > 0)
-    .sort((a, b) => b.jumlah - a.jumlah)
-    .slice(0, 5);
+      const tertinggi = Math.max(
+        0,
+        ...ranked.map(s => s.jumlah)
+      );
+
+      const winners = ranked.filter(
+        s => s.jumlah === tertinggi && tertinggi > 0
+      );
+
+      return {
+        className: c.name,
+        winners,
+        tertinggi
+      };
+    }).filter(c => c.winners.length > 0);
 
     const topBox = $("dashTopStudents");
 
     if (topBox) {
-      topBox.innerHTML = ranking.map((s, i) => `
+      topBox.innerHTML = rankingByClass.map(c => `
         <div class="list-item">
-          <span>${i + 1}. ${esc(s.name)}</span>
-          <strong>${s.jumlah} kali hadir</strong>
+          <div>
+            <strong>${esc(c.className)}</strong>
+            ${c.winners.map(s => `
+              <div>${esc(s.name)}</div>
+            `).join("")}
+          </div>
+          <strong>${c.tertinggi} kali hadir</strong>
         </div>
       `).join("") ||
       '<p class="muted">Belum ada data kehadiran.</p>';
