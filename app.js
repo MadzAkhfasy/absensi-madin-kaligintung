@@ -1598,7 +1598,7 @@ const attendance = snap.docs
             </summary>
 
             <div class="class-ranking-content">
-              <strong>Santri Terajin</strong>
+              <strong>Santri Sregep</strong>
               ${
                 winners.length
                   ? winners.map(s => `
