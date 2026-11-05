@@ -4524,3 +4524,99 @@ border: 0 !important;
     font-size: 11px;
   }
 }
+/* =================================
+   DASHBOARD ANALITIK MADIN
+================================= */
+
+#dashboardPanel .dash-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+#dashboardPanel .dash-section-title h2 {
+  margin: 0 0 5px;
+}
+
+#dashboardPanel .dash-period {
+  padding: 6px 10px;
+  border-radius: 20px;
+  background: #eaf4ee;
+  color: #216b45;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+#dashboardPanel .dash-four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+#dashboardPanel .dash-rate {
+  font-size: 36px;
+  font-weight: 800;
+  color: #216b45;
+  margin: 12px 0 4px;
+}
+
+#dashboardPanel .dash-progress {
+  height: 10px;
+  background: #e8eee9;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+
+#dashboardPanel .dash-progress span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: #278653;
+  border-radius: 20px;
+  transition: width .3s ease;
+}
+
+#dashboardPanel .dash-mini-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  font-size: 13px;
+}
+
+#dashboardPanel .dash-mini-stats strong {
+  color: #216b45;
+  margin-left: 4px;
+}
+
+#dashboardPanel #dashClassStats .list-item,
+#dashboardPanel #dashTopStudents .list-item,
+#dashboardPanel #dashRecentDays .list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 4px;
+  border-bottom: 1px solid #edf0ed;
+}
+
+#dashboardPanel #dashClassStats .list-item:last-child,
+#dashboardPanel #dashTopStudents .list-item:last-child,
+#dashboardPanel #dashRecentDays .list-item:last-child {
+  border-bottom: 0;
+}
+
+@media (max-width: 520px) {
+  #dashboardPanel .dash-four {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #dashboardPanel .dash-rate {
+    font-size: 30px;
+  }
+
+  #dashboardPanel .dash-mini-stats {
+    gap: 8px 12px;
+  }
+   }
