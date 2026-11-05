@@ -1552,7 +1552,7 @@ const attendance = snap.docs
     setText("dash30Sakit", sakit);
     setText("dash30Alpa", alpa);
 
-    // KEHADIRAN PER KELAS
+        // KEHADIRAN PER KELAS + SANTRI TERJAIN
     const classBox = $("dashClassStats");
 
     if (classBox) {
@@ -1569,59 +1569,51 @@ const attendance = snap.docs
             )
           : 0;
 
+        // HITUNG SANTRI TERJAIN DI KELAS INI
+        const ranked = students
+          .filter(s => s.classId === c.id)
+          .map(s => ({
+            ...s,
+            jumlahHadir: data.filter(a =>
+              a.studentId === s.id &&
+              a.status === "Hadir"
+            ).length
+          }));
+
+        const tertinggi = Math.max(
+          0,
+          ...ranked.map(s => s.jumlahHadir)
+        );
+
+        const winners = ranked.filter(
+          s => s.jumlahHadir === tertinggi &&
+          tertinggi > 0
+        );
+
         return `
-          <div class="list-item">
-            <span>${esc(c.name)}</span>
-            <strong>${persentase}% (${jumlah} absensi)</strong>
-          </div>
+          <details class="class-ranking-item">
+            <summary class="class-ranking-summary">
+              <span>${esc(c.name)}</span>
+              <strong>${persentase}% (${jumlah} absensi)</strong>
+            </summary>
+
+            <div class="class-ranking-content">
+              <strong>Santri Terajin</strong>
+              ${
+                winners.length
+                  ? winners.map(s => `
+                    <div class="class-ranking-student">
+                      <span>${esc(s.name)}</span>
+                      <strong>${s.jumlahHadir} kali hadir</strong>
+                    </div>
+                  `).join("")
+                  : '<p class="muted">Belum ada data kehadiran.</p>'
+              }
+            </div>
+          </details>
         `;
       }).join("") ||
       '<p class="muted">Belum ada data kelas.</p>';
-    }
-
-        // SANTRI PALING RAJIN SETIAP KELAS
-    const rankingByClass = visibleClasses.map(c => {
-      const ranked = students
-        .filter(s => s.classId === c.id)
-        .map(s => ({
-          ...s,
-          jumlah: attendance.filter(a =>
-            a.studentId === s.id &&
-            a.status === "Hadir"
-          ).length
-        }));
-
-      const tertinggi = Math.max(
-        0,
-        ...ranked.map(s => s.jumlah)
-      );
-
-      const winners = ranked.filter(
-        s => s.jumlah === tertinggi && tertinggi > 0
-      );
-
-      return {
-        className: c.name,
-        winners,
-        tertinggi
-      };
-    }).filter(c => c.winners.length > 0);
-
-    const topBox = $("dashTopStudents");
-
-    if (topBox) {
-      topBox.innerHTML = rankingByClass.map(c => `
-        <div class="list-item">
-          <div>
-            <strong>${esc(c.className)}</strong>
-            ${c.winners.map(s => `
-              <div>${esc(s.name)}</div>
-            `).join("")}
-          </div>
-          <strong>${c.tertinggi} kali hadir</strong>
-        </div>
-      `).join("") ||
-      '<p class="muted">Belum ada data kehadiran.</p>';
     }
 
     // 5 RIWAYAT ABSENSI TERBARU
