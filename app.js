@@ -795,6 +795,11 @@ $("addStudentBtn").onclick=async()=>{
   if(!classId)return msg("studentMsg","Pilih kelas santri.",true);
 
   try{
+        const nis = $("studentNis").value.trim() || nextAvailableNis(students.map(s => s.nis));
+
+    if (await checkNisDuplicate(nis)) {
+      return msg("studentMsg", "NIS " + nis + " sudah digunakan santri lain.", true);
+    }
         const photoFile = $("studentPhoto")?.files?.[0];
     const photoData = photoFile ? await uploadStudentPhoto(photoFile) : {};
     
