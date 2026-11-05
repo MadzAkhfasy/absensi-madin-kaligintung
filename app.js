@@ -1462,49 +1462,64 @@ importFile.onchange = async () => {
 };
 
 // DASHBOARD ANALITIK MADIN
+// DASHBOARD ANALITIK MADIN
 async function renderDashboard() {
   if (!currentUser || !profile) return;
 
+  const setText = (id, value) => {
+    const el = $(id);
+    if (el) el.textContent = value;
+  };
+
   try {
-    $("dashTotalStudents").textContent = students.length;
+    setText("dashTotalStudents", students.length);
 
     const visibleClasses = canAccessAllClasses()
       ? classes
       : classes.filter(c => c.id === myClass());
 
-    $("dashTotalClasses").textContent = visibleClasses.length;
+    setText("dashTotalClasses", visibleClasses.length);
 
     const pad = n => String(n).padStart(2, "0");
-    const formatDate = d =>
+
+    const dateString = d =>
       `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 
     const today = new Date();
-    const todayStr = formatDate(today);
+    const todayStr = dateString(today);
 
     const start = new Date(today);
     start.setDate(start.getDate() - 29);
-    const startStr = formatDate(start);
 
+    const startStr = dateString(start);
+
+    // AMBIL DATA ABSENSI 30 HARI
     const snap = await getDocs(query(
       collection(db, "attendance"),
       where("date", ">=", startStr),
       where("date", "<=", todayStr)
     ));
 
+    const classIds = new Set(
+      visibleClasses.map(c => c.id)
+    );
+
     const attendance = snap.docs
       .map(d => d.data())
-      .filter(a => visibleClasses.some(c => c.id === a.classId));
+      .filter(a => classIds.has(a.classId));
 
-    const todayData = attendance.filter(a => a.date === todayStr);
+    const todayData = attendance.filter(
+      a => a.date === todayStr
+    );
 
     const countStatus = (data, status) =>
       data.filter(a => a.status === status).length;
 
     // KEHADIRAN HARI INI
-    $("dashTodayHadir").textContent = countStatus(todayData, "Hadir");
-    $("dashTodayIzin").textContent = countStatus(todayData, "Izin");
-    $("dashTodaySakit").textContent = countStatus(todayData, "Sakit");
-    $("dashTodayAlpa").textContent = countStatus(todayData, "Alpa");
+    setText("dashTodayHadir", countStatus(todayData, "Hadir"));
+    setText("dashTodayIzin", countStatus(todayData, "Izin"));
+    setText("dashTodaySakit", countStatus(todayData, "Sakit"));
+    setText("dashTodayAlpa", countStatus(todayData, "Alpa"));
 
     // ANALISIS 30 HARI
     const total = attendance.length;
@@ -1513,37 +1528,56 @@ async function renderDashboard() {
     const sakit = countStatus(attendance, "Sakit");
     const alpa = countStatus(attendance, "Alpa");
 
-    const rate = total ? Math.round(hadir / total * 100) : 0;
+    const rate = total
+      ? Math.round(hadir / total * 100)
+      : 0;
 
-    $("dash30Rate").textContent = rate + "%";
-    $("dash30Total").textContent = total + " catatan absensi";
-    $("dash30Progress").style.width = rate + "%";
+    setText("dash30Rate", rate + "%");
+    setText("dash30Total", total + " catatan absensi");
 
-    $("dash30Hadir").textContent = hadir;
-    $("dash30Izin").textContent = izin;
-    $("dash30Sakit").textContent = sakit;
-    $("dash30Alpa").textContent = alpa;
+    const progress = $("dash30Progress");
+
+    if (progress) {
+      progress.style.width = rate + "%";
+    }
+
+    setText("dash30Hadir", hadir);
+    setText("dash30Izin", izin);
+    setText("dash30Sakit", sakit);
+    setText("dash30Alpa", alpa);
 
     // KEHADIRAN PER KELAS
-    $("dashClassStats").innerHTML = visibleClasses.map(c => {
-      const data = attendance.filter(a => a.classId === c.id);
-      const jumlah = data.length;
-      const persentase = jumlah
-        ? Math.round(countStatus(data, "Hadir") / jumlah * 100)
-        : 0;
+    const classBox = $("dashClassStats");
 
-      return `
-        <div class="list-item">
-          <span>${esc(c.name)}</span>
-          <strong>${persentase}% (${jumlah} absensi)</strong>
-        </div>
-      `;
-    }).join("") || '<p class="muted">Belum ada data kelas.</p>';
+    if (classBox) {
+      classBox.innerHTML = visibleClasses.map(c => {
+        const data = attendance.filter(
+          a => a.classId === c.id
+        );
 
-    // LIMA SANTRI PALING RAJIN
+        const jumlah = data.length;
+
+        const persentase = jumlah
+          ? Math.round(
+              countStatus(data, "Hadir") / jumlah * 100
+            )
+          : 0;
+
+        return `
+          <div class="list-item">
+            <span>${esc(c.name)}</span>
+            <strong>${persentase}% (${jumlah} absensi)</strong>
+          </div>
+        `;
+      }).join("") ||
+      '<p class="muted">Belum ada data kelas.</p>';
+    }
+
+    // 5 SANTRI PALING RAJIN
     const ranking = students.map(s => {
       const jumlah = attendance.filter(a =>
-        a.studentId === s.id && a.status === "Hadir"
+        a.studentId === s.id &&
+        a.status === "Hadir"
       ).length;
 
       return { ...s, jumlah };
@@ -1552,15 +1586,60 @@ async function renderDashboard() {
     .sort((a, b) => b.jumlah - a.jumlah)
     .slice(0, 5);
 
-    $("dashTopStudents").innerHTML = ranking.map((s, i) => `
-      <div class="list-item">
-        <span>${i + 1}. ${esc(s.name)}</span>
-        <strong>${s.jumlah} kali hadir</strong>
-      </div>
-    `).join("") || '<p class="muted">Belum ada data kehadiran.</p>';
+    const topBox = $("dashTopStudents");
 
-    // LIMA TANGGAL ABS
+    if (topBox) {
+      topBox.innerHTML = ranking.map((s, i) => `
+        <div class="list-item">
+          <span>${i + 1}. ${esc(s.name)}</span>
+          <strong>${s.jumlah} kali hadir</strong>
+        </div>
+      `).join("") ||
+      '<p class="muted">Belum ada data kehadiran.</p>';
+    }
 
+    // 5 RIWAYAT ABSENSI TERBARU
+    const dates = [...new Set(
+      attendance.map(a => a.date)
+    )]
+    .sort((a, b) => b.localeCompare(a))
+    .slice(0, 5);
+
+    const recentBox = $("dashRecentDays");
+
+    if (recentBox) {
+      recentBox.innerHTML = dates.map(date => {
+        const jumlah = attendance.filter(
+          a => a.date === date
+        ).length;
+
+        return `
+          <div class="list-item">
+            <span>${esc(date)}</span>
+            <strong>${jumlah} catatan</strong>
+          </div>
+        `;
+      }).join("") ||
+      '<p class="muted">Belum ada riwayat absensi.</p>';
+    }
+
+  } catch (error) {
+    console.error("Dashboard gagal dimuat:", error);
+
+    [
+      "dashClassStats",
+      "dashTopStudents",
+      "dashRecentDays"
+    ].forEach(id => {
+      const el = $(id);
+
+      if (el) {
+        el.innerHTML =
+          '<p class="muted">Gagal memuat statistik.</p>';
+      }
+    });
+  }
+}
   
 }// DROPDOWN CUSTOM MADIN
 function enhanceCustomDropdown(select) {
