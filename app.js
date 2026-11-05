@@ -787,7 +787,7 @@ $("addStudentBtn").onclick=async()=>{
     await addDoc(collection(db,"students"),{
       name,
       classId,
-      nis:$("studentNis").value.trim(),
+      nis:$("studentNis").value.trim() || nextAvailableNis(students.map(s => s.nis)),
       gender:$("studentGender").value,
       birthplace:$("studentBirthplace").value.trim(),
       birthdate:$("studentBirthdate").value,
