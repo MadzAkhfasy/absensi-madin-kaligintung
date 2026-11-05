@@ -65,9 +65,53 @@
   </div>
 
   <div class="card">
-    <h2>Jumlah Santri per Kelas</h2>
-    <div id="dashClassStats"></div>
+  <div class="dash-section-title">
+    <div>
+      <h2>Kehadiran Hari Ini</h2>
+      <p class="muted">Statistik absensi hari ini.</p>
+    </div>
+    <span class="dash-period">HARI INI</span>
+  </div>  <div class="summary-grid dash-four">
+    <div class="stat">
+      <strong id="dashTodayHadir">0</strong>
+      <span>Hadir</span>
+    </div>
+    <div class="stat">
+      <strong id="dashTodayIzin">0</strong>
+      <span>Izin</span>
+    </div>
+    <div class="stat">
+      <strong id="dashTodaySakit">0</strong>
+      <span>Sakit</span>
+    </div>
+    <div class="stat">
+      <strong id="dashTodayAlpa">0</strong>
+      <span>Alpa</span>
+    </div>
   </div>
+</div><div class="card">
+  <h2>Analisis Kehadiran 30 Hari</h2>
+  <div class="dash-rate" id="dash30Rate">0%</div>
+  <p class="muted" id="dash30Total">0 catatan absensi</p>  <div class="dash-progress dash-progress-large">
+    <span id="dash30Progress"></span>
+  </div>  <div class="dash-mini-stats">
+    <span>Hadir <strong id="dash30Hadir">0</strong></span>
+    <span>Izin <strong id="dash30Izin">0</strong></span>
+    <span>Sakit <strong id="dash30Sakit">0</strong></span>
+    <span>Alpa <strong id="dash30Alpa">0</strong></span>
+  </div>
+</div><div class="card">
+  <h2>Kehadiran per Kelas</h2>
+  <p class="muted">Persentase kehadiran selama 30 hari terakhir.</p>
+  <div id="dashClassStats"></div>
+</div><div class="card">
+  <h2>Santri Paling Rajin</h2>
+  <p class="muted">Lima santri dengan kehadiran terbanyak.</p>
+  <div id="dashTopStudents"></div>
+</div><div class="card">
+  <h2>Riwayat Absensi Terbaru</h2>
+  <div id="dashRecentDays"></div>
+</div>
       </section>
 
       <section id="attendancePanel" class="panel hidden">
