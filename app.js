@@ -1952,43 +1952,7 @@ $("printStudentsPdfBtn").onclick = () => {
       <div class="class-group">
         <h3>${esc(group.name)}</h3>
         <table>
-          <thead>
-            <tr><th style="width:55px">No.</th><th>Nama Santri</th></tr>
-          </thead>
-          <tbody>
-            ${group.students.map((s, i) => `
-              <tr>
-                <td>${i + 1}</td>
-                <td>${esc(s.name)}</td>
-              </tr>
-            `).join("")}
-          </tbody>
-        </table>
-      </div>
-    `).join("");
 
-    const title = type === "announcement"
-      ? "PENGUMUMAN PEMBAGIAN KELAS"
-      : "DAFTAR SANTRI PER KELAS";
-
-    const dateText = dateValue
-      ? new Date(dateValue + "T00:00:00").toLocaleDateString("id-ID", {
-          day: "numeric", month: "long", year: "numeric"
-        })
-      : "";
-
-    const printWindow = window.open("", "_blank");
-
-    if (!printWindow) {
-      msg("studentPdfMsg", "Popup diblokir. Izinkan pop-up lalu coba lagi.", true);
-      return;
-    }
-
-    printWindow.document.write(`
-      <!DOCTYPE html>
-      <html lang="id">
-      <head>
-        <meta charset="UTF-8">
 // ================= CETAK DATA SANTRI =================
 
 function fillStudentPdfClass() {
