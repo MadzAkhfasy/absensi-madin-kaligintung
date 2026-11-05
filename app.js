@@ -631,6 +631,14 @@ r.querySelector(".history-btn").onclick = async () => {
     button.textContent = "Menyimpan...";
 
     try {
+            const nis = r.querySelector(".edit-nis").value.trim();
+
+      if (await checkNisDuplicate(nis, s.id)) {
+        showToast("NIS " + nis + " sudah digunakan santri lain.");
+        button.disabled = false;
+        button.textContent = "Simpan Perubahan";
+        return;
+      }
       const photoFile = r.querySelector(".edit-photo").files[0];
       const photoData = photoFile
         ? await uploadStudentPhoto(photoFile)
