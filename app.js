@@ -1462,7 +1462,6 @@ importFile.onchange = async () => {
 };
 
 // DASHBOARD ANALITIK MADIN
-// DASHBOARD ANALITIK MADIN
 async function renderDashboard() {
   if (!currentUser || !profile) return;
 
@@ -1639,7 +1638,7 @@ async function renderDashboard() {
       }
     });
   } 
-
+}
 // DROPDOWN CUSTOM MADIN
 function enhanceCustomDropdown(select) {
   if (select.dataset.customized === "true") return;
