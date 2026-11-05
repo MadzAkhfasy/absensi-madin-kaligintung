@@ -232,12 +232,13 @@
 <section id="printStudentsPanel" class="panel hidden admin-only">
   <div class="card">
     <h2>Cetak Data Santri</h2>
-    <p class="muted">Pilih jenis dokumen yang ingin dibuat.</p>
+    <p class="muted">Pilih dokumen yang ingin dicetak.</p>
 
     <label>Jenis Dokumen
       <select id="studentPdfType">
-        <option value="list">Daftar Santri per Kelas</option>
-        <option value="announcement">Pengumuman Pembagian Kelas</option>
+        <option value="list">Daftar Nama Santri</option>
+        <option value="biodata">Cetak Biodata Santri</option>
+        <option value="table">Cetak Tabel Biodata per Kelas</option>
       </select>
     </label>
 
@@ -247,11 +248,17 @@
       </select>
     </label>
 
-    <label id="announcementDateWrap">Tanggal Pengumuman
-      <input id="studentPdfDate" type="date">
+    <label id="studentPdfStudentWrap" class="hidden">
+      Pilih Santri
+      <select id="studentPdfStudent">
+        <option value="__all__">Semua Santri</option>
+      </select>
     </label>
 
-    <button id="printStudentsPdfBtn" class="primary full">Cetak / Simpan PDF</button>
+    <button id="printStudentsPdfBtn" class="primary full">
+      Cetak / Simpan PDF
+    </button>
+
     <div id="studentPdfMsg" class="message"></div>
   </div>
 </section>
