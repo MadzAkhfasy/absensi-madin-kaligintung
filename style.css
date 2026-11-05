@@ -4620,3 +4620,46 @@ border: 0 !important;
     gap: 8px 12px;
   }
    }
+/* RANKING SANTRI DI DALAM KEHADIRAN PER KELAS */
+#dashboardPanel .class-ranking-item {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+#dashboardPanel .class-ranking-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 10px;
+  cursor: pointer;
+  list-style: none;
+}
+
+#dashboardPanel .class-ranking-summary::-webkit-details-marker {
+  display: none;
+}
+
+#dashboardPanel .class-ranking-summary::after {
+  content: "+";
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#dashboardPanel .class-ranking-item[open]
+.class-ranking-summary::after {
+  content: "−";
+}
+
+#dashboardPanel .class-ranking-content {
+  padding: 10px 14px 14px;
+  background: #f7faf7;
+  border-radius: 8px;
+}
+
+#dashboardPanel .class-ranking-student {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
