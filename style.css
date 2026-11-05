@@ -4793,3 +4793,14 @@ border: 0 !important;
     font-size: 10px;
   }
 }
+/* MEMPERBESAR NAMA SANTRI */
+#studentsPanel .student-info strong {
+  font-size: 15px !important;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  #studentsPanel .student-info strong {
+    font-size: 13px !important;
+  }
+}
