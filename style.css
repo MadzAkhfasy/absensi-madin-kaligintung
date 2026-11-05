@@ -4620,46 +4620,140 @@ border: 0 !important;
     gap: 8px 12px;
   }
    }
-/* RANKING SANTRI DI DALAM KEHADIRAN PER KELAS */
+/* DASHBOARD - KEHADIRAN DAN SANTRI SREGE P */
+#dashboardPanel #dashClassStats {
+  display: grid;
+  gap: 12px;
+}
+
 #dashboardPanel .class-ranking-item {
-  border-bottom: 1px solid #e5e7eb;
+  overflow: hidden;
+  border: 1px solid #dce9df;
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 0 3px 10px rgba(20, 70, 45, .05);
+  transition: all .2s ease;
+}
+
+#dashboardPanel .class-ranking-item[open] {
+  border-color: #9fc9ad;
+  box-shadow: 0 5px 15px rgba(20, 70, 45, .09);
 }
 
 #dashboardPanel .class-ranking-summary {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 10px;
-  padding: 14px 10px;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 65px;
+  padding: 13px 15px;
   cursor: pointer;
   list-style: none;
+  background: linear-gradient(110deg, #f3faf5, #ffffff);
 }
 
 #dashboardPanel .class-ranking-summary::-webkit-details-marker {
   display: none;
 }
 
+#dashboardPanel .class-ranking-summary > span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #24583e;
+  font-size: 15px;
+  font-weight: 750;
+}
+
+#dashboardPanel .class-ranking-summary > span::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #c5a24b;
+  box-shadow: 0 0 0 4px rgba(197, 162, 75, .15);
+}
+
+#dashboardPanel .class-ranking-summary > strong {
+  margin-left: auto;
+  padding: 7px 10px;
+  border-radius: 9px;
+  background: #e5f4e9;
+  color: #08734c;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
 #dashboardPanel .class-ranking-summary::after {
-  content: "+";
-  font-size: 20px;
+  content: "⌄";
+  color: #568368;
+  font-size: 21px;
   font-weight: bold;
+  transition: transform .2s ease;
 }
 
 #dashboardPanel .class-ranking-item[open]
 .class-ranking-summary::after {
-  content: "−";
+  transform: rotate(180deg);
 }
 
 #dashboardPanel .class-ranking-content {
-  padding: 10px 14px 14px;
-  background: #f7faf7;
-  border-radius: 8px;
+  padding: 14px;
+  border-top: 1px solid #e7efe9;
+  background: #fbfdfb;
+}
+
+#dashboardPanel .class-ranking-content > strong {
+  display: block;
+  margin-bottom: 10px;
+  color: #98762e;
+  font-size: 13px;
+  letter-spacing: .3px;
+  text-transform: uppercase;
 }
 
 #dashboardPanel .class-ranking-student {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 10px;
-  padding: 8px 0;
-  border-bottom: 1px solid #e5e7eb;
+  padding: 11px 12px;
+  margin-top: 7px;
+  border: 1px solid #e6eee8;
+  border-radius: 10px;
+  background: #fff;
+}
+
+#dashboardPanel .class-ranking-student span {
+  color: #315b46;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+#dashboardPanel .class-ranking-student strong {
+  flex-shrink: 0;
+  padding: 6px 9px;
+  border-radius: 8px;
+  background: #f8f1dc;
+  color: #927128;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  #dashboardPanel .class-ranking-summary {
+    min-height: 59px;
+    padding: 11px;
+    gap: 7px;
+  }
+
+  #dashboardPanel .class-ranking-summary > strong {
+    padding: 6px 7px;
+    font-size: 11px;
+  }
+
+  #dashboardPanel .class-ranking-student {
+    padding: 10px;
+  }
 }
