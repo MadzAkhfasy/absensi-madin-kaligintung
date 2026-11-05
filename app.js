@@ -679,6 +679,20 @@ async function importDeleteStudent(id){
   await loadStudents();
   await renderDashboard();
 }
+async function checkNisDuplicate(nis, excludeId = null) {
+  const value = String(nis || "").trim();
+
+  if (!value) return false;
+
+  const result = await getDocs(
+    query(
+      collection(db, "students"),
+      where("nis", "==", value)
+    )
+  );
+
+  return result.docs.some(student => student.id !== excludeId);
+}
 function nextAvailableNis(usedValues) {
   const used = new Set(
     usedValues.map(value => String(value || "").trim()).filter(Boolean)
