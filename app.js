@@ -647,7 +647,7 @@ showToast(`Pemeriksaan foto: URL=${!!photoData.photoUrl}, ID=${!!photoData.photo
       await updateDoc(doc(db, "students", s.id), {
         name,
         classId,
-        nis: r.querySelector(".edit-nis").value.trim(),
+        nis,
         gender: r.querySelector(".edit-gender").value,
         birthplace: r.querySelector(".edit-birthplace").value.trim(),
         birthdate: r.querySelector(".edit-birthdate").value,
