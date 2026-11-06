@@ -739,7 +739,6 @@ function nextAvailableNis(usedValues) {
   return String(number).padStart(4, "0");
 }
 
-async function generateNisForAllStudents() {
 $("generateNisBtn")?.addEventListener("click", async () => {
   if (!isAdmin()) return;
 
