@@ -2311,19 +2311,19 @@ window.onload = () => {
       function createPage() {
         const page = document.createElement("div");
 
-        page.style.cssText = `
-          width:${pageWidth}px;
-          height:${pageHeight}px;
-          padding:36px;
-          box-sizing:border-box;
-          background:white;
-          overflow:hidden;
-          position:fixed;
-          left:0;
-          top:0;
-          z-index:-1;
-          font-family:Arial,sans-serif;
-          color:#222;
+        page.style.cssText =
+  "width:" + pageWidth + "px;" +
+  "height:" + pageHeight + "px;" +
+  "padding:36px;" +
+  "box-sizing:border-box;" +
+  "background:white;" +
+  "overflow:hidden;" +
+  "position:fixed;" +
+  "left:0;" +
+  "top:0;" +
+  "z-index:-1;" +
+  "font-family:Arial,sans-serif;" +
+  "color:#222;";
         `;
 
         document.body.appendChild(page);
