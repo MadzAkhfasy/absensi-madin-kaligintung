@@ -2324,7 +2324,6 @@ window.onload = () => {
   "z-index:-1;" +
   "font-family:Arial,sans-serif;" +
   "color:#222;";
-        `;
 
         document.body.appendChild(page);
         pages.push(page);
