@@ -396,17 +396,26 @@ function renderWeeklySchedule() {
   container.innerHTML = classes.map(kelas => {
     const selectedDays = weeklyDaysOff[kelas.id] ?? [0];
 
-    return `
-      <div class="card" style="margin-bottom:12px;">
-        <strong>${esc(kelas.name)}</strong>
+    const namaLibur = selectedDays.length
+      ? selectedDays.map(index => WEEK_DAYS[index]).join(", ")
+      : "Tidak ada";
 
-        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px;">
+    return `
+      <details class="card" style="margin-bottom:10px;padding:12px;">
+        <summary style="cursor:pointer;font-weight:bold;">
+          ${esc(kelas.name)}
+          <span style="float:right;font-weight:normal;color:#198754;">
+            ${esc(namaLibur)} ▼
+          </span>
+        </summary>
+
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:15px;">
           ${WEEK_DAYS.map((hari, index) => `
             <label style="display:flex;align-items:center;gap:7px;">
               <input
                 type="checkbox"
                 class="weekly-day-check"
-                data-class="${kelas.id}"
+                data-class="${esc(kelas.id)}"
                 value="${index}"
                 ${selectedDays.includes(index) ? "checked" : ""}
                 ${!isAdmin() ? "disabled" : ""}
@@ -415,7 +424,7 @@ function renderWeeklySchedule() {
             </label>
           `).join("")}
         </div>
-      </div>
+      </details>
     `;
   }).join("");
 
