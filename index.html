@@ -380,6 +380,49 @@
   </main>
 
   <footer>Madrasah Diniyah Kaligintung · Absensi Santri</footer>
+  <!-- PEMERIKSAAN ERROR SEMENTARA -->
+<script>
+(function () {
+  function tampilkanError(judul, detail) {
+    var pesan = "PEMERIKSAAN APLIKASI: " + judul +
+      (detail ? "\n" + String(detail).slice(0, 500) : "");
+
+    var kotak = document.getElementById("authMsg");
+
+    if (kotak) {
+      kotak.textContent = pesan;
+      kotak.style.cssText =
+        "display:block;color:#b42318;background:#fff0f0;border:1px solid #e0a0a0;padding:12px;border-radius:8px;white-space:pre-wrap;overflow-wrap:anywhere;";
+    }
+  }
+
+  window.addEventListener("error", function(event) {
+    var detail = event.message || "";
+
+    if (event.filename) {
+      detail += " | " + event.filename + ":" + event.lineno;
+    }
+
+    if (event.target && event.target !== window && event.target.src) {
+      detail = "Gagal memuat: " + event.target.src;
+    }
+
+    tampilkanError(
+      "Terjadi kesalahan JavaScript atau pemuatan file.",
+      detail
+    );
+  }, true);
+
+  window.addEventListener("unhandledrejection", function(event) {
+    var alasan = event.reason;
+
+    tampilkanError(
+      "Proses aplikasi gagal dijalankan.",
+      alasan && (alasan.message || alasan)
+    );
+  });
+})();
+</script>
   <script type="module" src="app.js?v=27"></script>
   
   <script>
