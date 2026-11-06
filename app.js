@@ -108,6 +108,7 @@ const CLASS_NAMES = ["Kelas Jilid Pemula","Kelas Jilid 1","Kelas Jilid 2","Kelas
 const STATUSES = ["Hadir","Izin","Sakit","Alpa"];
 let currentUser=null, profile=null, classes=[], students=[], reportRows=[], reportMonthValue="", reportClassValue="";
 let weeklyDaysOff = {};
+let specialHolidays = [];
 const WEEK_DAYS = [
   "Minggu",
   "Senin",
@@ -243,7 +244,7 @@ async function loadHolidays() {
       id: d.id,
       ...d.data()
     }));
-
+specialHolidays = holidays;
     holidays.sort((a, b) => a.date.localeCompare(b.date));
 
     renderHolidayList(holidays);
@@ -1112,6 +1113,16 @@ function isWeeklyHoliday(classId, date) {
   const daysOff = weeklyDaysOff[classId] ?? [0];
 
   return daysOff.includes(day);
+}
+// MEMERIKSA LIBUR TANGGAL TERTENTU
+function isSpecialHoliday(classId, date) {
+  if (!classId || !date) return null;
+
+  return specialHolidays.find(h => {
+    if (h.date !== date) return false;
+    if (h.scope === "all") return true;
+    return (h.classIds || []).includes(classId);
+  }) || null;
 }
 $("attendanceDate").onchange=renderAttendance;$("attendanceClass").onchange=renderAttendance;
 async function renderAttendance(){
