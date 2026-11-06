@@ -269,6 +269,68 @@
     <div id="studentPdfMsg" class="message"></div>
   </div>
 </section>
+      <!-- PENGATURAN KALENDER MADIN -->
+<section id="calendarSettingsPanel" class="panel hidden">
+  <div class="card">
+
+    <h2>Kalender Madin</h2>
+    <p class="muted">
+      Pengaturan jadwal kegiatan dan hari libur Madin.
+    </p>
+
+    <hr>
+
+    <h3>Jadwal Libur Mingguan</h3>
+    <p class="muted">
+      Atur hari libur rutin untuk setiap kelas.
+    </p>
+
+    <div id="classScheduleSettings">
+      <p class="muted">Pengaturan jadwal kelas akan ditampilkan di sini.</p>
+    </div>
+
+    <hr>
+
+    <h3>Libur Tanggal Tertentu</h3>
+
+    <label>Tanggal Libur
+      <input type="date" id="holidayDate">
+    </label>
+
+    <label>Keterangan Libur
+      <input
+        type="text"
+        id="holidayName"
+        placeholder="Contoh: Libur kegiatan madrasah"
+      >
+    </label>
+
+    <label>Berlaku Untuk
+      <select id="holidayClassScope">
+        <option value="all">Semua Kelas</option>
+        <option value="selected">Kelas Tertentu</option>
+      </select>
+    </label>
+
+    <div id="holidayClassPicker" class="hidden"></div>
+
+    <button id="saveHolidayBtn" class="primary full" type="button">
+      Simpan Tanggal Libur
+    </button>
+
+    <div id="holidayMsg" class="message"></div>
+
+    <hr>
+
+    <h3>Daftar Hari Libur</h3>
+
+    <div id="holidayList">
+      <p class="muted">Belum ada data hari libur.</p>
+    </div>
+
+  </div>
+
+</section>
       <section id="backupPanel" class="panel hidden admin-only">
   <div class="card">
     <h2>Backup dan Restore Data</h2>
