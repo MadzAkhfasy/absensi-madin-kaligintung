@@ -472,6 +472,44 @@
 })();
 </script>
   <script type="module" src="app.js?v=27"></script>
+<script>
+(function () {
+
+  var splash = document.getElementById("startupSplash");
+  var skip = document.getElementById("skipSplash");
+
+  if (!splash) return;
+
+  var closed = false;
+
+  function closeSplash() {
+
+    if (closed) return;
+
+    closed = true;
+
+    splash.classList.add("splash-hide");
+
+    window.setTimeout(function () {
+
+      if (splash.parentNode) {
+        splash.parentNode.removeChild(splash);
+      }
+
+    }, 650);
+
+  }
+
+  // Tombol lewati
+  if (skip) {
+    skip.addEventListener("click", closeSplash);
+  }
+
+  // Splash otomatis menghilang setelah 3,8 detik
+  window.setTimeout(closeSplash, 3800);
+
+})();
+</script>
   
   <script>
 if ("serviceWorker" in navigator) {
