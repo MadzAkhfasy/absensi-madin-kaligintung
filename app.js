@@ -2271,11 +2271,119 @@ const selectedStudent = $("studentPdfStudent").value;
 
         ${content}
 
-        <script>
-          window.onload = () => {
-            setTimeout(() => window.print(), 500);
-          };
-        <\/script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+  window.onload = () => {
+    setTimeout(async () => {
+
+      // PILIHAN PDF
+      if ("${outputFormat}" === "pdf") {
+        window.print();
+        return;
+      }
+
+      // PILIHAN GAMBAR PNG
+      try {
+        if (!window.html2canvas) {
+          throw new Error("Library gambar gagal dimuat.");
+        }
+
+        const isLandscape =
+          document.querySelector(".biodata-table") !== null;
+
+        document.body.style.width = isLandscape
+          ? "1123px"
+          : "794px";
+
+        document.body.style.margin = "0";
+        document.body.style.padding = "24px";
+
+        await document.fonts.ready;
+
+        const images = Array.from(document.images);
+
+        await Promise.all(images.map(img => {
+          if (img.complete) return Promise.resolve();
+
+          return new Promise(resolve => {
+            img.onload = resolve;
+            img.onerror = resolve;
+          });
+        }));
+
+        const canvas = await html2canvas(document.body, {
+          scale: 2,
+          backgroundColor: "#ffffff",
+          useCORS: true
+        });
+
+        const pageRatio = isLandscape
+          ? 210 / 297
+          : 297 / 210;
+
+        const pageHeight = Math.round(
+          canvas.width * pageRatio
+        );
+
+        const totalPages = Math.ceil(
+          canvas.height / pageHeight
+        );
+
+        for (let i = 0; i < totalPages; i++) {
+          const pageCanvas = document.createElement("canvas");
+
+          pageCanvas.width = canvas.width;
+          pageCanvas.height = Math.min(
+            pageHeight,
+            canvas.height - i * pageHeight
+          );
+
+          const ctx = pageCanvas.getContext("2d");
+
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(
+            0, 0,
+            pageCanvas.width,
+            pageCanvas.height
+          );
+
+          ctx.drawImage(
+            canvas,
+            0,
+            i * pageHeight,
+            canvas.width,
+            pageCanvas.height,
+            0,
+            0,
+            canvas.width,
+            pageCanvas.height
+          );
+
+          const link = document.createElement("a");
+
+          link.download =
+            "data-santri-halaman-" + (i + 1) + ".png";
+
+          link.href = pageCanvas.toDataURL("image/png");
+          link.click();
+
+          await new Promise(resolve =>
+            setTimeout(resolve, 500)
+          );
+        }
+
+        alert(
+          totalPages + " halaman gambar berhasil dibuat."
+        );
+
+      } catch (error) {
+        alert("Gagal membuat gambar: " + error.message);
+      }
+
+    }, 800);
+  };
+<\/script>
       </body>
       </html>
     `);
