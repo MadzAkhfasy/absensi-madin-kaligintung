@@ -2271,118 +2271,186 @@ const selectedStudent = $("studentPdfStudent").value;
 
         ${content}
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <script>
-  window.onload = () => {
-    setTimeout(async () => {
+window.onload = () => {
+  setTimeout(async () => {
 
-      // PILIHAN PDF
-      if ("${outputFormat}" === "pdf") {
-        window.print();
-        return;
+    if ("${outputFormat}" === "pdf") {
+      window.print();
+      return;
+    }
+
+    try {
+      if (!window.html2canvas) {
+        throw new Error("Library gambar gagal dimuat.");
       }
 
-      // PILIHAN GAMBAR PNG
-      try {
-        if (!window.html2canvas) {
-          throw new Error("Library gambar gagal dimuat.");
-        }
+      await document.fonts.ready;
 
-        const isLandscape =
-          document.querySelector(".biodata-table") !== null;
+      const landscape =
+        document.querySelector(".biodata-table") !== null;
 
-        document.body.style.width = isLandscape
-          ? "1123px"
-          : "794px";
+      const pageWidth = landscape ? 1123 : 794;
+      const pageHeight = landscape ? 794 : 1123;
 
-        document.body.style.margin = "0";
-        document.body.style.padding = "24px";
+      const sourceImages = Array.from(document.images);
 
-        await document.fonts.ready;
+      await Promise.all(sourceImages.map(img => {
+        if (img.complete) return Promise.resolve();
 
-        const images = Array.from(document.images);
+        return new Promise(resolve => {
+          img.onload = resolve;
+          img.onerror = resolve;
+        });
+      }));
 
-        await Promise.all(images.map(img => {
-          if (img.complete) return Promise.resolve();
+      const pages = [];
 
-          return new Promise(resolve => {
-            img.onload = resolve;
-            img.onerror = resolve;
-          });
-        }));
+      function createPage() {
+        const page = document.createElement("div");
 
-        const canvas = await html2canvas(document.body, {
-          scale: 2,
-          backgroundColor: "#ffffff",
-          useCORS: true
+        page.style.cssText = `
+          width:${pageWidth}px;
+          height:${pageHeight}px;
+          padding:36px;
+          box-sizing:border-box;
+          background:white;
+          overflow:hidden;
+          position:fixed;
+          left:-100000px;
+          top:0;
+          font-family:Arial,sans-serif;
+          color:#222;
+        `;
+
+        document.body.appendChild(page);
+        pages.push(page);
+
+        return page;
+      }
+
+      function addDocumentHeader(page) {
+        const header = document.querySelector(".letterhead");
+        const title = document.querySelector(".document-title");
+
+        if (header) page.appendChild(header.cloneNode(true));
+        if (title) page.appendChild(title.cloneNode(true));
+      }
+
+      // BIODATA: SATU SANTRI SATU HALAMAN
+      if ("${type}" === "biodata") {
+
+        document.querySelectorAll(".biodata-page").forEach(item => {
+          const page = createPage();
+
+          page.appendChild(item.cloneNode(true));
         });
 
-        const pageRatio = isLandscape
-          ? 210 / 297
-          : 297 / 210;
+      } else {
 
-        const pageHeight = Math.round(
-          canvas.width * pageRatio
+        const groups = Array.from(
+          document.querySelectorAll(".class-group")
         );
 
-        const totalPages = Math.ceil(
-          canvas.height / pageHeight
-        );
+        let currentPage = null;
+        let currentBody = null;
+        let currentGroup = null;
 
-        for (let i = 0; i < totalPages; i++) {
-          const pageCanvas = document.createElement("canvas");
+        function startTablePage(group, table) {
+          currentPage = createPage();
 
-          pageCanvas.width = canvas.width;
-          pageCanvas.height = Math.min(
-            pageHeight,
-            canvas.height - i * pageHeight
-          );
+          addDocumentHeader(currentPage);
 
-          const ctx = pageCanvas.getContext("2d");
+          currentGroup = group.querySelector("h3");
 
-          ctx.fillStyle = "#ffffff";
-          ctx.fillRect(
-            0, 0,
-            pageCanvas.width,
-            pageCanvas.height
-          );
+          if (currentGroup) {
+            currentPage.appendChild(
+              currentGroup.cloneNode(true)
+            );
+          }
 
-          ctx.drawImage(
-            canvas,
-            0,
-            i * pageHeight,
-            canvas.width,
-            pageCanvas.height,
-            0,
-            0,
-            canvas.width,
-            pageCanvas.height
-          );
+          const newTable = table.cloneNode(false);
 
-          const link = document.createElement("a");
+          const thead = table.querySelector("thead");
 
-          link.download =
-            "data-santri-halaman-" + (i + 1) + ".png";
+          if (thead) {
+            newTable.appendChild(thead.cloneNode(true));
+          }
 
-          link.href = pageCanvas.toDataURL("image/png");
-          link.click();
+          currentBody = document.createElement("tbody");
+          newTable.appendChild(currentBody);
 
-          await new Promise(resolve =>
-            setTimeout(resolve, 500)
-          );
+          currentPage.appendChild(newTable);
         }
 
-        alert(
-          totalPages + " halaman gambar berhasil dibuat."
-        );
+        groups.forEach(group => {
+          const table = group.querySelector("table");
 
-      } catch (error) {
-        alert("Gagal membuat gambar: " + error.message);
+          if (!table) return;
+
+          startTablePage(group, table);
+
+          const rows = Array.from(
+            table.querySelectorAll("tbody tr")
+          );
+
+          rows.forEach(row => {
+            const copy = row.cloneNode(true);
+
+            currentBody.appendChild(copy);
+
+            if (currentPage.scrollHeight > pageHeight) {
+              currentBody.removeChild(copy);
+
+              if (currentBody.children.length > 0) {
+                startTablePage(group, table);
+              }
+
+              currentBody.appendChild(copy);
+            }
+          });
+        });
       }
 
-    }, 800);
-  };
+      // UNDUH SETIAP HALAMAN
+      for (let i = 0; i < pages.length; i++) {
+
+        const canvas = await html2canvas(pages[i], {
+          scale: 2,
+          backgroundColor: "#ffffff",
+          useCORS: true,
+          logging: false
+        });
+
+        const link = document.createElement("a");
+
+        link.download =
+          "data-santri-halaman-" + (i + 1) + ".png";
+
+        link.href = canvas.toDataURL("image/png");
+
+        link.click();
+
+        await new Promise(resolve =>
+          setTimeout(resolve, 500)
+        );
+      }
+
+      pages.forEach(page => page.remove());
+
+      alert(
+        pages.length + " halaman gambar berhasil dibuat."
+      );
+
+    } catch (error) {
+      console.error(error);
+      alert("Gagal membuat gambar: " + error.message);
+    }
+
+  }, 800);
+};
 <\/script>
       </body>
       </html>
