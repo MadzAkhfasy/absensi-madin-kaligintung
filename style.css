@@ -4843,3 +4843,280 @@ border: 0 !important;
   white-space: nowrap;
   padding: 0 14px;
 }
+/* ==================================================
+   SPLASH SCREEN MADIN KALIGINTUNG
+   Islamic Modern Premium
+================================================== */
+
+.startup-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  padding: 24px 18px;
+
+  background:
+    radial-gradient(
+      circle at 50% 40%,
+      rgba(255,255,255,.95),
+      transparent 65%
+    ),
+    repeating-conic-gradient(
+      from 45deg at 50% 50%,
+      rgba(201,166,79,.05) 0deg 2deg,
+      transparent 2deg 15deg
+    ),
+    linear-gradient(
+      145deg,
+      #f5f1e5,
+      #fffdf6 48%,
+      #e8f0e6
+    );
+
+  transition:
+    opacity .6s ease,
+    visibility .6s ease;
+}
+
+/* ORNAMEN GEOMETRIS */
+
+.startup-splash::before,
+.startup-splash::after {
+  content: "";
+  position: absolute;
+
+  width: min(78vw, 430px);
+  aspect-ratio: 1;
+
+  border: 1px solid rgba(201,166,79,.28);
+  border-radius: 34%;
+
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
+.startup-splash::before {
+  top: -54%;
+  left: -35%;
+
+  box-shadow:
+    0 0 0 12px rgba(201,166,79,.045),
+    0 0 0 25px rgba(23,107,69,.035);
+}
+
+.startup-splash::after {
+  bottom: -58%;
+  right: -36%;
+
+  box-shadow:
+    0 0 0 12px rgba(201,166,79,.045),
+    0 0 0 25px rgba(23,107,69,.035);
+}
+
+/* KONTEN UTAMA */
+
+.splash-content {
+  position: relative;
+  z-index: 1;
+
+  width: min(100%, 440px);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+
+  animation:
+    splash-arrive 1.05s cubic-bezier(.2,.75,.25,1) both;
+}
+
+/* LOGO ASLI */
+
+.splash-logo {
+  display: block;
+
+  width: clamp(118px, 32vw, 158px);
+  height: clamp(118px, 32vw, 158px);
+
+  object-fit: contain;
+  margin-bottom: 4px;
+}
+
+/* ILUSTRASI SANTRI */
+
+.splash-santri {
+  display: block;
+
+  width: min(73vw, 285px);
+  max-height: min(34vh, 280px);
+
+  height: auto;
+
+  object-fit: contain;
+  object-position: center;
+
+  margin: 4px auto 10px;
+  border-radius: 12px;
+}
+
+/* JUDUL MADRASAH */
+
+.splash-title {
+  margin-top: 2px;
+
+  color: #124b32;
+
+  font-size: clamp(17px, 4.7vw, 23px);
+  font-weight: 800;
+
+  line-height: 1.25;
+  letter-spacing: .09em;
+}
+
+/* NAMA KALIGINTUNG */
+
+.splash-subtitle {
+  margin-top: 4px;
+
+  color: #a27d2e;
+
+  font-size: clamp(15px, 4vw, 19px);
+  font-weight: 800;
+
+  letter-spacing: .28em;
+}
+
+/* ORNAMEN GARIS EMAS */
+
+.splash-gold-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: min(62%, 230px);
+  height: 15px;
+
+  margin-top: 8px;
+}
+
+.splash-gold-line::before,
+.splash-gold-line::after {
+  content: "";
+
+  flex: 1;
+  height: 1px;
+
+  background:
+    linear-gradient(90deg, transparent, #c9a64f);
+}
+
+.splash-gold-line::after {
+  transform: scaleX(-1);
+}
+
+.splash-gold-line span {
+  width: 7px;
+  height: 7px;
+
+  margin: 0 9px;
+
+  border: 1px solid #c9a64f;
+  transform: rotate(45deg);
+}
+
+/* MOTTO */
+
+.splash-motto {
+  margin: 5px 0 0;
+
+  color: #66766b;
+  font-size: 11px;
+
+  letter-spacing: .025em;
+}
+
+/* TOMBOL LEWATI */
+
+.splash-skip {
+  position: absolute;
+  z-index: 2;
+
+  right: 18px;
+  bottom: 18px;
+
+  padding: 8px 15px;
+
+  color: white;
+  background: #176b45;
+
+  border: 1px solid rgba(201,166,79,.85);
+  border-radius: 22px;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  box-shadow: 0 3px 12px rgba(16,75,50,.15);
+}
+
+/* ANIMASI KELUAR */
+
+.startup-splash.splash-hide {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ANIMASI MASUK */
+
+@keyframes splash-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* PENYESUAIAN HP LAYAR PENDEK */
+
+@media (max-height: 650px) {
+
+  .splash-logo {
+    width: 105px;
+    height: 105px;
+  }
+
+  .splash-santri {
+    max-height: 29vh;
+    width: min(58vw, 225px);
+    margin-bottom: 5px;
+  }
+
+  .splash-motto {
+    font-size: 10px;
+  }
+}
+
+/* MENGHORMATI PENGATURAN ANIMASI PERANGKAT */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .splash-content {
+    animation: none;
+  }
+
+  .startup-splash {
+    transition: none;
+  }
+
+}
