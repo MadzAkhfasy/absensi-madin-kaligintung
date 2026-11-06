@@ -266,6 +266,7 @@ function isStudentBiodataComplete(s) {
   );
 }
 function renderStudentList() {
+  document.querySelector("#studentsPanel .student-tools").style.display = "";
   const keyword = $("studentSearch")?.value
     .trim()
     .toLowerCase() || "";
@@ -584,6 +585,7 @@ r.querySelector(".history-btn").onclick = async () => {
 
     if (isAdmin()) {
       r.querySelector(".edit-btn").onclick = () => {
+        document.querySelector("#studentsPanel .student-tools").style.display = "none";
           r.classList.add("student-detail-open");
   r.innerHTML = `
     <div class="student-edit-v1">
