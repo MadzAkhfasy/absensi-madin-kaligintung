@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
-import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, query, where, orderBy, serverTimestamp, Timestamp, writeBatch } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+import { getFirestore, collection, doc, deleteDoc, getDoc, getDocs, setDoc, addDoc, updateDoc, query, where, orderBy, serverTimestamp, Timestamp, writeBatch } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
 // GANTI konfigurasi di bawah dengan konfigurasi aplikasi Firebase milik Madin.
 const firebaseConfig = {
   apiKey: "AIzaSyCpZa_NnbTRGL1GxWS3ti6AKibBLs4rzcU",
@@ -172,6 +172,7 @@ onAuthStateChanged(auth,async user=>{
   profile=p.data();
 await loadClasses();
 await loadWeeklySchedule();
+await loadHolidays();
 fillStudentPdfClass();
   $("authView").classList.add("hidden");$("appView").classList.remove("hidden");$("logoutBtn").classList.remove("hidden");
 $("hello").textContent="Halo, "+(profile.name||user.email);$("roleInfo").textContent=isAdmin()?"Admin/Pengurus":"Admin Absensi · Semua Kelas";
@@ -207,7 +208,185 @@ async function loadWeeklySchedule() {
   }
 }
 
+// ======================================
+// PENGELOLAAN LIBUR TANGGAL TERTENTU
+// ======================================
 
+// Menampilkan pilihan kelas
+function renderHolidayClassPicker() {
+  const picker = $("holidayClassPicker");
+
+  picker.innerHTML = classes.map(kelas => `
+    <label style="display:flex;gap:8px;margin:8px 0;">
+      <input
+        type="checkbox"
+        class="holiday-class-check"
+        value="${esc(kelas.id)}"
+        ${!isAdmin() ? "disabled" : ""}
+      >
+      ${esc(kelas.name)}
+    </label>
+  `).join("");
+
+  picker.classList.toggle(
+    "hidden",
+    $("holidayClassScope").value !== "selected"
+  );
+}
+
+// Memuat daftar libur dari Firestore
+async function loadHolidays() {
+  try {
+    const snap = await getDocs(collection(db, "holidays"));
+
+    const holidays = snap.docs.map(d => ({
+      id: d.id,
+      ...d.data()
+    }));
+
+    holidays.sort((a, b) => a.date.localeCompare(b.date));
+
+    renderHolidayList(holidays);
+
+    renderHolidayClassPicker();
+
+    $("holidayClassScope").disabled = !isAdmin();
+    $("holidayDate").disabled = !isAdmin();
+    $("holidayName").disabled = !isAdmin();
+
+    $("saveHolidayBtn").classList.toggle("hidden", !isAdmin());
+
+  } catch (error) {
+    console.error(error);
+    msg("holidayMsg", "Gagal memuat daftar libur: " + error.message, true);
+  }
+}
+
+// Menampilkan daftar libur
+function renderHolidayList(holidays) {
+  const container = $("holidayList");
+
+  if (!holidays.length) {
+    container.innerHTML =
+      '<p class="muted">Belum ada data hari libur.</p>';
+    return;
+  }
+
+  container.innerHTML = holidays.map(h => {
+    const cakupan = h.scope === "all"
+      ? "Semua Kelas"
+      : (h.classIds || [])
+          .map(id => clsName(id))
+          .join(", ");
+
+    return `
+      <div class="card" style="margin-bottom:10px;">
+        <strong>${esc(h.name || "Hari Libur")}</strong>
+
+        <p style="margin:6px 0;">
+          Tanggal: ${esc(h.date)}
+        </p>
+
+        <p style="margin:6px 0;">
+          Berlaku: ${esc(cakupan || "Belum ditentukan")}
+        </p>
+
+        ${isAdmin() ? `
+          <button
+            type="button"
+            class="danger full delete-holiday-btn"
+            data-id="${esc(h.id)}"
+          >
+            Hapus / Batalkan Libur
+          </button>
+        ` : ""}
+      </div>
+    `;
+  }).join("");
+}
+
+// Menyimpan tanggal libur
+async function saveHoliday() {
+  try {
+    const date = $("holidayDate").value;
+    const name = $("holidayName").value.trim();
+    const scope = $("holidayClassScope").value;
+
+    if (!date || !name) {
+      msg("holidayMsg", "Tanggal dan keterangan libur wajib diisi.", true);
+      return;
+    }
+
+    let classIds = [];
+
+    if (scope === "selected") {
+      classIds = Array.from(
+        document.querySelectorAll(".holiday-class-check:checked")
+      ).map(el => el.value);
+
+      if (!classIds.length) {
+        msg("holidayMsg", "Pilih minimal satu kelas.", true);
+        return;
+      }
+    }
+
+    await addDoc(collection(db, "holidays"), {
+      date,
+      name,
+      scope,
+      classIds,
+      createdAt: serverTimestamp()
+    });
+
+    $("holidayDate").value = "";
+    $("holidayName").value = "";
+    $("holidayClassScope").value = "all";
+
+    renderHolidayClassPicker();
+
+    await loadHolidays();
+
+    msg("holidayMsg", "Tanggal libur berhasil disimpan.");
+
+  } catch (error) {
+    console.error(error);
+    msg("holidayMsg", "Gagal menyimpan libur: " + error.message, true);
+  }
+}
+
+// Menghapus atau membatalkan libur
+async function deleteHoliday(id) {
+  const yakin = confirm(
+    "Apakah Anda yakin ingin menghapus atau membatalkan tanggal libur ini?"
+  );
+
+  if (!yakin) return;
+
+  try {
+    await deleteDoc(doc(db, "holidays", id));
+
+    await loadHolidays();
+
+    msg("holidayMsg", "Tanggal libur berhasil dibatalkan.");
+
+  } catch (error) {
+    console.error(error);
+    msg("holidayMsg", "Gagal menghapus libur: " + error.message, true);
+  }
+}
+
+// Menghubungkan tombol
+$("holidayClassScope").onchange = renderHolidayClassPicker;
+
+$("saveHolidayBtn").onclick = saveHoliday;
+
+$("holidayList").onclick = event => {
+  const button = event.target.closest(".delete-holiday-btn");
+
+  if (button) {
+    deleteHoliday(button.dataset.id);
+  }
+};
 // MENAMPILKAN JADWAL LIBUR SETIAP KELAS
 function renderWeeklySchedule() {
   const container = $("classScheduleSettings");
