@@ -740,81 +740,32 @@ function nextAvailableNis(usedValues) {
 }
 
 async function generateNisForAllStudents() {
-  if (!isAdmin()) throw new Error("Hanya admin yang dapat membuat NIS.");
-
-  const snapshot = await getDocs(collection(db, "students"));
-
-  const records = snapshot.docs.map(item => ({
-    ref: item.ref,
-    ...item.data()
-  }));
-
-  const used = new Set(
-    records.map(student => String(student.nis || "").trim()).filter(Boolean)
-  );
-
-  const classOrder = new Map(classes.map(c => [c.id, Number(c.order) || 0]));
-
-  const pending = records
-    .filter(student => !String(student.nis || "").trim())
-    .sort((a, b) =>
-      (classOrder.get(b.classId) || 0) - (classOrder.get(a.classId) || 0) ||
-      String(a.name || "").localeCompare(String(b.name || ""), "id")
-    );
-
-  let number = 301;
-  let batch = writeBatch(db);
-  let count = 0;
-  let updated = 0;
-
-  for (const student of pending) {
-    let nis = String(number).padStart(4, "0");
-
-    while (used.has(nis)) {
-      number++;
-      nis = String(number).padStart(4, "0");
-    }
-
-    used.add(nis);
-    batch.update(student.ref, { nis });
-    number++;
-    count++;
-    updated++;
-
-    if (count === 450) {
-      await batch.commit();
-      batch = writeBatch(db);
-      count = 0;
-    }
-  }
-
-  if (count > 0) await batch.commit();
-
-  return { updated, total: records.length };
-}
-
 $("generateNisBtn")?.addEventListener("click", async () => {
   if (!isAdmin()) return;
 
   const button = $("generateNisBtn");
-
-  if (!confirm("Buat NIS otomatis mulai 0301 untuk santri yang belum memiliki NIS? NIS lama tidak akan diubah.")) return;
+  const input = $("studentNis");
 
   button.disabled = true;
-  msg("generateNisMsg", "Sedang membuat NIS...");
+  button.textContent = "Memproses...";
 
   try {
-    const result = await generateNisForAllStudents();
-    await loadStudents();
-    await renderDashboard();
+    const snapshot = await getDocs(collection(db, "students"));
 
-    msg("generateNisMsg", result.updated
-      ? result.updated + " NIS berhasil dibuat."
-      : "Semua santri sudah memiliki NIS.");
+    const usedNis = snapshot.docs.map(item =>
+      item.data().nis || ""
+    );
+
+    const newNis = nextAvailableNis(usedNis);
+
+    input.value = newNis;
+
+    showToast("NIS otomatis berhasil dibuat: " + newNis);
   } catch (error) {
-    msg("generateNisMsg", "Gagal: " + error.message, true);
+    showToast("Gagal membuat NIS: " + error.message);
   } finally {
     button.disabled = false;
+    button.textContent = "NIS Otomatis";
   }
 });
 $("studentSearch").addEventListener("input", renderStudentList);
