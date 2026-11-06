@@ -2319,8 +2319,9 @@ window.onload = () => {
           background:white;
           overflow:hidden;
           position:fixed;
-          left:-100000px;
+          left:0;
           top:0;
+          z-index:-1;
           font-family:Arial,sans-serif;
           color:#222;
         `;
