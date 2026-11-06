@@ -107,6 +107,16 @@ return {
 const CLASS_NAMES = ["Kelas Jilid Pemula","Kelas Jilid 1","Kelas Jilid 2","Kelas Jilid 3","Kelas Jilid 4","Kelas Jilid 5"];
 const STATUSES = ["Hadir","Izin","Sakit","Alpa"];
 let currentUser=null, profile=null, classes=[], students=[], reportRows=[], reportMonthValue="", reportClassValue="";
+let weeklyDaysOff = {};
+const WEEK_DAYS = [
+  "Minggu",
+  "Senin",
+  "Selasa",
+  "Rabu",
+  "Kamis",
+  "Jumat",
+  "Sabtu"
+];
 const today = new Date().toLocaleDateString("sv-SE");
 $("attendanceDate").value=today; $("todayLabel").textContent=new Date().toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
 for(let i=0;i<12;i++){const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-i);const v=d.toLocaleDateString("sv-SE").slice(0,7);const o=document.createElement("option");o.value=v;o.textContent=d.toLocaleDateString("id-ID",{month:"long",year:"numeric"});$("reportMonth").append(o);}
@@ -159,7 +169,10 @@ onAuthStateChanged(auth,async user=>{
  try{
   const p=await getDoc(doc(db,"users",user.uid));
   if(!p.exists()){await signOut(auth);msg("authMsg","Profil belum dibuat. Hubungi admin.",true);return;}
-  profile=p.data(); await loadClasses(); fillStudentPdfClass();
+  profile=p.data();
+await loadClasses();
+await loadWeeklySchedule();
+fillStudentPdfClass();
   $("authView").classList.add("hidden");$("appView").classList.remove("hidden");$("logoutBtn").classList.remove("hidden");
 $("hello").textContent="Halo, "+(profile.name||user.email);$("roleInfo").textContent=isAdmin()?"Admin/Pengurus":"Admin Absensi · Semua Kelas";
   document.querySelectorAll(".admin-only:not(.panel)").forEach(x=>x.classList.toggle("hidden",!isAdmin()));
@@ -175,6 +188,104 @@ async function loadClasses(){
  const snap=await getDocs(collection(db,"classes"));classes=snap.docs.map(d=>({id:d.id,...d.data()}));
  if(isAdmin()&&classes.length===0){for(let i=0;i<CLASS_NAMES.length;i++)await setDoc(doc(db,"classes","kelas"+(i+1)),{name:CLASS_NAMES[i],order:i+1});const s=await getDocs(collection(db,"classes"));classes=s.docs.map(d=>({id:d.id,...d.data()}));}
  classes.sort((a,b)=>(a.order||0)-(b.order||0));
+}
+// MEMUAT JADWAL LIBUR MINGGUAN
+async function loadWeeklySchedule() {
+  try {
+    const ref = doc(db, "calendarSettings", "weekly");
+    const snap = await getDoc(ref);
+
+    weeklyDaysOff = snap.exists()
+      ? snap.data().classDaysOff || {}
+      : {};
+
+    renderWeeklySchedule();
+
+  } catch (error) {
+    console.error(error);
+    msg("holidayMsg", "Gagal memuat jadwal libur: " + error.message, true);
+  }
+}
+
+
+// MENAMPILKAN JADWAL LIBUR SETIAP KELAS
+function renderWeeklySchedule() {
+  const container = $("classScheduleSettings");
+  if (!container) return;
+
+  container.innerHTML = classes.map(kelas => {
+    const selectedDays = weeklyDaysOff[kelas.id] ?? [0];
+
+    return `
+      <div class="card" style="margin-bottom:12px;">
+        <strong>${esc(kelas.name)}</strong>
+
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px;">
+          ${WEEK_DAYS.map((hari, index) => `
+            <label style="display:flex;align-items:center;gap:7px;">
+              <input
+                type="checkbox"
+                class="weekly-day-check"
+                data-class="${kelas.id}"
+                value="${index}"
+                ${selectedDays.includes(index) ? "checked" : ""}
+                ${!isAdmin() ? "disabled" : ""}
+              >
+              ${hari}
+            </label>
+          `).join("")}
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  if (isAdmin()) {
+    container.innerHTML += `
+      <button id="saveWeeklyScheduleBtn" class="primary full" type="button">
+        Simpan Jadwal Libur Mingguan
+      </button>
+    `;
+
+    $("saveWeeklyScheduleBtn").onclick = saveWeeklySchedule;
+  } else {
+    container.innerHTML += `
+      <p class="muted">
+        Jadwal ini hanya dapat diubah oleh admin.
+      </p>
+    `;
+  }
+}
+
+
+// MENYIMPAN JADWAL LIBUR MINGGUAN
+async function saveWeeklySchedule() {
+  try {
+    const newSchedule = {};
+
+    classes.forEach(kelas => {
+      newSchedule[kelas.id] = Array.from(
+        document.querySelectorAll(
+          `.weekly-day-check[data-class="${kelas.id}"]:checked`
+        )
+      ).map(el => Number(el.value));
+    });
+
+    await setDoc(
+      doc(db, "calendarSettings", "weekly"),
+      {
+        classDaysOff: newSchedule,
+        updatedAt: serverTimestamp()
+      }
+    );
+
+    weeklyDaysOff = newSchedule;
+
+    showToast("Jadwal libur mingguan berhasil disimpan.");
+
+  } catch (error) {
+    console.error(error);
+    showToast("Gagal menyimpan jadwal: " + error.message, true);
+  }
 }
 async function fillClassSelects() {
   for (const id of ["attendanceClass", "studentClass", "reportClass"]) {
