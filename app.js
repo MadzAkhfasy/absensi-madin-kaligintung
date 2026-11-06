@@ -298,9 +298,14 @@ function renderStudentList() {
     }
   </div>
 
-  <div class="student-info">
+    <div class="student-info">
     <strong>${esc(s.name)}</strong>
     <small>${esc(clsName(s.classId))}</small>
+
+    <span class="biodata-status ${biodataComplete ? "complete" : "incomplete"}">
+      ${biodataComplete ? "Lengkap" : "Belum Lengkap"}
+    </span>
+  </div>
   </div>
 
   <div class="student-actions">
