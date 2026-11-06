@@ -2986,17 +2986,29 @@ $("restoreDataBtn").onclick = async () => {
       throw new Error("File backup tidak valid atau tidak cocok.");
     }
 
-    const allowedCollections = ["classes", "students", "attendance"];
+        const requiredCollections = ["classes", "students", "attendance"];
 
-    for (const name of allowedCollections) {
+    const allowedCollections = [
+      "classes",
+      "students",
+      "attendance",
+      "calendarSettings",
+      "holidays"
+    ];
+
+    for (const name of requiredCollections) {
       if (!Array.isArray(backup.collections[name])) {
         throw new Error(`Data ${name} tidak ditemukan atau tidak valid.`);
       }
     }
 
-    let restored = 0;
-
     for (const name of allowedCollections) {
+      if (backup.collections[name] === undefined) continue;
+
+      if (!Array.isArray(backup.collections[name])) {
+        throw new Error(`Format koleksi ${name} tidak valid.`);
+      }
+
       for (const item of backup.collections[name]) {
         if (
           !item ||
@@ -3009,7 +3021,15 @@ $("restoreDataBtn").onclick = async () => {
         ) {
           throw new Error(`Ada data ${name} yang tidak valid.`);
         }
+      }
+    }
 
+    let restored = 0;
+
+    for (const name of allowedCollections) {
+      const items = backup.collections[name] || [];
+
+      for (const item of items) {
         await setDoc(
           doc(db, name, item.id),
           restoreBackupValue(item.data),
