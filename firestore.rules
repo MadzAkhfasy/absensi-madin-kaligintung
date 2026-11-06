@@ -18,8 +18,14 @@ service cloud.firestore {
     }
 
     match /classes/{classId} {
-      allow read, write: if admin();
-    }
+  allow read: if signedIn();
+  allow write: if admin();
+}
+
+match /calendarSettings/{settingId} {
+  allow read: if signedIn();
+  allow write: if admin();
+}
 
     match /students/{studentId} {
       allow read, write: if admin();
