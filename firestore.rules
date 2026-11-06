@@ -27,6 +27,11 @@ match /calendarSettings/{settingId} {
   allow write: if admin();
 }
 
+match /holidays/{holidayId} {
+  allow read: if signedIn();
+  allow create, update, delete: if admin();
+}
+
     match /students/{studentId} {
       allow read, write: if admin();
     }
