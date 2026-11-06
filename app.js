@@ -1166,7 +1166,12 @@ $("saveAttendanceBtn").onclick = async () => {
   const date = $("attendanceDate").value;
 
   if (!date) return;
+const specialHoliday = isSpecialHoliday(classId, date);
 
+if (specialHoliday) {
+  showToast("Tanggal tersebut libur: " + (specialHoliday.name || "Hari Libur"), true);
+  return;
+}
   if (isWeeklyHoliday(classId, date)) {
   showToast("Tanggal tersebut merupakan hari libur kelas ini!", true);
   return;
