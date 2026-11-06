@@ -925,6 +925,15 @@ await loadStudents();
   }
 };
 
+// MEMERIKSA APAKAH KELAS SEDANG LIBUR
+function isWeeklyHoliday(classId, date) {
+  if (!classId || !date) return false;
+
+  const day = new Date(date + "T00:00:00").getDay();
+  const daysOff = weeklyDaysOff[classId] ?? [0];
+
+  return daysOff.includes(day);
+}
 $("attendanceDate").onchange=renderAttendance;$("attendanceClass").onchange=renderAttendance;
 async function renderAttendance(){
  if(!currentUser||(!canAccessAllClasses()&&!myClass()))return;
@@ -951,9 +960,16 @@ $("saveAttendanceBtn").onclick = async () => {
 
   if (!date) return;
 
-  if (new Date(date + "T00:00:00").getDay() === 0) {
-    showToast("Hari Minggu adalah hari libur!", true);
-    return;
+  if (isWeeklyHoliday(classId, date)) {
+  const namaHari = WEEK_DAYS[new Date(date + "T00:00:00").getDay()];
+
+  $("attendanceList").innerHTML =
+    `<p style="text-align:center;padding:20px;color:#198754;font-weight:bold;">
+      HARI ${namaHari.toUpperCase()} – LIBUR NGAJI
+    </p>`;
+
+  $("saveAttendanceBtn").classList.add("hidden");
+  return;
   }
 
   const btn = $("saveAttendanceBtn");
