@@ -404,9 +404,9 @@ function renderWeeklySchedule() {
       <details class="card" style="margin-bottom:10px;padding:12px;">
         <summary style="cursor:pointer;font-weight:bold;">
           ${esc(kelas.name)}
-          <span style="float:right;font-weight:normal;color:#198754;">
-            ${esc(namaLibur)} ▼
-          </span>
+          <span style="float:right;font-weight:normal;color:#dc3545;">
+  ${esc(namaLibur)} ✓
+</span>
         </summary>
 
         <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:15px;">
