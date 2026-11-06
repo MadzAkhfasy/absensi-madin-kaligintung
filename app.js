@@ -2866,26 +2866,41 @@ function restoreBackupValue(value) {
   return value;
 }
 
-// UNDUH BACKUP
+// UNDUH BACKUP LENGKAP
 $("backupDataBtn").onclick = async () => {
   if (!isAdmin()) {
     msg("backupMsg", "Fitur ini hanya untuk admin.", true);
     return;
   }
 
+  const btn = $("backupDataBtn");
+  btn.disabled = true;
+
   try {
-    msg("backupMsg", "Sedang membuat backup...");
+    msg("backupMsg", "Sedang membuat backup lengkap...");
 
     const backup = {
       app: "absensi-madin-kaligintung",
       version: 1,
       createdAt: new Date().toISOString(),
-      collections: {}
+      collections: {},
+      summary: {}
     };
 
     let total = 0;
 
-    for (const name of ["classes", "students", "attendance"]) {
+    // Semua koleksi data aplikasi
+    const collectionNames = [
+      "classes",
+      "students",
+      "attendance",
+      "calendarSettings",
+      "holidays"
+    ];
+
+    for (const name of collectionNames) {
+      msg("backupMsg", `Mengamankan data ${name}...`);
+
       const snapshot = await getDocs(collection(db, name));
 
       backup.collections[name] = snapshot.docs.map(item => ({
@@ -2893,8 +2908,11 @@ $("backupDataBtn").onclick = async () => {
         data: serializeBackupValue(item.data())
       }));
 
+      backup.summary[name] = snapshot.size;
       total += snapshot.size;
     }
+
+    backup.summary.total = total;
 
     const blob = new Blob(
       [JSON.stringify(backup, null, 2)],
@@ -2904,19 +2922,34 @@ $("backupDataBtn").onclick = async () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
 
+    const tanggal = new Date().toISOString()
+      .slice(0, 10);
+
     link.href = url;
-    link.download = `backup-absensi-madin-${new Date().toISOString().slice(0, 10)}.json`;
+    link.download = `backup-lengkap-madin-${tanggal}.json`;
 
     document.body.appendChild(link);
     link.click();
     link.remove();
 
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
 
-    msg("backupMsg", `Backup berhasil. ${total} data tersimpan.`);
+    msg(
+      "backupMsg",
+      `Backup lengkap berhasil dibuat. Total ${total} dokumen dari ${collectionNames.length} koleksi.`
+    );
+
   } catch (error) {
     console.error(error);
-    msg("backupMsg", "Backup gagal: " + error.message, true);
+
+    msg(
+      "backupMsg",
+      "Backup gagal: " + error.message,
+      true
+    );
+
+  } finally {
+    btn.disabled = false;
   }
 };
 
