@@ -126,10 +126,6 @@
         <div class="card">
           <h2>Data santri</h2>
           <p class="muted">Data santri dikelola oleh admin.</p>
-          <button id="generateNisBtn" class="secondary admin-only" type="button">
-  Buat NIS Otomatis
-</button>
-<div id="generateNisMsg" class="message"></div>
           
           <div class="student-tools">
   <label>
@@ -164,10 +160,13 @@
     <select id="studentClass"></select>
   </label>
 
-  <label>NIS / Nomor Induk
-    <input id="studentNis" placeholder="Nomor induk santri">
-  </label>
-
+<label>NIS / Nomor Induk</label>
+<div class="nis-input-group">
+  <input id="studentNis" placeholder="Nomor induk santri">
+  <button id="generateNisBtn" class="secondary" type="button">
+    NIS Otomatis
+  </button>
+</div>
   <label>Jenis Kelamin
     <select id="studentGender">
       <option value="">Pilih jenis kelamin</option>
