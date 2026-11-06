@@ -1131,6 +1131,18 @@ async function renderAttendance(){
  const list=students.filter(s=>s.classId===classId);
  $("attendanceClassName").textContent=clsName(classId);
  const date=$("attendanceDate").value;
+  // Periksa libur tanggal tertentu
+const specialHoliday = isSpecialHoliday(classId, date);
+
+if (specialHoliday) {
+  $("attendanceList").innerHTML =
+    `<p style="text-align:center;padding:20px;color:#198754;font-weight:bold;">
+      LIBUR NGAJI<br>${esc(specialHoliday.name || "Hari Libur")}
+    </p>`;
+
+  $("saveAttendanceBtn").classList.add("hidden");
+  return;
+}
   if (isWeeklyHoliday(classId, date)) {
   const namaHari = WEEK_DAYS[new Date(date + "T00:00:00").getDay()];
 
