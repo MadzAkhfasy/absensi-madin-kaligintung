@@ -248,6 +248,23 @@ async function loadPhotoStats() {
 }
 
 $("refreshPhotoStatsBtn").onclick = loadPhotoStats;
+function isStudentBiodataComplete(s) {
+  const requiredFields = [
+    s.nis,
+    s.name,
+    s.classId,
+    s.gender,
+    s.birthplace,
+    s.birthdate,
+    s.fatherName,
+    s.motherName,
+    s.address
+  ];
+
+  return requiredFields.every(value =>
+    String(value ?? "").trim() !== ""
+  );
+}
 function renderStudentList() {
   const keyword = $("studentSearch")?.value
     .trim()
@@ -270,6 +287,8 @@ function renderStudentList() {
   filtered.forEach(s => {
     const r = document.createElement("div");
     r.className = "list-row";
+
+    const biodataComplete = isStudentBiodataComplete(s);
 
    r.innerHTML = `
   <div class="student-photo">
