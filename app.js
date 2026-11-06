@@ -3055,6 +3055,109 @@ $("restoreDataBtn").onclick = async () => {
     msg("backupMsg", "Restore gagal: " + error.message, true);
   }
 };
+// MEMERIKSA FILE BACKUP TANPA MENGUBAH DATABASE
+$("checkBackupBtn").onclick = async () => {
+  if (!isAdmin()) {
+    msg("backupMsg", "Fitur ini hanya untuk admin.", true);
+    return;
+  }
+
+  const file = $("restoreFile").files[0];
+
+  if (!file) {
+    msg("backupMsg", "Pilih file backup terlebih dahulu.", true);
+    return;
+  }
+
+  const btn = $("checkBackupBtn");
+  btn.disabled = true;
+
+  try {
+    msg("backupMsg", "Sedang memeriksa file backup...");
+
+    const backup = JSON.parse(await file.text());
+
+    if (
+      backup.app !== "absensi-madin-kaligintung" ||
+      backup.version !== 1 ||
+      !backup.collections
+    ) {
+      throw new Error("File backup tidak valid atau tidak cocok.");
+    }
+
+    const requiredCollections = [
+      "classes",
+      "students",
+      "attendance"
+    ];
+
+    const allowedCollections = [
+      "classes",
+      "students",
+      "attendance",
+      "calendarSettings",
+      "holidays"
+    ];
+
+    for (const name of requiredCollections) {
+      if (!Array.isArray(backup.collections[name])) {
+        throw new Error(`Data ${name} tidak ditemukan.`);
+      }
+    }
+
+    const counts = {};
+    let total = 0;
+
+    for (const name of allowedCollections) {
+      if (backup.collections[name] === undefined) continue;
+
+      if (!Array.isArray(backup.collections[name])) {
+        throw new Error(`Format koleksi ${name} tidak valid.`);
+      }
+
+      const ids = new Set();
+
+      for (const item of backup.collections[name]) {
+        if (
+          !item ||
+          typeof item.id !== "string" ||
+          !item.id ||
+          item.id.includes("/") ||
+          !item.data ||
+          typeof item.data !== "object" ||
+          Array.isArray(item.data)
+        ) {
+          throw new Error(`Ada data ${name} yang tidak valid.`);
+        }
+
+        if (ids.has(item.id)) {
+          throw new Error(`Ada ID ganda pada koleksi ${name}.`);
+        }
+
+        ids.add(item.id);
+      }
+
+      counts[name] = backup.collections[name].length;
+      total += backup.collections[name].length;
+    }
+
+    const detail = Object.entries(counts)
+      .map(([name, count]) => `${name}: ${count}`)
+      .join(" | ");
+
+    msg(
+      "backupMsg",
+      `PEMERIKSAAN BERHASIL. ${detail}. Total ${total} dokumen. Database TIDAK diubah.`
+    );
+
+  } catch (error) {
+    console.error(error);
+    msg("backupMsg", "Pemeriksaan gagal: " + error.message, true);
+  } finally {
+    btn.disabled = false;
+  }
+};
+
 $("shareImageBtn").onclick = async () => {
   if (!reportRows.length) {
     return msg("reportMsg", "Tampilkan rekap terlebih dahulu.", true);
