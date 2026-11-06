@@ -306,7 +306,6 @@ function renderStudentList() {
       ${biodataComplete ? "Lengkap" : "Belum Lengkap"}
     </span>
   </div>
-  </div>
 
   <div class="student-actions">
     <button type="button" class="secondary history-btn">
