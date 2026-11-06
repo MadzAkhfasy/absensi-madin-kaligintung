@@ -469,7 +469,9 @@ async function saveWeeklySchedule() {
 
     weeklyDaysOff = newSchedule;
 
-    showToast("Jadwal libur mingguan berhasil disimpan.");
+renderWeeklySchedule();
+
+showToast("Jadwal libur mingguan berhasil disimpan.");
 
   } catch (error) {
     console.error(error);
