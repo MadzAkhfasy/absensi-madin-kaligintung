@@ -1938,6 +1938,7 @@ $("printStudentsPdfBtn").onclick = () => {
     const type = $("studentPdfType").value;
 const outputFormat = $("studentPdfFormat").value;
 const selectedClass = $("studentPdfClass").value;
+const selectedStudent = $("studentPdfStudent").value;
     const selectedStudents = students
       .filter(s =>
         selectedClass === "__all__" || s.classId === selectedClass
