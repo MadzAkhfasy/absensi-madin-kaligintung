@@ -104,7 +104,7 @@ return {
   photoFileId: result.fileId.trim()
 };
 }
-const CLASS_NAMES = ["Kelas Jilid Pemula","Kelas Jilid 1","Kelas Jilid 2","Kelas Jilid 3","Kelas Jilid 4","Kelas Jilid 5"];
+const CLASS_NAMES = ["Kelas Jilid Pemula","Kelas Jilid 1","Kelas Jilid 2","Kelas Jilid 3","Kelas Jilid 4","Kelas Jilid 5","Kelas Khusus"];
 const STATUSES = ["Hadir","Izin","Sakit","Alpa"];
 let currentUser=null, profile=null, classes=[], students=[], reportRows=[], reportMonthValue="", reportClassValue="";
 let weeklyDaysOff = {};
