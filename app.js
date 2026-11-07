@@ -187,8 +187,30 @@ $("reportClassWrap").classList.toggle("hidden",!canAccessAllClasses());
 });
 
 async function loadClasses(){
- const snap=await getDocs(collection(db,"classes"));classes=snap.docs.map(d=>({id:d.id,...d.data()}));
- if(isAdmin()&&classes.length===0){for(let i=0;i<CLASS_NAMES.length;i++)await setDoc(doc(db,"classes","kelas"+(i+1)),{name:CLASS_NAMES[i],order:i+1});const s=await getDocs(collection(db,"classes"));classes=s.docs.map(d=>({id:d.id,...d.data()}));}
+ const snap=await getDocs(collection(db,"classes"));
+ classes=snap.docs.map(d=>({id:d.id,...d.data()}));
+
+ if(isAdmin()&&classes.length===0){
+   for(let i=0;i<CLASS_NAMES.length;i++){
+     await setDoc(doc(db,"classes","kelas"+(i+1)),{
+       name:CLASS_NAMES[i],
+       order:i+1
+     });
+   }
+   const s=await getDocs(collection(db,"classes"));
+   classes=s.docs.map(d=>({id:d.id,...d.data()}));
+ }
+
+ if(isAdmin()&&!classes.some(c=>c.name==="Kelas Khusus")){
+   await addDoc(collection(db,"classes"),{
+     name:"Kelas Khusus",
+     order:7
+   });
+
+   const s=await getDocs(collection(db,"classes"));
+   classes=s.docs.map(d=>({id:d.id,...d.data()}));
+ }
+
  classes.sort((a,b)=>(a.order||0)-(b.order||0));
 }
 // MEMUAT JADWAL LIBUR MINGGUAN
