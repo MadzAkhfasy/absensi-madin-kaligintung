@@ -1299,8 +1299,15 @@ async function loadReport() {
   const end = month + "-31";
 
   try {
-    const specialClass = classes.find(c => c.name === "Kelas Khusus");
+const specialClass = classes.find(c => c.name === "Kelas Khusus");
 const selectedSpecial = !allClasses && classId === specialClass?.id;
+
+const studentQuery = allClasses
+  ? getDocs(collection(db, "students"))
+  : getDocs(query(
+      collection(db, "students"),
+      where("classId", "==", classId)
+    ));
 
 const attendanceQuery = allClasses || selectedSpecial
   ? getDocs(query(
@@ -1319,8 +1326,6 @@ const attendanceQuery = allClasses || selectedSpecial
       studentQuery,
       attendanceQuery
     ]);
-
-    const specialClass = classes.find(c => c.name === "Kelas Khusus");
 
 const eligibleStudentDocs = ss.docs.filter(d =>
   selectedSpecial
