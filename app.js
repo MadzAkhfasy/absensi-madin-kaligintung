@@ -958,14 +958,44 @@ ${
       <input type="file" class="edit-photo" accept="image/jpeg,image/png,image/webp">
 
       ${studentPhotoUrl(s) ? `<img src="${esc(studentPhotoUrl(s))}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;">` : ""}
-      <br><br>
-      <button type="button" class="edit-save">Simpan Perubahan</button>
+${(s.photoUrl || s.photoFileId) ? `<br><button type="button" class="secondary edit-photo-delete">Hapus Foto</button>` : ""}
+<br><br>
+<button type="button" class="edit-save">Simpan Perubahan</button>
       <button type="button" class="secondary edit-cancel">Batal</button>
     </div>
   `;
 
   r.querySelector(".edit-cancel").onclick = renderStudentList;
+const deletePhotoButton = r.querySelector(".edit-photo-delete");
 
+if (deletePhotoButton) {
+  deletePhotoButton.onclick = async () => {
+    if (!confirm("Hapus foto santri dari aplikasi?")) return;
+
+    deletePhotoButton.disabled = true;
+    deletePhotoButton.textContent = "Menghapus...";
+
+    try {
+      await updateDoc(doc(db, "students", s.id), {
+        photoUrl: "",
+        photoFileId: ""
+      });
+
+      s.photoUrl = "";
+      s.photoFileId = "";
+
+      showToast("Foto berhasil dihapus dari aplikasi.");
+
+      await loadStudents();
+      await renderDashboard();
+
+    } catch (e) {
+      showToast("Gagal menghapus foto: " + e.message);
+      deletePhotoButton.disabled = false;
+      deletePhotoButton.textContent = "Hapus Foto";
+    }
+  };
+}
   r.querySelector(".edit-save").onclick = async () => {
     const name = r.querySelector(".edit-name").value.trim();
     const classId = r.querySelector(".edit-class").value;
