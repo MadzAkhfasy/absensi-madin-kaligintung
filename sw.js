@@ -1,4 +1,4 @@
-const CACHE = "absensi-madin-v36";
+const CACHE = "absensi-madin-v37";
 
 self.addEventListener("install", event => {
   self.skipWaiting();
@@ -8,7 +8,7 @@ self.addEventListener("install", event => {
       cache.addAll([
         "./",
         "./index.html",
-        "./style.css?v=31",
+        "./style.css?v=32",
         "./app.js?v=27",
         "./manifest.json",
         "./LOGO%20MADIN%20REMOVE%20BG.png",
