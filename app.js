@@ -1324,8 +1324,19 @@ async function loadReport() {
       attendanceQuery
     ]);
 
-    const att = aa.docs.map(d => d.data());
+    const specialClass = classes.find(c => c.name === "Kelas Khusus");
 
+const eligibleStudentDocs = ss.docs.filter(d =>
+  d.data().classId !== specialClass?.id
+);
+
+const eligibleStudentIds = new Set(
+  eligibleStudentDocs.map(d => d.id)
+);
+
+const att = aa.docs
+  .map(d => d.data())
+  .filter(a => eligibleStudentIds.has(a.studentId));
     const meetingCount = allClasses
       ? new Set(att.map(a => a.classId + "|" + a.date)).size
       : new Set(att.map(a => a.date)).size;
@@ -1350,7 +1361,7 @@ async function loadReport() {
         </div>
       `;
 
-    const rows = ss.docs.map(d => {
+    const rows = eligibleStudentDocs.map(d => {
       const s = d.data();
 
       const mine = att.filter(a => a.studentId === d.id);
