@@ -2429,11 +2429,12 @@ const selectedStudent = $("studentPdfStudent").value;
           <h2 class="document-title">BIODATA SANTRI</h2>
 
           <div class="biodata-layout">
-            <div class="${studentPhotoUrl(s)
-  ? `<img src="${esc(studentPhotoUrl(s))}" alt="Foto Santri">`
-  : `<span>FOTO<br>SANTRI</span>`
-                        }
-            </div>
+  <div class="photo-box">
+    ${studentPhotoUrl(s)
+      ? `<img src="${esc(studentPhotoUrl(s))}" alt="Foto Santri">`
+      : `<span>FOTO<br>SANTRI</span>`
+    }
+  </div>
 
             <div class="biodata-details">
               <table>
