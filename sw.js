@@ -12,7 +12,8 @@ self.addEventListener("install", event => {
         "./app.js?v=27",
         "./manifest.json",
         "./LOGO%20MADIN%20REMOVE%20BG.png",
-        "./santri-mengaji-transparent-hd.png"
+        "./santri-mengaji-transparent-hd.png",
+"./splash-diwan-madin.png"
       ])
     )
   );
