@@ -1299,25 +1299,21 @@ async function loadReport() {
   const end = month + "-31";
 
   try {
-    const studentQuery = allClasses
-      ? getDocs(collection(db, "students"))
-      : getDocs(query(
-          collection(db, "students"),
-          where("classId", "==", classId)
-        ));
+    const specialClass = classes.find(c => c.name === "Kelas Khusus");
+const selectedSpecial = !allClasses && classId === specialClass?.id;
 
-    const attendanceQuery = allClasses
-      ? getDocs(query(
-          collection(db, "attendance"),
-          where("date", ">=", start),
-          where("date", "<=", end)
-        ))
-      : getDocs(query(
-          collection(db, "attendance"),
-          where("classId", "==", classId),
-          where("date", ">=", start),
-          where("date", "<=", end)
-        ));
+const attendanceQuery = allClasses || selectedSpecial
+  ? getDocs(query(
+      collection(db, "attendance"),
+      where("date", ">=", start),
+      where("date", "<=", end)
+    ))
+  : getDocs(query(
+      collection(db, "attendance"),
+      where("classId", "==", classId),
+      where("date", ">=", start),
+      where("date", "<=", end)
+    ));
 
     const [ss, aa] = await Promise.all([
       studentQuery,
@@ -1327,7 +1323,9 @@ async function loadReport() {
     const specialClass = classes.find(c => c.name === "Kelas Khusus");
 
 const eligibleStudentDocs = ss.docs.filter(d =>
-  d.data().classId !== specialClass?.id
+  selectedSpecial
+    ? d.data().classId === specialClass?.id
+    : d.data().classId !== specialClass?.id
 );
 
 const eligibleStudentIds = new Set(
