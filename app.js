@@ -617,9 +617,10 @@ function renderStudentList() {
 
    r.innerHTML = `
   <div class="student-photo">
-    ${s.photoUrl
-      ? `<img src="${esc(s.photoUrl)}" alt="Foto ${esc(s.name)}">`
-      : `<div class="photo-placeholder">?</div>`
+    ${studentPhotoUrl(s)
+  ? `<img src="${esc(studentPhotoUrl(s))}" alt="Foto ${esc(s.name)}">`
+  : `<div class="photo-placeholder">?</div>`
+  
     }
   </div>
 
@@ -705,12 +706,12 @@ r.querySelector(".history-btn").onclick = async () => {
       <div class="student-history-v1">
 
         <div style="text-align:center;padding:12px;">
-          ${
-            s.photoUrl
-              ? `<img src="${esc(s.photoUrl)}"
-                  style="width:85px;height:85px;object-fit:cover;border-radius:50%;">`
-              : ""
-          }
+${
+  studentPhotoUrl(s)
+    ? `<img src="${esc(studentPhotoUrl(s))}"
+        style="width:85px;height:85px;object-fit:cover;border-radius:50%;">`
+    : ""
+}
           <h3 style="margin:8px 0 3px;">${esc(s.name)}</h3>
           <span class="muted">${esc(clsName(s.classId))}</span>
         </div>
@@ -786,9 +787,9 @@ r.querySelector(".history-btn").onclick = async () => {
 
         <div class="profile-v3-photo">
           ${
-            s.photoUrl
-              ? `<img src="${esc(s.photoUrl)}" alt="Foto ${esc(s.name)}">`
-              : `<div class="profile-v3-placeholder">?</div>`
+            studentPhotoUrl(s)
+  ? `<img src="${esc(studentPhotoUrl(s))}" alt="Foto ${esc(s.name)}">`
+  : `<div class="profile-v3-placeholder">?</div>`
           }
         </div>
 
@@ -956,8 +957,7 @@ r.querySelector(".history-btn").onclick = async () => {
       <label>Ganti Foto Santri (opsional)</label>
       <input type="file" class="edit-photo" accept="image/jpeg,image/png,image/webp">
 
-      ${s.photoUrl ? `<img src="${esc(s.photoUrl)}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;">` : ""}
-
+      ${studentPhotoUrl(s) ? `<img src="${esc(studentPhotoUrl(s))}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;">` : ""}
       <br><br>
       <button type="button" class="edit-save">Simpan Perubahan</button>
       <button type="button" class="secondary edit-cancel">Batal</button>
@@ -1030,6 +1030,24 @@ showToast(`Pemeriksaan foto: URL=${!!photoData.photoUrl}, ID=${!!photoData.photo
   });
 }
 function esc(s=""){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function studentPhotoUrl(s){
+  if(s.photoUrl && s.photoUrl.trim()){
+    return s.photoUrl;
+  }
+
+  const gender = String(s.gender || "").toLowerCase();
+
+  if(gender === "l" || gender === "laki-laki"){
+    return "avatar-santri-laki.jpg";
+  }
+
+  if(gender === "p" || gender === "perempuan"){
+    return "avatar-santri-perempuan.jpg";
+  }
+
+  return "";
+}
+
 async function importDeleteStudent(id){
   const {deleteDoc}=await import("https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js");
   await deleteDoc(doc(db,"students",id));
@@ -2411,11 +2429,10 @@ const selectedStudent = $("studentPdfStudent").value;
           <h2 class="document-title">BIODATA SANTRI</h2>
 
           <div class="biodata-layout">
-            <div class="photo-box">
-              ${s.photoUrl
-                ? `<img src="${esc(s.photoUrl)}" alt="Foto Santri">`
-                : `<span>FOTO<br>SANTRI</span>`
-              }
+            <div class="${studentPhotoUrl(s)
+  ? `<img src="${esc(studentPhotoUrl(s))}" alt="Foto Santri">`
+  : `<span>FOTO<br>SANTRI</span>`
+                        }
             </div>
 
             <div class="biodata-details">
