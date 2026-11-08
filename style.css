@@ -4000,26 +4000,6 @@ border: 0 !important;
   }
 }
 
-/* =====================================
-   SPLASH SCREEN KREM - EMAS PREMIUM
-===================================== */
-
-.startup-splash {
-  background:
-    radial-gradient(
-      circle at 50% 42%,
-      #ffffff 0%,
-      rgba(255, 247, 224, .85) 42%,
-      transparent 75%
-    ),
-    linear-gradient(
-      145deg,
-      #fff9e9 0%,
-      #f5e8c8 55%,
-      #eee1bd 100%
-    ) !important;
-}
-
 /* ORNAMEN GEOMETRIS EMAS */
 
 .startup-splash::before,
