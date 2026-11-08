@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
-import { getFirestore, collection, doc, deleteDoc, getDoc, getDocs, setDoc, addDoc, updateDoc, query, where, orderBy, serverTimestamp, Timestamp, writeBatch } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
+import { getFirestore, collection, doc, deleteDoc, getDoc, getDocs, setDoc, addDoc, updateDoc, query, where, serverTimestamp, Timestamp, writeBatch } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
 // GANTI konfigurasi di bawah dengan konfigurasi aplikasi Firebase milik Madin.
 const firebaseConfig = {
   apiKey: "AIzaSyCpZa_NnbTRGL1GxWS3ti6AKibBLs4rzcU",
