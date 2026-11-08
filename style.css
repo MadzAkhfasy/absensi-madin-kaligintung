@@ -1547,57 +1547,6 @@ width: 120px;
 height: 120px;
 }
 
-.profile-details {
-margin: 14px 9px;
-padding: 8px 10px;
-}
-
-.profile-detail {
-grid-template-columns: 38px minmax(85px,.95fr) minmax(0,1.15fr);
-gap: 7px;
-min-height: 59px;
-}
-
-.profile-icon {
-width: 36px;
-height: 36px;
-font-size: 19px;
-}
-
-.profile-detail strong,
-.profile-detail > span:last-child {
-font-size: 12px;
-}
-
-.profile-class {
-font-size: 16px;
-padding: 9px 18px;
-}
-
-.profile-back {
-width: calc(100% - 30px);
-font-size: 16px;
-}
-}
-
-@media(max-width:360px) {
-
-.profile-detail {
-grid-template-columns: 32px minmax(76px,.95fr) minmax(0,1.05fr);
-gap: 5px;
-}
-
-.profile-icon {
-width: 31px;
-height: 31px;
-font-size: 17px;
-}
-
-.profile-detail strong,
-.profile-detail > span:last-child {
-font-size: 11px;
-}
-}
 /* ==========================================
 PROFIL SANTRI V2
 MADRASAH DINIYAH KALIGINTUNG
