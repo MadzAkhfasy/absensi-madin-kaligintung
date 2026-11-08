@@ -3953,30 +3953,6 @@ border: 0 !important;
 
 }
 
-/* =========================================
-   SPLASH SCREEN EMERALD GOLD PREMIUM
-========================================= */
-
-.startup-splash {
-  background:
-    radial-gradient(
-      circle at 50% 45%,
-      rgba(255,215,120,.28),
-      transparent 48%
-    ),
-    repeating-conic-gradient(
-      from 45deg at 50% 50%,
-      rgba(255,215,120,.13) 0deg 3deg,
-      transparent 3deg 15deg
-    ),
-    linear-gradient(
-      145deg,
-      #032e29 0%,
-      #087653 48%,
-      #052d48 100%
-    );
-}
-
 /* ORNAMEN EMAS */
 
 .startup-splash::before,
