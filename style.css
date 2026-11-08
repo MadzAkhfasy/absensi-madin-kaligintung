@@ -4115,17 +4115,18 @@ linear-gradient(
 #dashboardPanel > .card:first-child .muted {
   color: #ffffff !important;
 }
-/* WATERMARK LOGO MADIN - UJI COBA DASHBOARD */
+/* WATERMARK LOGO MADIN - SELURUH HALAMAN */
 
-#dashboardPanel > .card:nth-child(2) {
+#appView > .panel:not(#dashboardPanel) > .card,
+#dashboardPanel > .card:not(:first-child) {
   background:
     linear-gradient(
-      rgba(255, 253, 247, .94),
-      rgba(237, 245, 238, .94)
+      rgba(255, 253, 247, .88),
+      rgba(237, 245, 238, .88)
     ),
-    url("LOGO%20MADIN%20REMOVE%20BG.png");
+    url("LOGO%20MADIN%20REMOVE%20BG.png") !important;
 
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 100% 100%, 75% auto;
+  background-size: 100% 100%, 72% auto;
 }
