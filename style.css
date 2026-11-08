@@ -4127,7 +4127,7 @@ linear-gradient(
   z-index: 0;
   background-image: url("LOGO%20MADIN%20REMOVE%20BG.png");
   background-repeat: no-repeat;
-  background-position: center calc(50svh + 75px);
+  background-position: center calc(50svh + 45px);
   background-size: min(68vw, 340px) auto;
   opacity: .20;
   pointer-events: none;
