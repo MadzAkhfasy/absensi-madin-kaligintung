@@ -3998,50 +3998,6 @@ border: 0 !important;
   animation: ornament-rotate 45s linear infinite;
 }
 
-/* JUDUL FONT ALGERIAN */
-
-.splash-title,
-.splash-subtitle {
-  font-family:
-    "Algerian",
-    "Almendra SC",
-    Georgia,
-    serif;
-
-  font-weight: 700;
-  text-shadow:
-    0 3px 0 #704817,
-    0 5px 15px rgba(0,0,0,.35);
-}
-
-.splash-title {
-  color: #fff1c5;
-  font-size: clamp(21px, 5.5vw, 29px);
-  letter-spacing: .05em;
-}
-
-.splash-subtitle {
-  color: #ffd66f;
-  font-size: clamp(19px, 4.8vw, 25px);
-  letter-spacing: .15em;
-}
-
-.splash-motto {
-  color: #fff8e8;
-  text-shadow: 0 2px 5px rgba(0,0,0,.4);
-}
-
-/* GARIS EMAS */
-
-.splash-gold-line::before,
-.splash-gold-line::after {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    #ffd66f
-  );
-}
-
 /* TOMBOL LEWATI */
 
 .splash-skip {
