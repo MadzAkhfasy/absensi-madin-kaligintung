@@ -4143,3 +4143,16 @@ linear-gradient(
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
+/* PERBAIKAN TAMPILAN KARTU DASHBOARD MADIN */
+
+#dashboardPanel > .card:first-child {
+  background: rgba(255, 253, 247, .82) !important;
+}
+
+#dashboardPanel > .card:first-child h2 {
+  color: #104b32 !important;
+}
+
+#dashboardPanel > .card:first-child > p {
+  color: #52685b !important;
+}
