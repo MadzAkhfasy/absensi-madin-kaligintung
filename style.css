@@ -4115,31 +4115,38 @@ linear-gradient(
 #dashboardPanel > .card:first-child .muted {
   color: #ffffff !important;
 }
-/* LOGO MADIN DI LAPISAN PALING BAWAH */
+/* LOGO MADIN STATIS DI TENGAH LAYAR */
 
-#appView > .panel {
-  background:
-    linear-gradient(
-      rgba(232, 242, 233, .35),
-      rgba(244, 247, 239, .35)
-    ),
-    url("LOGO%20MADIN%20REMOVE%20BG.png"),
-    linear-gradient(
-      135deg,
-      #e8f2e9,
-      #f4f7ef,
-      #e8f0e5
-    ) !important;
-
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100% 100%, 340px auto, 100% 100%;
+#appView {
+  position: relative;
+  isolation: isolate;
 }
 
-/* KARTU TRANSPARAN DI ATAS LOGO */
+#appView::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-image: url("LOGO%20MADIN%20REMOVE%20BG.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: min(78vw, 380px) auto;
+  opacity: .18;
+  pointer-events: none;
+}
+
+/* PANEL TRANSPARAN */
+
+#appView > .panel {
+  position: relative;
+  z-index: 1;
+  background: rgba(232, 242, 233, .48) !important;
+}
+
+/* KARTU TRANSPARAN */
 
 #appView > .panel > .card {
-  background: rgba(255, 253, 247, .78) !important;
+  background: rgba(255, 253, 247, .76) !important;
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
 }
