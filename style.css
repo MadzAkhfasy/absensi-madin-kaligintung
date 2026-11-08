@@ -4087,3 +4087,19 @@ background: linear-gradient(
 #edf5ee 100%
 );
 }
+/* AKSEN EMAS LEMBUT PANEL */
+
+#appView > .panel {
+background:
+radial-gradient(
+circle at 100% 0%,
+rgba(201, 166, 79, .16),
+transparent 35%
+),
+linear-gradient(
+135deg,
+#e8f2e9 0%,
+#f4f7ef 50%,
+#e8f0e5 100%
+) !important;
+}
