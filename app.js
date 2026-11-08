@@ -155,6 +155,77 @@ function showToast(text, isError = false) {
     toast.style.display = "none";
   }, 3500);
 }
+// PEMILIH KONTAK WALI SANTRI
+function attachGuardianContactPicker(input) {
+  if (!input || input.dataset.contactPickerReady === "true") return;
+  input.dataset.contactPickerReady = "true";
+
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText = `
+    display:flex;
+    align-items:stretch;
+    gap:8px;
+    width:100%;
+  `;
+
+  input.parentNode.insertBefore(wrapper, input);
+  wrapper.appendChild(input);
+
+  input.style.flex = "1";
+  input.style.minWidth = "0";
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.title = "Pilih dari kontak HP";
+  button.setAttribute("aria-label", "Pilih nomor dari kontak HP");
+  button.style.cssText = `
+    width:46px;
+    min-width:46px;
+    padding:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#176b45;
+    color:white;
+    border:1px solid #c9a64f;
+    border-radius:10px;
+  `;
+
+  button.innerHTML = `
+    <svg viewBox="0 0 24 24" width="21" height="21"
+      fill="none" stroke="currentColor" stroke-width="1.8"
+      stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3.5" y="3" width="17" height="18" rx="3"></rect>
+      <circle cx="12" cy="9" r="2.5"></circle>
+      <path d="M7.5 17c.8-2 2.3-3 4.5-3s3.7 1 4.5 3"></path>
+    </svg>
+  `;
+
+  wrapper.appendChild(button);
+
+  button.onclick = async () => {
+    if (!navigator.contacts?.select) {
+      showToast("Browser belum mendukung pemilih kontak.", true);
+      return;
+    }
+
+    try {
+      const contacts = await navigator.contacts.select(
+        ["name", "tel"],
+        { multiple: false }
+      );
+
+      if (contacts.length && contacts[0].tel?.length) {
+        input.value = contacts[0].tel[0];
+      }
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        showToast("Gagal membuka kontak HP.", true);
+      }
+    }
+  };
+}
+attachGuardianContactPicker(document.getElementById("studentPhone"));
 const clsName=id=>classes.find(c=>c.id===id)?.name||"Belum ditetapkan";
 const isAdmin=()=>profile?.role==="admin";
 const canAccessAllClasses=()=>isAdmin()||profile?.role==="petugas";
@@ -964,7 +1035,8 @@ ${(s.photoUrl || s.photoFileId) ? `<br><button type="button" class="secondary ed
       <button type="button" class="secondary edit-cancel">Batal</button>
     </div>
   `;
-
+        
+attachGuardianContactPicker(r.querySelector(".edit-phone"));
   r.querySelector(".edit-cancel").onclick = renderStudentList;
 const deletePhotoButton = r.querySelector(".edit-photo-delete");
 
