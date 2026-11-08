@@ -4055,30 +4055,6 @@ border: 0 !important;
     0 0 0 26px rgba(201,166,79,.045);
 }
 
-/* ILUSTRASI SANTRI */
-
-.splash-santri {
-  background: transparent !important;
-  filter: drop-shadow(0 8px 12px rgba(75, 55, 20, .18));
-}
-
-/* TULISAN MADRASAH */
-
-.splash-title {
-  color: #174b35 !important;
-  text-shadow: 0 2px 2px rgba(255,255,255,.8);
-}
-
-.splash-subtitle {
-  color: #a47722 !important;
-  text-shadow: 0 2px 3px rgba(255,255,255,.6);
-}
-
-.splash-motto {
-  color: #536653 !important;
-  text-shadow: none;
-}
-
 /* TOMBOL LEWATI */
 
 .splash-skip {
