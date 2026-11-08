@@ -3972,19 +3972,6 @@ border: 0 !important;
   animation: ornament-rotate 45s linear infinite;
 }
 
-/* TOMBOL LEWATI */
-
-.splash-skip {
-  color: #173e31;
-
-  background: linear-gradient(
-    135deg,
-    #ffe39a,
-    #c18b29
-  );
-
-  border: 1px solid #fff0bf;
-}
 
 /* ANIMASI ORNAMEN */
 
