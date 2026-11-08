@@ -4119,14 +4119,14 @@ linear-gradient(
 
 #appView > .panel:not(#dashboardPanel) > .card,
 #dashboardPanel > .card:not(:first-child) {
-  background:
-    linear-gradient(
-      rgba(255, 253, 247, .88),
-      rgba(237, 245, 238, .88)
-    ),
-    url("LOGO%20MADIN%20REMOVE%20BG.png") !important;
+background:
+linear-gradient(
+rgba(255, 253, 247, .80),
+rgba(237, 245, 238, .80)
+),
+url("LOGO%20MADIN%20REMOVE%20BG.png") !important;
 
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100% 100%, 72% auto;
+background-repeat: no-repeat;
+background-position: center center;
+background-size: 100% 100%, contain;
 }
