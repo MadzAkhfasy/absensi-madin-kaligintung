@@ -4054,3 +4054,24 @@ DIWAAN MADIN - SPLASH GOLD
     animation: none;
   }
 }
+
+/* =========================================
+BACKGROUND GLOBAL - MADIN PREMIUM
+========================================= */
+
+body {
+background:
+radial-gradient(
+circle at 10% 5%,
+rgba(201, 166, 79, .10),
+transparent 32%
+),
+linear-gradient(
+135deg,
+#f5f8f4 0%,
+#edf4ee 45%,
+#fffaf0 100%
+) !important;
+
+background-attachment: fixed;
+}
