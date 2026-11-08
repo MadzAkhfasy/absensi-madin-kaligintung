@@ -4115,18 +4115,39 @@ linear-gradient(
 #dashboardPanel > .card:first-child .muted {
   color: #ffffff !important;
 }
-/* WATERMARK LOGO MADIN - SELURUH HALAMAN */
+/* LOGO MADIN DI LAPISAN PALING BAWAH */
 
-#appView > .panel:not(#dashboardPanel) > .card,
-#dashboardPanel > .card:not(:first-child) {
+#appView > .panel {
   background:
     linear-gradient(
-      rgba(255, 253, 247, .80),
-      rgba(237, 245, 238, .80)
+      rgba(232, 242, 233, .35),
+      rgba(244, 247, 239, .35)
     ),
-    url("LOGO%20MADIN%20REMOVE%20BG.png") !important;
+    url("LOGO%20MADIN%20REMOVE%20BG.png"),
+    linear-gradient(
+      135deg,
+      #e8f2e9,
+      #f4f7ef,
+      #e8f0e5
+    ) !important;
 
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% 100%, min(38%, 220px) auto;
+  background-position: center;
+  background-size: 100% 100%, 340px auto, 100% 100%;
+}
+
+/* KARTU TRANSPARAN DI ATAS LOGO */
+
+#appView > .panel > .card {
+  background: rgba(255, 253, 247, .78) !important;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+/* PERTAHANKAN KARTU PEMBUKA DASHBOARD */
+
+#dashboardPanel > .card:first-child {
+  background:
+    radial-gradient(circle at 95% 0%, rgba(255,255,255,.15), transparent 30%),
+    linear-gradient(125deg, #064a34, #08744d) !important;
 }
