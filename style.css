@@ -3943,26 +3943,6 @@ border: 0 !important;
   pointer-events: none;
 }
 
-/* PENYESUAIAN HP LAYAR PENDEK */
-
-@media (max-height: 650px) {
-
-  .splash-logo {
-    width: 105px;
-    height: 105px;
-  }
-
-  .splash-santri {
-    max-height: 29vh;
-    width: min(58vw, 225px);
-    margin-bottom: 5px;
-  }
-
-  .splash-motto {
-    font-size: 10px;
-  }
-}
-
 /* MENGHORMATI PENGATURAN ANIMASI PERANGKAT */
 
 @media (prefers-reduced-motion: reduce) {
