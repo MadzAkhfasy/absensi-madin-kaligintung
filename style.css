@@ -4103,3 +4103,15 @@ linear-gradient(
 #e8f0e5 100%
 ) !important;
 }
+/* PERBAIKAN KONTRAS KARTU DASHBOARD */
+#dashboardPanel > .card:first-child {
+  background:
+    radial-gradient(circle at 95% 0%, rgba(255,255,255,.15), transparent 30%),
+    linear-gradient(125deg, #064a34, #08744d) !important;
+  color: #ffffff;
+}
+
+#dashboardPanel > .card:first-child h2,
+#dashboardPanel > .card:first-child .muted {
+  color: #ffffff !important;
+}
