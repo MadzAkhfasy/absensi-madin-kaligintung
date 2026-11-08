@@ -3998,24 +3998,6 @@ border: 0 !important;
   animation: ornament-rotate 45s linear infinite;
 }
 
-/* ILUSTRASI PNG TRANSPARAN */
-
-.splash-santri {
-  width: min(78vw, 310px);
-  max-height: min(38vh, 310px);
-
-  height: auto;
-
-  object-fit: contain;
-
-  background: transparent;
-  border-radius: 0;
-
-  filter: drop-shadow(0 8px 15px rgba(0,0,0,.22));
-
-  animation: santri-float 4s ease-in-out infinite;
-}
-
 /* JUDUL FONT ALGERIAN */
 
 .splash-title,
