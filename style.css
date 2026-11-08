@@ -3943,20 +3943,6 @@ border: 0 !important;
   pointer-events: none;
 }
 
-/* ANIMASI MASUK */
-
-@keyframes splash-arrive {
-  from {
-    opacity: 0;
-    transform: translateY(12px) scale(.985);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
 /* PENYESUAIAN HP LAYAR PENDEK */
 
 @media (max-height: 650px) {
