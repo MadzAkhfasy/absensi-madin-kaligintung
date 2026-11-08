@@ -4143,3 +4143,10 @@ linear-gradient(
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
+/* PERTAHANKAN KARTU PEMBUKA DASHBOARD */
+
+#dashboardPanel > .card:first-child {
+  background:
+    radial-gradient(circle at 95% 0%, rgba(255,255,255,.15), transparent 30%),
+    linear-gradient(125deg, #064a34, #08744d) !important;
+}
