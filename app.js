@@ -1550,7 +1550,7 @@ document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
 
   if(b.dataset.tab==="studentsPanel") loadStudents();
   if(b.dataset.tab==="staffPanel") loadStaffProfiles();
-}););
+});
 $("loadReportBtn").onclick=loadReport;
 async function loadReport() {
   const month = $("reportMonth").value;
