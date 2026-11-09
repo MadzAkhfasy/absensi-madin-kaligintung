@@ -298,6 +298,53 @@ showToast("Gagal mengganti foto: " + error.message, true);
 this.value = "";
 }};
 
+// KELOLA PROFIL PETUGAS OLEH ADMIN
+let staffProfiles = [];
+
+async function loadStaffProfiles() {
+  if (!isAdmin()) return;
+
+  const select = $("staffSelect");
+  select.innerHTML = '<option value="">Memuat akun petugas...</option>';
+
+  try {
+    const snap = await getDocs(collection(db, "users"));
+
+    staffProfiles = snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(u => u.role === "petugas");
+
+    select.innerHTML = '<option value="">Pilih akun petugas</option>';
+
+    staffProfiles.forEach(u => {
+      const option = document.createElement("option");
+      option.value = u.id;
+      option.textContent = u.displayName || u.name || u.email || u.id;
+      select.appendChild(option);
+    });
+
+    if (!staffProfiles.length) {
+      select.innerHTML = '<option value="">Belum ada akun petugas</option>';
+    }
+
+  } catch (error) {
+    console.error(error);
+    $("staffProfileMsg").textContent =
+      "Gagal memuat akun petugas: " + error.message;
+  }
+}
+
+$("staffSelect").onchange = function() {
+  const staff = staffProfiles.find(u => u.id === this.value);
+  if (!staff) return;
+
+  $("staffNameInput").value = staff.displayName || staff.name || "";
+  $("staffRoleInput").value = staff.displayRole || "PETUGAS ABSENSI";
+
+  $("staffPhotoPreview").src = staff.photoUrl ||
+    "https://ui-avatars.com/api/?name=Petugas&background=176b45&color=fff&size=160";
+};
+
 async function loadClasses(){
  const snap=await getDocs(collection(db,"classes"));
  classes=snap.docs.map(d=>({id:d.id,...d.data()}));
