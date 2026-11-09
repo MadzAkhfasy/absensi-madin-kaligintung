@@ -268,8 +268,8 @@ $("reportClassWrap").classList.toggle("hidden",!canAccessAllClasses());
  }catch(e){console.error(e);alert("Gagal memuat data: "+e.message);}
 });
 
-$("changeProfilePhotoBtn").onclick = () => {
-$("profilePhotoInput").click();
+$("userProfilePhoto").onclick = () => {
+  $("profilePhotoInput").click():
 };
 
 $("profilePhotoInput").onchange = async function() {
