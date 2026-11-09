@@ -247,7 +247,18 @@ await loadWeeklySchedule();
 await loadHolidays();
 fillStudentPdfClass();
   $("authView").classList.add("hidden");$("appView").classList.remove("hidden");$("logoutBtn").classList.remove("hidden");
-$("hello").textContent="Halo, "+(profile.name||user.email);$("roleInfo").textContent=isAdmin()?"Admin/Pengurus":"Admin Absensi · Semua Kelas";
+$("hello").textContent="Halo, "+(profile.name||user.email);
+$("roleInfo").textContent=isAdmin()?"Admin/Pengurus":"Admin Absensi · Semua Kelas";
+
+const profileName = profile.name || user.email;
+const profileRole = isAdmin() ? "ADMIN MADIN" : "PETUGAS ABSENSI";
+
+$("userProfilePhoto").src = profile.photoUrl ||
+  "https://ui-avatars.com/api/?name=" + encodeURIComponent(profileName) +
+  "&background=176b45&color=fff&size=160";
+
+$("welcomeUserName").textContent = profileName;
+$("welcomeUserRole").textContent = profileRole;
   document.querySelectorAll(".admin-only:not(.panel)").forEach(x=>x.classList.toggle("hidden",!isAdmin()));
   $("studentAdminForm").classList.toggle("hidden",!isAdmin());
   $("attendanceClassWrap").classList.toggle("hidden",!canAccessAllClasses());
