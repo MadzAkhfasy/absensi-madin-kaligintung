@@ -268,6 +268,42 @@ $("reportClassWrap").classList.toggle("hidden",!canAccessAllClasses());
  }catch(e){console.error(e);alert("Gagal memuat data: "+e.message);}
 });
 
+$("changeProfilePhotoBtn").onclick = () => {
+$("profilePhotoInput").click();
+};
+
+$("profilePhotoInput").onchange = async function() {
+const file = this.files[0];
+if (!file) return;
+
+const button = $("changeProfilePhotoBtn");
+button.disabled = true;
+button.textContent = "Mengunggah...";
+
+try {
+const photoData = await uploadStudentPhoto(file);
+
+await updateDoc(doc(db, "users", currentUser.uid), {
+  photoUrl: photoData.photoUrl,
+  photoFileId: photoData.photoFileId
+});
+
+profile.photoUrl = photoData.photoUrl;
+profile.photoFileId = photoData.photoFileId;
+
+$("userProfilePhoto").src = photoData.photoUrl;
+
+showToast("Foto profil berhasil diperbarui.");
+
+} catch (error) {
+console.error(error);
+showToast("Gagal mengganti foto: " + error.message, true);
+} finally {
+button.disabled = false;
+button.textContent = "Ganti Foto";
+this.value = "";
+}};
+
 async function loadClasses(){
  const snap=await getDocs(collection(db,"classes"));
  classes=snap.docs.map(d=>({id:d.id,...d.data()}));
