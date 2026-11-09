@@ -345,6 +345,62 @@ $("staffSelect").onchange = function() {
     "https://ui-avatars.com/api/?name=Petugas&background=176b45&color=fff&size=160";
 };
 
+$("saveStaffProfileBtn").onclick = async function() {
+  const uid = $("staffSelect").value;
+  const name = $("staffNameInput").value.trim();
+  const role = $("staffRoleInput").value.trim();
+  const file = $("staffPhotoInput").files[0];
+
+  if (!uid) {
+    alert("Pilih akun petugas terlebih dahulu.");
+    return;
+  }
+
+  if (!name || !role) {
+    alert("Nama dan jabatan harus diisi.");
+    return;
+  }
+
+  this.disabled = true;
+  this.textContent = "Menyimpan...";
+
+  try {
+    let photoData = {};
+
+    if (file) {
+      photoData = await uploadStudentPhoto(file);
+    }
+
+    const updateData = {
+      displayName: name,
+      displayRole: role
+    };
+
+    if (file) {
+      updateData.photoUrl = photoData.photoUrl;
+      updateData.photoFileId = photoData.photoFileId;
+    }
+
+    await updateDoc(doc(db, "users", uid), updateData);
+
+    const staff = staffProfiles.find(u => u.id === uid);
+    Object.assign(staff, updateData);
+
+    $("staffPhotoPreview").src = staff.photoUrl ||
+      "https://ui-avatars.com/api/?name=Petugas&background=176b45&color=fff&size=160";
+
+    $("staffProfileMsg").textContent = "Profil petugas berhasil diperbarui.";
+    $("staffPhotoInput").value = "";
+
+  } catch (error) {
+    console.error(error);
+    $("staffProfileMsg").textContent =
+      "Gagal menyimpan profil: " + error.message;
+  } finally {
+    this.disabled = false;
+    this.textContent = "Simpan Profil Petugas";
+  }
+};
 async function loadClasses(){
  const snap=await getDocs(collection(db,"classes"));
  classes=snap.docs.map(d=>({id:d.id,...d.data()}));
