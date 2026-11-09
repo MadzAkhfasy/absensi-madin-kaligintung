@@ -269,7 +269,7 @@ $("reportClassWrap").classList.toggle("hidden",!canAccessAllClasses());
 });
 
 $("userProfilePhoto").onclick = () => {
-  $("profilePhotoInput").click():
+  $("profilePhotoInput").click();
 };
 
 $("profilePhotoInput").onchange = async function() {
