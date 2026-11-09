@@ -247,7 +247,7 @@ await loadWeeklySchedule();
 await loadHolidays();
 fillStudentPdfClass();
   $("authView").classList.add("hidden");$("appView").classList.remove("hidden");$("logoutBtn").classList.remove("hidden");
-$("hello").textContent="Halo, "+(profile.name||user.email);
+$("hello").textContent="Halo, "+(profile.displayName || profile.name || user.email);
 $("roleInfo").textContent=isAdmin()?"Admin/Pengurus":"Admin Absensi · Semua Kelas";
 
 const profileName = profile.displayName || profile.name || user.email;
