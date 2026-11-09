@@ -409,6 +409,52 @@
     <div id="backupMsg" class="message"></div>
   </div>
       </section>
+      <!-- KELOLA PROFIL PETUGAS -->
+<section id="staffPanel" class="panel hidden admin-only">
+  <div class="card">
+    <h2>Kelola Profil Petugas</h2>
+    <p class="muted">
+      Atur foto, nama, dan jabatan yang ditampilkan pada panel Welcome.
+    </p>
+
+    <label>Pilih Akun Petugas
+      <select id="staffSelect">
+        <option value="">Memuat akun...</option>
+      </select>
+    </label>
+
+    <div style="text-align:center;margin:20px 0;">
+      <img id="staffPhotoPreview"
+           src="https://ui-avatars.com/api/?name=Petugas&background=176b45&color=fff&size=160"
+           alt="Foto Petugas"
+           style="width:110px;height:110px;object-fit:cover;border-radius:50%;border:3px solid #c9a64f;">
+    </div>
+
+    <label>Ganti Foto Petugas
+      <input id="staffPhotoInput"
+             type="file"
+             accept="image/jpeg,image/png,image/webp">
+    </label>
+
+    <label>Nama Tampilan
+      <input id="staffNameInput"
+             type="text"
+             placeholder="Masukkan nama petugas">
+    </label>
+
+    <label>Jabatan Tampilan
+      <input id="staffRoleInput"
+             type="text"
+             placeholder="Contoh: PETUGAS ABSENSI">
+    </label>
+
+    <button id="saveStaffProfileBtn" class="primary full">
+      Simpan Profil Petugas
+    </button>
+
+    <div id="staffProfileMsg" class="message"></div>
+  </div>
+</section>
     </section>
   </main>
 
