@@ -276,10 +276,6 @@ $("profilePhotoInput").onchange = async function() {
 const file = this.files[0];
 if (!file) return;
 
-const button = $("changeProfilePhotoBtn");
-button.disabled = true;
-button.textContent = "Mengunggah...";
-
 try {
 const photoData = await uploadStudentPhoto(file);
 
@@ -299,8 +295,6 @@ showToast("Foto profil berhasil diperbarui.");
 console.error(error);
 showToast("Gagal mengganti foto: " + error.message, true);
 } finally {
-button.disabled = false;
-button.textContent = "Ganti Foto";
 this.value = "";
 }};
 
