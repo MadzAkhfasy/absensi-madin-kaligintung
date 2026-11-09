@@ -14,8 +14,13 @@ service cloud.firestore {
       allow read: if signedIn() && (request.auth.uid == uid || admin());
       // Profil admin dibuat secara manual oleh pemilik proyek di Firebase Console.
       allow create: if false;
-      allow update, delete: if admin();
-    }
+      allow update: if admin() ||
+  (signedIn() &&
+   request.auth.uid == uid &&
+   request.resource.data.diff(resource.data).affectedKeys()
+     .hasOnly(['photoUrl', 'photoFileId']));
+
+allow delete: if admin();
 
     match /classes/{classId} {
   allow read: if signedIn();
