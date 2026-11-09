@@ -4159,3 +4159,102 @@ linear-gradient(
 #dashboardPanel > .card:first-child > p {
   color: #52685b !important;
 }
+/* RAPikan PROFIL ADMIN/PETUGAS DI PANEL WELCOME */
+
+#appView > .welcome {
+  align-items: center;
+}
+
+#appView .welcome-profile {
+  display: grid;
+  grid-template-columns: 105px minmax(0, 1fr);
+  align-items: center;
+  gap: 7px 12px;
+  width: min(270px, 42%);
+  min-width: 0;
+  text-align: left;
+}
+
+#appView .welcome-profile .today-pill {
+  grid-column: 1 / -1;
+  justify-self: end;
+}
+
+#appView #profilePhotoInput {
+  display: none !important;
+}
+
+#appView #userProfilePhoto {
+  grid-column: 1;
+  grid-row: 2 / span 3;
+  width: 100px !important;
+  height: 100px !important;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,.8);
+  background: #fff;
+}
+
+#appView .change-profile-photo-btn {
+  grid-column: 2;
+  justify-self: start;
+  padding: 8px 13px;
+  border: 1px solid rgba(255,255,255,.65);
+  border-radius: 20px;
+  background: #fff;
+  color: #07583c;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+#appView .welcome-user-name {
+  grid-column: 2;
+  min-width: 0;
+  font-size: 15px;
+  font-weight: 750;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+#appView .welcome-user-role {
+  grid-column: 2;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #f0d78e;
+}
+
+/* PENYESUAIAN TAMPILAN HP */
+@media (max-width: 600px) {
+  #appView > .welcome {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    padding: 20px 17px;
+  }
+
+  #appView > .welcome > div:first-child {
+    width: 100%;
+  }
+
+  #appView > .welcome h1 {
+    font-size: 23px;
+    line-height: 1.3;
+  }
+
+  #appView .welcome-profile {
+    width: 100%;
+    grid-template-columns: 78px minmax(0, 1fr);
+    gap: 6px 12px;
+  }
+
+  #appView #userProfilePhoto {
+    width: 72px !important;
+    height: 72px !important;
+  }
+
+  #appView .welcome-user-name {
+    font-size: 14px;
+  }
+}
