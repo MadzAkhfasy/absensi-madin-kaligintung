@@ -250,8 +250,8 @@ fillStudentPdfClass();
 $("hello").textContent="Halo, "+(profile.name||user.email);
 $("roleInfo").textContent=isAdmin()?"Admin/Pengurus":"Admin Absensi · Semua Kelas";
 
-const profileName = profile.name || user.email;
-const profileRole = isAdmin() ? "ADMIN MADIN" : "PETUGAS ABSENSI";
+const profileName = profile.displayName || profile.name || user.email;
+const profileRole = profile.displayRole || (isAdmin() ? "ADMIN MADIN" : "PETUGAS ABSENSI");
 
 $("userProfilePhoto").src = profile.photoUrl ||
   "https://ui-avatars.com/api/?name=" + encodeURIComponent(profileName) +
