@@ -1544,7 +1544,13 @@ msg(
   }
 };
 
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("hidden",x.id!==b.dataset.tab));if(b.dataset.tab==="studentsPanel")loadStudents();});
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));
+  document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("hidden",x.id!==b.dataset.tab));
+
+  if(b.dataset.tab==="studentsPanel") loadStudents();
+  if(b.dataset.tab==="staffPanel") loadStaffProfiles();
+}););
 $("loadReportBtn").onclick=loadReport;
 async function loadReport() {
   const month = $("reportMonth").value;
