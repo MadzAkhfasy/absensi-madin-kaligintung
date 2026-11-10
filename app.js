@@ -1278,7 +1278,14 @@ showToast(`Pemeriksaan foto: URL=${!!photoData.photoUrl}, ID=${!!photoData.photo
 function esc(s=""){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 function studentPhotoUrl(s){
   if(s.photoUrl && s.photoUrl.trim()){
-    return s.photoUrl;
+    const match = s.photoUrl.match(/[?&]id=([^&]+)/)
+      || s.photoUrl.match(/\/d\/([^/?]+)/);
+
+    if(match){
+      return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w400`;
+    }
+
+    return s.photoUrl.trim();
   }
 
   const gender = String(s.gender || "").toLowerCase();
@@ -1293,7 +1300,6 @@ function studentPhotoUrl(s){
 
   return "";
 }
-
 async function importDeleteStudent(id){
   const {deleteDoc}=await import("https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js");
   await deleteDoc(doc(db,"students",id));
