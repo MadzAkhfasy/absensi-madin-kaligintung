@@ -1945,22 +1945,29 @@ tbody tr {
 }
 
         .sign {
-          display: flex;
-          justify-content: space-between;
-          margin-top: 55px;
-          text-align: center;
-          font-size: 12px;
-        }
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  text-align: center;
+  font-size: 12px;
+}
 
-        .sign div {
-          width: 40%;
-        }
+.sign-box {
+  width: 50%;
+  text-align: center;
+}
 
-        .sign strong {
-          display: block;
-          margin-top: 65px;
-          text-decoration: underline;
-        }
+.sign strong {
+  display: block;
+  margin-top: 65px;
+  text-decoration: none;
+  font-weight: normal;
+}
+
+.sign span {
+  display: block;
+  margin-top: 4px;
+}
 
         .note {
           font-size: 10px;
@@ -2048,20 +2055,13 @@ tr {
         </tbody>
       </table>
 
-      <div class="sign">
-  <div>
+<div class="sign">
+  <div class="sign-box">
     Mengetahui,
-    <strong>(__________________)</strong>
-    Pembimbing Kelas
+    <strong>____________________</strong>
+    <span>Pembimbing Kelas</span>
   </div>
 </div>
-
-        <div>
-          Kaligintung, ....................<br>
-          Admin Absensi
-          <strong>(__________________)</strong>
-        </div>
-      </div>
 
       <p class="note">
         Dicetak dari Aplikasi Absensi Madin Kaligintung.
