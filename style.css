@@ -2491,6 +2491,13 @@ border: 0 !important;
 /* NAMA SANTRI */
 #reportsPanel #reportTable tbody td:first-child {
   font-weight: 750;
+  text-align: left;
+}
+
+/* NAMA SANTRI PADA REKAP SEMUA KELAS */
+#reportsPanel #reportTable table:has(thead th:nth-child(8)) tbody td:nth-child(2) {
+  font-weight: 750;
+  text-align: left;
 }
 
 /* WARNA BARIS BERGANTIAN */
