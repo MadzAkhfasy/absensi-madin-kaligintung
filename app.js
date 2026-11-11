@@ -2216,7 +2216,7 @@ importFile.onchange = async () => {
 function setupAttendanceChartControls(visibleClasses) {
   const classSelect = $("attendanceChartClass");
   const periodButtons = document.querySelectorAll(".chart-period-btn");
-
+  const detailSelect = $("attendanceDetailType");
   if (!classSelect) return;
 
   // Isi pilihan kelas tanpa Kelas Khusus
@@ -2246,6 +2246,12 @@ function setupAttendanceChartControls(visibleClasses) {
   renderAttendanceChart();
   };
 
+    // GANTI JENIS ANALISIS DETAIL
+  if (detailSelect) {
+    detailSelect.onchange = function() {
+      renderAttendanceChart();
+    };
+  }
   // Aktifkan pilihan periode
   periodButtons.forEach(button => {
     button.onclick = function() {
