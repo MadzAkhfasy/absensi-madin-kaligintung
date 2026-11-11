@@ -1859,10 +1859,11 @@ $("printReportBtn").onclick = () => {
 }
 
 .letterhead-text .organizer {
+  font-family: Georgia, "Times New Roman", serif;
   font-size: 15px;
   font-weight: 700;
-  letter-spacing: 1px;
-  margin-bottom: 4px;
+  letter-spacing: 1.2px;
+  margin-bottom: 5px;
 }
 
 .letterhead-text .school {
