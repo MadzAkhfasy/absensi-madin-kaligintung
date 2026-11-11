@@ -2243,7 +2243,7 @@ function setupAttendanceChartControls(visibleClasses) {
 
   // Simpan pilihan kelas
   classSelect.onchange = function() {
-    attendanceChartReady = false;
+  renderAttendanceChart();
   };
 
   // Aktifkan pilihan periode
