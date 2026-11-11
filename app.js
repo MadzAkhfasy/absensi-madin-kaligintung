@@ -2663,18 +2663,29 @@ function renderAttendanceChart() {
               ? "#c9a64f"
               : "#d96b6b";
 
-      days.push(`
-        <div title="${key}: ${
-          percent < 0
-            ? "Belum ada data"
-            : percent + "% kehadiran"
-        }" style="
-          aspect-ratio:1;
-          min-width:0;
-          border-radius:6px;
-          background:${color};
-        "></div>
-      `);
+const namaHari = [
+  "Min", "Sen", "Sel", "Rab",
+  "Kam", "Jum", "Sab"
+][date.getDay()];
+
+days.push(`
+  <div title="${namaHari}, ${key}: ${
+    percent < 0
+      ? "Belum ada data"
+      : percent + "% kehadiran"
+  }" style="
+    aspect-ratio:1;
+    min-width:0;
+    border-radius:6px;
+    background:${color};
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:${percent < 0 ? "#64748b" : "#ffffff"};
+    font-size:9px;
+    font-weight:700;
+  ">${namaHari}</div>
+`);
     }
 
     chartBox.innerHTML = `
