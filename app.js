@@ -1935,6 +1935,14 @@ $("printReportBtn").onclick = () => {
         .name-col {
           text-align: left;
         }
+        tbody tr:nth-child(even) {
+  background: #f1f8f3;
+}
+
+tbody tr {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
 
         .sign {
           display: flex;
