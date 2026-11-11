@@ -1961,6 +1961,19 @@ $("printReportBtn").onclick = () => {
           body {
             margin: 12mm;
           }
+          thead {
+  display: table-header-group;
+}
+
+tr {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.sign {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
 
           @page {
             size: A4 portrait;
