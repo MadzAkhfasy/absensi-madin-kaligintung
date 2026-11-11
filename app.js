@@ -2458,6 +2458,57 @@ function renderAttendanceChart() {
     }
   }
 
+    // DIAGRAM PERBANDINGAN STATUS
+  const detailType = $("attendanceDetailType")?.value || "trend";
+
+  if (detailType === "status") {
+    const maxStatus = Math.max(1, ...STATUSES.map(
+      status => totals[status]
+    ));
+
+    const statusChart = STATUSES.map(status => {
+      const percent = totals[status] / maxStatus * 100;
+
+      return `
+        <div style="margin:18px 0">
+          <div style="
+            display:flex;
+            justify-content:space-between;
+            margin-bottom:7px;
+            font-size:14px;
+          ">
+            <strong>${status}</strong>
+            <strong>${totals[status]}</strong>
+          </div>
+
+          <div style="
+            height:16px;
+            background:#edf1ed;
+            border-radius:20px;
+            overflow:hidden;
+          ">
+            <div style="
+              width:${percent}%;
+              height:100%;
+              background:${colors[status]};
+              border-radius:20px;
+            "></div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    chartBox.innerHTML = statusChart;
+
+    $("chartHadir").textContent = totals.Hadir;
+    $("chartIzin").textContent = totals.Izin;
+    $("chartSakit").textContent = totals.Sakit;
+    $("chartAlpa").textContent = totals.Alpa;
+    $("chartAttendanceRate").textContent = rate + "%";
+
+    attendanceChartReady = true;
+    return;
+  }
   const maxValue = Math.max(
     1,
     ...data.map(item =>
