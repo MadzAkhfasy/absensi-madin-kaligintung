@@ -2449,59 +2449,66 @@ border: 0 !important;
   overflow-x: auto;
 }
 
+/* TABEL REKAP ABSENSI */
 #reportsPanel #reportTable table {
   width: 100%;
-  min-width: 650px;
+  min-width: 700px;
   border-collapse: separate;
   border-spacing: 0;
   overflow: hidden;
   border: 1px solid #dce9e0;
   border-radius: 13px;
   background: #ffffff;
-  font-size: 12px;
+  font-size: 13px;
 }
 
-/* Header tabel */
+/* HEADER TABEL */
 #reportsPanel #reportTable thead th {
-  padding: 13px 11px;
+  padding: 15px 12px;
   background: linear-gradient(120deg, #075b3d, #08784f);
   color: #ffffff;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   white-space: nowrap;
   border: none;
+  text-align: center;
 }
 
-/* Isi tabel */
+/* ISI TABEL */
 #reportsPanel #reportTable tbody td {
-  padding: 12px 10px;
+  padding: 14px 12px;
   color: #365545;
   border-bottom: 1px solid #e8efe9;
-  font-size: 12px;
+  font-size: 13px;
   white-space: nowrap;
+  text-align: center;
 }
 
+/* NAMA SANTRI */
+#reportsPanel #reportTable tbody td:first-child {
+  font-weight: 750;
+}
+
+/* WARNA BARIS BERGANTIAN */
 #reportsPanel #reportTable tbody tr:nth-child(even) {
-  background: #f4f9f5;
+  background: #f1f8f3;
 }
 
 #reportsPanel #reportTable tbody tr:last-child td {
   border-bottom: none;
 }
 
-#reportsPanel #reportTable tbody td:first-child {
-  font-weight: 700;
-}
-
+/* PERSENTASE KEHADIRAN */
 #reportsPanel #reportTable tbody td strong {
   display: inline-block;
-  padding: 5px 9px;
+  min-width: 48px;
+  padding: 6px 9px;
   border-radius: 8px;
   background: #e5f4e9;
   color: #08734c;
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: 800;
 }
-
 /* Keterangan tabel */
 #reportsPanel #reportTable > p {
   margin-top: 12px;
