@@ -2367,6 +2367,129 @@ if (index >= 0 && result[index]) {
 return result;
 }
 
+// MENAMPILKAN GRAFIK KEHADIRAN
+function renderAttendanceChart() {
+const chartBox = $("attendanceChart");
+if (!chartBox) return;
+
+const data = prepareAttendanceChartData(attendanceChartData);
+
+const colors = {
+Hadir: "#176b45",
+Izin: "#c9a64f",
+Sakit: "#4b91c5",
+Alpa: "#d96b6b"
+};
+
+const totals = {
+Hadir: 0,
+Izin: 0,
+Sakit: 0,
+Alpa: 0
+};
+
+data.forEach(item => {
+STATUSES.forEach(status => {
+totals[status] += item[status];
+});
+});
+
+const totalAbsensi = Object.values(totals)
+.reduce((sum, value) => sum + value, 0);
+
+const rate = totalAbsensi
+? Math.round(totals.Hadir / totalAbsensi * 100)
+: 0;
+
+const maxValue = Math.max(
+1,
+...data.map(item =>
+STATUSES.reduce((sum, status) => sum + item[status], 0)
+)
+);
+
+const width = 700;
+const height = 270;
+const left = 35;
+const right = 15;
+const top = 20;
+const bottom = 45;
+const chartHeight = height - top - bottom;
+const chartWidth = width - left - right;
+const slotWidth = chartWidth / data.length;
+const barWidth = Math.min(38, slotWidth * 0.55);
+
+let svg = "<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Grafik statistik kehadiran santri" style="width:100%;height:auto;display:block">";
+
+for (let i = 0; i <= 4; i++) {
+const y = top + chartHeight - (chartHeight * i / 4);
+const value = Math.round(maxValue * i / 4);
+
+svg += `
+  <line x1="${left}" y1="${y}"
+    x2="${width - right}" y2="${y}"
+    stroke="#e5e9e6" stroke-dasharray="4 4"/>
+  <text x="${left - 8}" y="${y + 4}"
+    text-anchor="end" font-size="10"
+    fill="#7b857e">${value}</text>
+`;
+
+}
+
+data.forEach((item, index) => {
+const centerX = left + slotWidth * index + slotWidth / 2;
+let currentY = top + chartHeight;
+
+STATUSES.forEach(status => {
+  const value = item[status];
+  if (!value) return;
+
+  const barHeight = value / maxValue * chartHeight;
+  currentY -= barHeight;
+
+  svg += `
+    <rect x="${centerX - barWidth / 2}"
+      y="${currentY}"
+      width="${barWidth}"
+      height="${barHeight}"
+      rx="3"
+      fill="${colors[status]}"/>
+  `;
+});
+
+svg += `
+  <text x="${centerX}" y="${height - 15}"
+    text-anchor="middle"
+    font-size="10" fill="#68736c">
+    ${item.label}
+  </text>
+`;
+
+});
+
+svg += "</svg>";
+
+if (!totalAbsensi) {
+chartBox.innerHTML =
+'<p class="muted">Belum ada data kehadiran pada periode ini.</p>';
+} else {
+chartBox.innerHTML = svg;
+}
+
+const setValue = (id, value) => {
+const el = $(id);
+if (el) el.textContent = value;
+};
+
+setValue("chartHadir", totals.Hadir);
+setValue("chartIzin", totals.Izin);
+setValue("chartSakit", totals.Sakit);
+setValue("chartAlpa", totals.Alpa);
+setValue("chartAttendanceRate", rate + "%");
+
+attendanceChartReady = true;
+}
+
 // DASHBOARD ANALITIK MADIN
 async function renderDashboard() {
   if (!currentUser || !profile) return;
