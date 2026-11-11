@@ -2572,6 +2572,111 @@ function renderAttendanceChart() {
     attendanceChartReady = true;
     return;
   }
+    // RIWAYAT KEHADIRAN MODEL HEATMAP
+  if (detailType === "history") {
+    const selectedClass =
+      $("attendanceChartClass")?.value || "all";
+
+    const records = attendanceChartData.filter(a =>
+      (selectedClass === "all" ||
+        a.classId === selectedClass) &&
+      STATUSES.includes(a.status)
+    );
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    let startDate = new Date(today);
+
+    if (attendanceChartPeriod === "weekly") {
+      startDate.setDate(today.getDate() - 6);
+    } else if (attendanceChartPeriod === "monthly") {
+      startDate.setDate(1);
+    } else {
+      const year = today.getMonth() >= 10
+        ? today.getFullYear()
+        : today.getFullYear() - 1;
+
+      startDate = new Date(year, 10, 1);
+    }
+
+    const days = [];
+
+    for (
+      let date = new Date(startDate);
+      date <= today;
+      date.setDate(date.getDate() + 1)
+    ) {
+      const key = [
+        date.getFullYear(),
+        String(date.getMonth() + 1).padStart(2, "0"),
+        String(date.getDate()).padStart(2, "0")
+      ].join("-");
+
+      const dailyRecords = records.filter(a =>
+        a.date === key
+      );
+
+      const total = dailyRecords.length;
+      const hadir = dailyRecords.filter(a =>
+        a.status === "Hadir"
+      ).length;
+
+      const percent = total
+        ? Math.round(hadir / total * 100)
+        : -1;
+
+      const color = percent < 0
+        ? "#edf0ed"
+        : percent >= 80
+          ? "#176b45"
+          : percent >= 60
+            ? "#70a989"
+            : percent >= 40
+              ? "#c9a64f"
+              : "#d96b6b";
+
+      days.push(`
+        <div title="${key}: ${
+          percent < 0
+            ? "Belum ada data"
+            : percent + "% kehadiran"
+        }" style="
+          aspect-ratio:1;
+          min-width:0;
+          border-radius:6px;
+          background:${color};
+        "></div>
+      `);
+    }
+
+    chartBox.innerHTML = `
+      <div style="
+        display:grid;
+        grid-template-columns:repeat(7, minmax(0, 1fr));
+        gap:6px;
+        margin:20px 0;
+      ">
+        ${days.join("")}
+      </div>
+
+      <div style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:12px;
+        font-size:12px;
+      ">
+        <span>🟩 Tinggi</span>
+        <span>🟢 Sedang</span>
+        <span>🟨 Rendah</span>
+        <span>🟥 Sangat rendah</span>
+        <span>⬜ Belum ada data</span>
+      </div>
+    `;
+
+    attendanceChartReady = true;
+    return;
+  }
   const maxValue = Math.max(
     1,
     ...data.map(item =>
