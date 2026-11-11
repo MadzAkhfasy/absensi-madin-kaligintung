@@ -1925,8 +1925,11 @@ $("printReportBtn").onclick = () => {
         }
 
         th {
-          background: #eee;
-        }
+  background: #176b45;
+  color: #ffffff;
+  font-weight: 700;
+  padding: 10px 8px;
+}
 
         .class-col,
         .name-col {
