@@ -2271,97 +2271,101 @@ function setupAttendanceChartControls(visibleClasses) {
     };
   });
 }
-
 // MENGOLAH DATA GRAFIK KEHADIRAN
 function prepareAttendanceChartData(records) {
-  const classSelect = $("attendanceChartClass");
-  const selectedClass = classSelect ? classSelect.value : "all";
+const classSelect = $("attendanceChartClass");
+const selectedClass = classSelect ? classSelect.value : "all";
 
-  // Filter kelas yang dipilih
-  const filtered = records.filter(a =>
-    selectedClass === "all" || a.classId === selectedClass
-  );
+const filtered = records.filter(a =>
+selectedClass === "all" || a.classId === selectedClass
+);
 
-  const today = new Date();
-  const pad = n => String(n).padStart(2, "0");
+const today = new Date();
+const pad = n => String(n).padStart(2, "0");
 
-  const dateString = d =>
-    `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const dateString = d =>
+"${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}";
 
-  const groups = [];
+const groups = [];
 
-  if (attendanceChartPeriod === "weekly") {
-    // 7 hari terakhir
-    for (let i = 6; i >= 0; i--) {
-      const date = new Date(today);
-      date.setDate(today.getDate() - i);
+if (attendanceChartPeriod === "weekly") {
+for (let i = 6; i >= 0; i--) {
+const date = new Date(today);
+date.setDate(today.getDate() - i);
 
-      groups.push({
-        key: dateString(date),
-        label: date.toLocaleDateString("id-ID", {
-          weekday: "short"
-        })
-      });
-    }
-  } else if (attendanceChartPeriod === "monthly") {
-    // Kelompok minggu dalam bulan berjalan
-    for (let i = 1; i <= 5; i++) {
-      groups.push({
-        key: String(i),
-        label: `Minggu ${i}`
-      });
-    }
-  } else {
-    // 12 bulan dalam tahun berjalan
-    for (let i = 0; i < 12; i++) {
-      const date = new Date(today.getFullYear(), i, 1);
+  groups.push({
+    key: dateString(date),
+    label: date.toLocaleDateString("id-ID", {
+      weekday: "short"
+    })
+  });
+}
 
-      groups.push({
-        key: String(i),
-        label: date.toLocaleDateString("id-ID", {
-          month: "short"
-        })
-      });
-    }
+} else if (attendanceChartPeriod === "monthly") {
+for (let i = 1; i <= 5; i++) {
+groups.push({
+key: String(i),
+label: "Minggu ${i}"
+});
+}
+
+} else {
+// TAHUN AJARAN NOVEMBER - OKTOBER
+const academicStartYear =
+today.getMonth() >= 10
+? today.getFullYear()
+: today.getFullYear() - 1;
+
+for (let i = 0; i < 12; i++) {
+  const date = new Date(academicStartYear, 10 + i, 1);
+
+  groups.push({
+    key: dateString(date).slice(0, 7),
+    label: date.toLocaleDateString("id-ID", {
+      month: "short"
+    })
+  });
+}
+
+}
+  const result = groups.map(group => ({
+...group,
+Hadir: 0,
+Izin: 0,
+Sakit: 0,
+Alpa: 0
+}));
+
+filtered.forEach(a => {
+if (!a.date || !STATUSES.includes(a.status)) return;
+
+const date = new Date(a.date + "T00:00:00");
+let index = -1;
+
+if (attendanceChartPeriod === "weekly") {
+  index = result.findIndex(g => g.key === a.date);
+
+} else if (attendanceChartPeriod === "monthly") {
+  if (
+    date.getFullYear() === today.getFullYear() &&
+    date.getMonth() === today.getMonth()
+  ) {
+    index = Math.ceil(date.getDate() / 7) - 1;
   }
 
-  const result = groups.map(group => ({
-    ...group,
-    Hadir: 0,
-    Izin: 0,
-    Sakit: 0,
-    Alpa: 0
-  }));
+} else {
+  const monthKey = a.date.slice(0, 7);
+  index = result.findIndex(g => g.key === monthKey);
+}
 
-  filtered.forEach(a => {
-    if (!a.date || !STATUSES.includes(a.status)) return;
+if (index >= 0 && result[index]) {
+  result[index][a.status]++;
+}
 
-    const date = new Date(a.date + "T00:00:00");
+});
 
-    let index = -1;
-
-    if (attendanceChartPeriod === "weekly") {
-      index = result.findIndex(g => g.key === a.date);
-    } else if (attendanceChartPeriod === "monthly") {
-      if (
-        date.getFullYear() === today.getFullYear() &&
-        date.getMonth() === today.getMonth()
-      ) {
-        index = Math.ceil(date.getDate() / 7) - 1;
-      }
-    } else {
-      if (date.getFullYear() === today.getFullYear()) {
-        index = date.getMonth();
-      }
-    }
-
-    if (index >= 0 && result[index]) {
-      result[index][a.status]++;
-    }
-  });
-
-  return result;
-    }
+return result;
+}
 
 // DASHBOARD ANALITIK MADIN
 async function renderDashboard() {
