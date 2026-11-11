@@ -2267,7 +2267,7 @@ function setupAttendanceChartControls(visibleClasses) {
         label.textContent = labels[attendanceChartPeriod];
       }
 
-      attendanceChartReady = false;
+      renderAttendanceChart();
     };
   });
 }
