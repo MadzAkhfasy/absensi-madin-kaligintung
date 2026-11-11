@@ -2011,9 +2011,12 @@ tr {
 <h1 class="report-title">LAPORAN ABSENSI SANTRI</h1>
 
       <div class="meta">
-        <b>Kelas:</b> ${esc(reportClassValue)}
+        ${esc(reportClassValue)}
         <br>
-        <b>Bulan:</b> ${esc(reportMonthValue)}
+        <b>Bulan:</b> ${new Date(reportMonthValue + "-01T00:00:00").toLocaleDateString("id-ID", {
+  month: "long",
+  year: "numeric"
+})}
       </div>
 
       <div class="stats">
