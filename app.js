@@ -2046,11 +2046,12 @@ tr {
       </table>
 
       <div class="sign">
-        <div>
-          Mengetahui,<br>
-          Pengurus Madin
-          <strong>(__________________)</strong>
-        </div>
+  <div>
+    Mengetahui,
+    <strong>(__________________)</strong>
+    Pembimbing Kelas
+  </div>
+</div>
 
         <div>
           Kaligintung, ....................<br>
