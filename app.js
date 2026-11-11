@@ -2417,6 +2417,27 @@ const attendance = snap.docs
     activeStudentIds.has(a.studentId)
   );
 
+    // AMBIL DATA ABSENSI UNTUK GRAFIK 1 TAHUN
+const chartStart = new Date();
+chartStart.setMonth(0, 1);
+chartStart.setHours(0, 0, 0, 0);
+
+const chartStartStr = dateString(chartStart);
+
+const chartSnap = await getDocs(query(
+  collection(db, "attendance"),
+  where("date", ">=", chartStartStr),
+  where("date", "<=", todayStr)
+));
+
+attendanceChartData = chartSnap.docs
+  .map(d => d.data())
+  .filter(a =>
+    classIds.has(a.classId) &&
+    activeStudentIds.has(a.studentId) &&
+    a.classId !== classes.find(c => c.name === "Kelas Khusus")?.id
+  );
+    
     const todayData = attendance.filter(
       a => a.date === todayStr
     );
