@@ -159,23 +159,42 @@
     Ringkasan kehadiran mingguan
   </p>
 
-  <div id="attendanceChart">
-    <p class="muted">Memuat grafik...</p>
+  <h3>Komposisi Kehadiran</h3>
+
+  <div id="attendanceDonutChart">
+    <p class="muted">Diagram utama akan ditampilkan di sini.</p>
   </div>
 
   <div class="dash-mini-stats">
     <span>Hadir <strong id="chartHadir">0</strong></span>
     <span>Izin <strong id="chartIzin">0</strong></span>
     <span>Sakit <strong id="chartSakit">0</strong></span>
-    <span>Alfa <strong id="chartAlpa">0</strong></span>
+    <span>Alpa <strong id="chartAlpa">0</strong></span>
   </div>
 
   <div class="chart-attendance-rate">
     Persentase Kehadiran:
     <strong id="chartAttendanceRate">0%</strong>
   </div>
-</div><div class="card">
-  <h2>Kehadiran per Kelas</h2>
+
+  <hr>
+
+  <h3>Analisis Detail</h3>
+
+  <label class="chart-filter-label">
+    Pilih Jenis Analisis
+    <select id="attendanceDetailType">
+      <option value="trend">Tren Kehadiran</option>
+      <option value="status">Perbandingan Status</option>
+      <option value="class">Kehadiran per Kelas</option>
+      <option value="history">Riwayat Kehadiran</option>
+    </select>
+  </label>
+
+  <div id="attendanceChart">
+    <p class="muted">Memuat analisis detail...</p>
+  </div>
+</div>
   <p class="muted">Persentase kehadiran selama 30 hari terakhir.</p>
   <div id="dashClassStats"></div>
 </div><div class="card">
