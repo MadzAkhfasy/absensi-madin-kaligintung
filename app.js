@@ -1860,9 +1860,9 @@ $("printReportBtn").onclick = () => {
 
 .letterhead-text .organizer {
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
-  letter-spacing: 1.2px;
+  letter-spacing: 1.5px;
   margin-bottom: 5px;
 }
 
@@ -1877,8 +1877,8 @@ $("printReportBtn").onclick = () => {
 
 .letterhead-text .address {
   color: #222;
-  font-size: 11px;
-  line-height: 1.4;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
         .report-title {
@@ -2061,7 +2061,7 @@ tr {
 <div class="sign">
   <div class="sign-box">
     Mengetahui,
-    <strong>____________________</strong>
+    <strong>_____________________________</strong>
     <span>Pembimbing Kelas</span>
   </div>
 </div>
