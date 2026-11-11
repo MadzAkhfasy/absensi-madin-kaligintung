@@ -2417,12 +2417,16 @@ const attendance = snap.docs
     activeStudentIds.has(a.studentId)
   );
 
-    // AMBIL DATA ABSENSI UNTUK GRAFIK 1 TAHUN
-const chartStart = new Date();
-chartStart.setMonth(0, 1);
-chartStart.setHours(0, 0, 0, 0);
+    // AMBIL DATA ABSENSI UNTUK GRAFIK TAHUN AJARAN
+const now = new Date();
 
-const chartStartStr = dateString(chartStart);
+const academicYearStart = new Date(
+  now.getFullYear() - (now.getMonth() < 10 ? 1 : 0),
+  10,
+  1
+);
+
+const chartStartStr = dateString(academicYearStart);
 
 const chartSnap = await getDocs(query(
   collection(db, "attendance"),
