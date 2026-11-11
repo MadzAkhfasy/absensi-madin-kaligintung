@@ -2522,9 +2522,36 @@ function renderAttendanceChart() {
       )
     );
 
+        const periodToday = new Date();
+    periodToday.setHours(0, 0, 0, 0);
+
+    const padDate = n => String(n).padStart(2, "0");
+
+    const makeDateKey = d =>
+      `${d.getFullYear()}-${padDate(d.getMonth() + 1)}-${padDate(d.getDate())}`;
+
+    let periodStart = new Date(periodToday);
+
+    if (attendanceChartPeriod === "weekly") {
+      periodStart.setDate(periodToday.getDate() - 6);
+    } else if (attendanceChartPeriod === "monthly") {
+      periodStart.setDate(1);
+    } else {
+      const startYear = periodToday.getMonth() >= 10
+        ? periodToday.getFullYear()
+        : periodToday.getFullYear() - 1;
+
+      periodStart = new Date(startYear, 10, 1);
+    }
+
+    const startKey = makeDateKey(periodStart);
+    const endKey = makeDateKey(periodToday);
+
     const classChart = classRows.map(c => {
       const records = attendanceChartData.filter(a =>
         a.classId === c.id &&
+        a.date >= startKey &&
+        a.date <= endKey &&
         STATUSES.includes(a.status)
       );
 
