@@ -1837,46 +1837,48 @@ $("printReportBtn").onclick = () => {
                 .letterhead {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 18px;
   width: 100%;
-  margin: 0 0 22px;
-  padding-bottom: 12px;
+  margin: 0 0 26px;
+  padding-bottom: 15px;
   border-bottom: 3px double #176b45;
 }
 
-        .letterhead img {
-          width: 92px;
-          height: 92px;
-          object-fit: contain;
-          flex: 0 0 92px;
-        }
+.letterhead img {
+  width: 115px;
+  height: 115px;
+  object-fit: contain;
+  flex: 0 0 115px;
+}
 
-        .letterhead-text {
-          flex: 1;
-          min-width: 0;
-          text-align: center;
-          color: #075b32;
-        }
+.letterhead-text {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  color: #075b32;
+}
 
-        .letterhead-text .organizer {
-          font-size: 13px;
-          font-weight: 700;
-          letter-spacing: 1px;
-          margin-bottom: 3px;
-        }
+.letterhead-text .organizer {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
 
-        .letterhead-text .school {
-          font-size: 19px;
-          line-height: 1.15;
-          font-weight: 800;
-          margin-bottom: 7px;
-        }
+.letterhead-text .school {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  margin-bottom: 8px;
+}
 
-        .letterhead-text .address {
-          color: #222;
-          font-size: 10px;
-          line-height: 1.35;
-        }
+.letterhead-text .address {
+  color: #222;
+  font-size: 11px;
+  line-height: 1.4;
+}
 
         .report-title {
           text-align: center;
