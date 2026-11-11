@@ -1835,12 +1835,14 @@ $("printReportBtn").onclick = () => {
         }
 
                 .letterhead {
-          display: flex;
-          align-items: center;
-          gap: 14px;
-          width: 100%;
-          margin: 0 0 22px;
-        }
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  margin: 0 0 22px;
+  padding-bottom: 12px;
+  border-bottom: 3px double #176b45;
+}
 
         .letterhead img {
           width: 92px;
