@@ -2572,6 +2572,7 @@ attendanceChartData = chartSnap.docs
     activeStudentIds.has(a.studentId) &&
     a.classId !== classes.find(c => c.name === "Kelas Khusus")?.id
   );
+    renderAttendanceChart();
     
     const todayData = attendance.filter(
       a => a.date === todayStr
