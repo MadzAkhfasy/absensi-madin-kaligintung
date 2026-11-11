@@ -2509,6 +2509,69 @@ function renderAttendanceChart() {
     attendanceChartReady = true;
     return;
   }
+    // DIAGRAM KEHADIRAN PER KELAS
+  if (detailType === "class") {
+    const selectedClassId =
+      $("attendanceChartClass")?.value || "all";
+
+    const classRows = classes.filter(c =>
+      c.name !== "Kelas Khusus" &&
+      (
+        selectedClassId === "all" ||
+        c.id === selectedClassId
+      )
+    );
+
+    const classChart = classRows.map(c => {
+      const records = attendanceChartData.filter(a =>
+        a.classId === c.id &&
+        STATUSES.includes(a.status)
+      );
+
+      const total = records.length;
+      const hadir = records.filter(a =>
+        a.status === "Hadir"
+      ).length;
+
+      const percent = total
+        ? Math.round(hadir / total * 100)
+        : 0;
+
+      return `
+        <div style="margin:18px 0">
+          <div style="
+            display:flex;
+            justify-content:space-between;
+            margin-bottom:7px;
+            font-size:14px;
+          ">
+            <strong>${esc(c.name)}</strong>
+            <strong>${percent}%</strong>
+          </div>
+
+          <div style="
+            height:18px;
+            background:#edf1ed;
+            border-radius:20px;
+            overflow:hidden;
+          ">
+            <div style="
+              width:${percent}%;
+              height:100%;
+              background:#176b45;
+              border-radius:20px;
+            "></div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    chartBox.innerHTML = classChart ||
+      '<p class="muted">Belum ada data kehadiran per kelas.</p>';
+
+    attendanceChartReady = true;
+    return;
+  }
   const maxValue = Math.max(
     1,
     ...data.map(item =>
