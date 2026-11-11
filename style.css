@@ -2445,8 +2445,12 @@ border: 0 !important;
   margin-top: 16px;
 }
 
-#reportsPanel #reportTable .table-wrap {
+/* AREA GESER TABEL DI HP */
+#reportsPanel #reportTable {
   overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
 }
 
 /* TABEL REKAP ABSENSI */
