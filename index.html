@@ -121,16 +121,58 @@
       <span>Alpa</span>
     </div>
   </div>
-</div><div class="card">
-  <h2>Analisis Kehadiran 30 Hari</h2>
-  <div class="dash-rate" id="dash30Rate">0%</div>
-  <p class="muted" id="dash30Total">0 catatan absensi</p>  <div class="dash-progress dash-progress-large">
-    <span id="dash30Progress"></span>
-  </div>  <div class="dash-mini-stats">
-    <span>Hadir <strong id="dash30Hadir">0</strong></span>
-    <span>Izin <strong id="dash30Izin">0</strong></span>
-    <span>Sakit <strong id="dash30Sakit">0</strong></span>
-    <span>Alpa <strong id="dash30Alpa">0</strong></span>
+</div><div class="card attendance-chart-card">
+  <h2>Analisis Kehadiran Santri</h2>
+
+  <p class="muted">
+    Statistik kehadiran santri Madin Kaligintung.
+  </p>
+
+  <label class="chart-filter-label">
+    Pilih Kelas
+    <select id="attendanceChartClass">
+      <option value="all">Semua Kelas</option>
+    </select>
+  </label>
+
+  <div class="chart-period-tabs">
+    <button type="button"
+      class="chart-period-btn active"
+      data-period="weekly">
+      Mingguan
+    </button>
+
+    <button type="button"
+      class="chart-period-btn"
+      data-period="monthly">
+      Bulanan
+    </button>
+
+    <button type="button"
+      class="chart-period-btn"
+      data-period="yearly">
+      Tahunan
+    </button>
+  </div>
+
+  <p id="attendanceChartPeriodLabel" class="muted">
+    Ringkasan kehadiran mingguan
+  </p>
+
+  <div id="attendanceChart">
+    <p class="muted">Memuat grafik...</p>
+  </div>
+
+  <div class="dash-mini-stats">
+    <span>Hadir <strong id="chartHadir">0</strong></span>
+    <span>Izin <strong id="chartIzin">0</strong></span>
+    <span>Sakit <strong id="chartSakit">0</strong></span>
+    <span>Alfa <strong id="chartAlpa">0</strong></span>
+  </div>
+
+  <div class="chart-attendance-rate">
+    Persentase Kehadiran:
+    <strong id="chartAttendanceRate">0%</strong>
   </div>
 </div><div class="card">
   <h2>Kehadiran per Kelas</h2>
