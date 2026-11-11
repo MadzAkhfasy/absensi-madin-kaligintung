@@ -2419,8 +2419,12 @@ const chartWidth = width - left - right;
 const slotWidth = chartWidth / data.length;
 const barWidth = Math.min(38, slotWidth * 0.55);
 
-let svg = "<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Grafik statistik kehadiran santri" style="width:100%;height:auto;display:block">";
-
+let svg = `
+  <svg viewBox="0 0 ${width} ${height}"
+    role="img"
+    aria-label="Grafik statistik kehadiran santri"
+    style="width:100%;height:auto;display:block">
+`;
 for (let i = 0; i <= 4; i++) {
 const y = top + chartHeight - (chartHeight * i / 4);
 const value = Math.round(maxValue * i / 4);
