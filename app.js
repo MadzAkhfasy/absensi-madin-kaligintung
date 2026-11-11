@@ -2212,6 +2212,65 @@ importFile.onchange = async () => {
     importFile.value = "";
   }
 };
+// PENGATUR PILIHAN KELAS DAN PERIODE GRAFIK
+function setupAttendanceChartControls(visibleClasses) {
+  const classSelect = $("attendanceChartClass");
+  const periodButtons = document.querySelectorAll(".chart-period-btn");
+
+  if (!classSelect) return;
+
+  // Isi pilihan kelas tanpa Kelas Khusus
+  const chartClasses = visibleClasses.filter(c =>
+    c.name !== "Kelas Khusus"
+  );
+
+  const previousValue = classSelect.value || "all";
+
+  classSelect.innerHTML =
+    '<option value="all">Semua Kelas</option>' +
+    chartClasses.map(c =>
+      `<option value="${c.id}">${esc(c.name)}</option>`
+    ).join("");
+
+  if (
+    previousValue === "all" ||
+    chartClasses.some(c => c.id === previousValue)
+  ) {
+    classSelect.value = previousValue;
+  } else {
+    classSelect.value = "all";
+  }
+
+  // Simpan pilihan kelas
+  classSelect.onchange = function() {
+    attendanceChartReady = false;
+  };
+
+  // Aktifkan pilihan periode
+  periodButtons.forEach(button => {
+    button.onclick = function() {
+      attendanceChartPeriod = button.dataset.period;
+
+      periodButtons.forEach(item =>
+        item.classList.toggle("active", item === button)
+      );
+
+      const label = $("attendanceChartPeriodLabel");
+
+      if (label) {
+        const labels = {
+          weekly: "Ringkasan kehadiran 7 hari terakhir",
+          monthly: "Ringkasan kehadiran per minggu",
+          yearly: "Ringkasan kehadiran per bulan"
+        };
+
+        label.textContent = labels[attendanceChartPeriod];
+      }
+
+      attendanceChartReady = false;
+    };
+  });
+}
 
 // DASHBOARD ANALITIK MADIN
 async function renderDashboard() {
@@ -2228,6 +2287,7 @@ async function renderDashboard() {
     const visibleClasses = canAccessAllClasses()
       ? classes
       : classes.filter(c => c.id === myClass());
+    setupAttendanceChartControls(visibleClasses);
 
     setText("dashTotalClasses", visibleClasses.length);
 
