@@ -2284,7 +2284,7 @@ const today = new Date();
 const pad = n => String(n).padStart(2, "0");
 
 const dateString = d =>
-"${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}';
+  `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 
 const groups = [];
 
@@ -2305,7 +2305,7 @@ date.setDate(today.getDate() - i);
 for (let i = 1; i <= 5; i++) {
 groups.push({
 key: String(i),
-label: "Minggu ${i}'
+label: `Minggu ${i}`
 });
 }
 
