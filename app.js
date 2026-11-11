@@ -2400,6 +2400,57 @@ function renderAttendanceChart() {
   const rate = totalAbsensi
     ? Math.round(totals.Hadir / totalAbsensi * 100)
     : 0;
+    // DIAGRAM DONAT KOMPOSISI KEHADIRAN
+  const donutBox = $("attendanceDonutChart");
+
+  if (donutBox) {
+    if (!totalAbsensi) {
+      donutBox.innerHTML =
+        '<p class="muted">Belum ada data kehadiran.</p>';
+    } else {
+      const hadirDeg = totals.Hadir / totalAbsensi * 360;
+      const izinDeg = hadirDeg +
+        totals.Izin / totalAbsensi * 360;
+      const sakitDeg = izinDeg +
+        totals.Sakit / totalAbsensi * 360;
+
+      donutBox.innerHTML = `
+        <div style="
+          width:190px;
+          height:190px;
+          margin:20px auto;
+          border-radius:50%;
+          background:conic-gradient(
+            #176b45 0deg ${hadirDeg}deg,
+            #c9a64f ${hadirDeg}deg ${izinDeg}deg,
+            #4b91c5 ${izinDeg}deg ${sakitDeg}deg,
+            #d96b6b ${sakitDeg}deg 360deg
+          );
+          display:flex;
+          align-items:center;
+          justify-content:center;
+        ">
+          <div style="
+            width:125px;
+            height:125px;
+            border-radius:50%;
+            background:white;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+          ">
+            <strong style="font-size:30px;color:#176b45">
+              ${rate}%
+            </strong>
+            <span style="font-size:12px;color:#68736c">
+              Kehadiran
+            </span>
+          </div>
+        </div>
+      `;
+    }
+  }
 
   const maxValue = Math.max(
     1,
