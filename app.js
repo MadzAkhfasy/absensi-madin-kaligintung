@@ -3353,9 +3353,10 @@ const outputFormat = $("studentPdfFormat").value;
 const selectedClass = $("studentPdfClass").value;
 const selectedStudent = $("studentPdfStudent").value;
     const selectedStudents = students
-      .filter(s =>
-        selectedClass === "__all__" || s.classId === selectedClass
-      )
+  .filter(s => (s.status || "Aktif") === "Aktif")
+  .filter(s =>
+    selectedClass === "__all__" || s.classId === selectedClass
+  )
       .filter(s =>
         type !== "biodata" ||
         selectedStudent === "__all__" ||
