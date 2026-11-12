@@ -324,18 +324,8 @@ async function loadStaffProfiles() {
       .map(d => ({ id: d.id, ...d.data() }))
       .filter(u => u.role === "petugas");
 
-    select.innerHTML = '<option value="">Pilih akun petugas</option>';
-
-    staffProfiles.forEach(u => {
-      const option = document.createElement("option");
-      option.value = u.id;
-      option.textContent = u.displayName || u.name || u.email || u.id;
-      select.appendChild(option);
-    });
-
-    if (!staffProfiles.length) {
-      select.innerHTML = '<option value="">Belum ada akun petugas</option>';
-    }
+    staffProfilesLoaded = true;
+renderStaffProfiles();
 
   } catch (error) {
     console.error(error);
