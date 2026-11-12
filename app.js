@@ -3013,7 +3013,6 @@ setText("dashTotalStudents", activeStudents.length);
       activeStudentIds.has(a.studentId)
     );
 
-    renderAttendanceChart();;
     renderAttendanceChart();
     
     const todayData = attendance.filter(
