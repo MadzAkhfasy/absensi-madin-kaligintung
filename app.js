@@ -411,6 +411,22 @@ $("saveStaffProfileBtn").onclick = async function() {
     this.textContent = "Simpan Profil Petugas";
   }
 };
+function renderStaffProfiles() {
+  const select = $("staffSelect");
+
+  select.innerHTML = '<option value="">Pilih akun petugas</option>';
+
+  staffProfiles.forEach(u => {
+    const option = document.createElement("option");
+    option.value = u.id;
+    option.textContent = u.displayName || u.name || u.email || u.id;
+    select.appendChild(option);
+  });
+
+  if (!staffProfiles.length) {
+    select.innerHTML = '<option value="">Belum ada akun petugas</option>';
+  }
+}
 async function loadClasses(){
  const snap=await getDocs(collection(db,"classes"));
  classes=snap.docs.map(d=>({id:d.id,...d.data()}));
