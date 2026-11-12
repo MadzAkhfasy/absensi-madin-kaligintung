@@ -4336,9 +4336,6 @@ $("shareImageBtn").onclick = async () => {
     ctx.lineTo(W, 28);
     ctx.stroke();
 
-    // Logo asli
-    ctx.drawImage(logo, 65, 65, 230, 230);
-
         // Kop surat baru
     ctx.textAlign = "center";
 
