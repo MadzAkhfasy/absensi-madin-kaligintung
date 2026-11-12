@@ -1390,6 +1390,7 @@ $("addStudentBtn").onclick=async()=>{
       classId,
       nis,
       gender:$("studentGender").value,
+      status:$("studentStatus").value || "Aktif",
       birthplace:$("studentBirthplace").value.trim(),
       birthdate:$("studentBirthdate").value,
       address:$("studentAddress").value.trim(),
