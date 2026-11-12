@@ -3353,7 +3353,6 @@ const outputFormat = $("studentPdfFormat").value;
 const selectedClass = $("studentPdfClass").value;
 const selectedStudent = $("studentPdfStudent").value;
     const selectedStudents = students
-  .filter(s => (s.status || "Aktif") === "Aktif")
   .filter(s =>
     selectedClass === "__all__" || s.classId === selectedClass
   )
@@ -3510,6 +3509,7 @@ const selectedStudent = $("studentPdfStudent").value;
                 <th>NIS</th>
                 <th>Nama Santri</th>
                 <th>JK</th>
+                <th>Status</th>
                 <th>Tempat, Tanggal Lahir</th>
                 <th>Nama Ayah</th>
                 <th>Nama Ibu</th>
@@ -3525,6 +3525,7 @@ const selectedStudent = $("studentPdfStudent").value;
                   <td>${esc(s.nis || "-")}</td>
                   <td>${esc(s.name || "-")}</td>
                   <td>${esc(s.gender === "L" ? "L" : s.gender === "P" ? "P" : "-")}</td>
+                  <td>${esc(s.status || "Aktif")}</td>
                   <td>${esc([s.birthplace, pdfDate(s.birthdate)].filter(Boolean).join(", ") || "-")}</td>
                   <td>${esc(s.fatherName || "-")}</td>
                   <td>${esc(s.motherName || "-")}</td>
