@@ -3683,37 +3683,28 @@ const selectedStudent = $("studentPdfStudent").value;
           }
 
           @media print {
-            body {
-              margin: 12mm;
-            }
+  body {
+    margin: 10mm;
+  }
 
-            @page {
-              size: A4 portrait;
-              margin: 12mm;
-            }
+  @page {
+    size: ${type === "table" ? "A4 landscape" : "A4 portrait"};
+    margin: ${type === "table" ? "10mm" : "12mm"};
+  }
 
-            body:has(.biodata-table) {
-              font-size: 9px;
-            }
+  body:has(.biodata-table) {
+    font-size: 10px;
+  }
 
-            body:has(.biodata-table) table {
-              font-size: 8px;
-            }
+  body:has(.biodata-table) table {
+    font-size: 9px;
+  }
 
-            body:has(.biodata-table) th,
-            body:has(.biodata-table) td {
-              padding: 4px;
-            }
-          }
-
-          @page landscape {
-            size: A4 landscape;
-            margin: 10mm;
-          }
-
-          body:has(.biodata-table) {
-            page: landscape;
-          }
+  body:has(.biodata-table) th,
+  body:has(.biodata-table) td {
+    padding: 5px;
+  }
+}
         </style>
       </head>
 
