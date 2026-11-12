@@ -4401,12 +4401,22 @@ $("shareImageBtn").onclick = async () => {
     const totalAlpa = reportRows.reduce((s, r) => s + r.Alpa, 0);
 
     ctx.textAlign = "center";
-    ctx.fillStyle = "#123c27";
-    ctx.font = "bold 24px Arial";
+ctx.textBaseline = "middle";
+ctx.fillStyle = "#123c27";
+ctx.font = "bold 24px Arial";
 
-    ctx.fillText(`${reportClassValue}`, 240, 385);
-    ctx.fillText(`BULAN: ${reportMonthValue}`, 600, 385);
-    ctx.fillText(`TOTAL SANTRI: ${reportRows.length}`, 970, 385);
+const formattedMonth = new Date(
+  reportMonthValue + "-01T00:00:00"
+).toLocaleDateString("id-ID", {
+  month: "long",
+  year: "numeric"
+});
+
+ctx.fillText(`KELAS: ${reportClassValue}`, 240, 397);
+ctx.fillText(`BULAN: ${formattedMonth}`, 600, 397);
+ctx.fillText(`TOTAL SANTRI: ${reportRows.length}`, 970, 397);
+
+ctx.textBaseline = "alphabetic";
 
     // Header tabel
     let y = headerHeight;
