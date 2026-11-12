@@ -1858,6 +1858,16 @@ $("printReportBtn").onclick = () => {
   color: #075b32;
 }
 
+.letterhead-text .arabic-title {
+  font-family: "Noto Naskh Arabic", "Amiri", "Traditional Arabic", serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.5;
+  direction: rtl;
+  color: #075b32;
+  margin-bottom: 4px;
+}
+
 .letterhead-text .organizer {
   font-family: Georgia, "Times New Roman", serif;
   font-size: 18px;
