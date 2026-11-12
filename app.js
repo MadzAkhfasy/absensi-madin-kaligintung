@@ -4311,7 +4311,7 @@ $("shareImageBtn").onclick = async () => {
     });
 
     const tableHeaderHeight = 90;
-    const headerHeight = 420;
+    const headerHeight = 450;
     const footerHeight = 180;
 
     const tableHeight = preparedRows.reduce(
@@ -4339,29 +4339,55 @@ $("shareImageBtn").onclick = async () => {
     // Logo asli
     ctx.drawImage(logo, 65, 65, 230, 230);
 
-    // Kop laporan
-ctx.textAlign = "center";
+        // Kop surat baru
+    ctx.textAlign = "center";
 
-ctx.fillStyle = "#075b35";
-ctx.font = "bold 42px Arial";
-ctx.fillText("MADRASAH DINIYAH KALIGINTUNG", 732, 145);
+    // Logo di sebelah kiri
+    ctx.drawImage(logo, 65, 65, 190, 190);
 
-ctx.fillStyle = "#075b35";
-ctx.fillRect(325, 175, 815, 75);
+    // Tulisan Arab
+    ctx.fillStyle = "#075b32";
+    ctx.font = "bold 40px serif";
+    ctx.direction = "rtl";
+    ctx.fillText("المدرسة الدنية كالي ڮينتوڠ", 735, 90);
+    ctx.direction = "ltr";
 
-ctx.fillStyle = "#ffffff";
-ctx.font = "bold 38px Arial";
-ctx.fillText("REKAP KEHADIRAN SANTRI", 732, 225);
+    // Pengurus
+    ctx.fillStyle = "#075b32";
+    ctx.font = "bold 30px Georgia";
+    ctx.fillText("PENGURUS", 735, 140);
 
-ctx.fillStyle = "#075b35";
-ctx.font = "italic 28px Arial";
-ctx.fillText(
-  "Belajar Bersama, Meraih Ridha Allah",
-  732,
-  300
-);
+    // Nama madrasah
+    ctx.font = "bold 38px Georgia";
+    ctx.fillText("MADRASAH DINIYAH KALIGINTUNG", 735, 190);
+
+    // Alamat sekretariat
+    ctx.fillStyle = "#222222";
+    ctx.font = "20px Arial";
+    ctx.fillText(
+      "Sekretariat: Dusun Kaligintung Rt. 05/ Rw. 03 Cilibang - Jeruklegi 53252",
+      735,
+      230
+    );
+
+    // Garis pembatas kop
+    ctx.strokeStyle = "#176b45";
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(55, 260);
+    ctx.lineTo(1145, 260);
+    ctx.stroke();
+
+    // Judul laporan
+    ctx.fillStyle = "#075b35";
+    ctx.fillRect(325, 280, 815, 65);
+
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 34px Arial";
+    ctx.fillText("REKAP KEHADIRAN SANTRI", 732, 323);
+
     // Informasi laporan
-    const infoY = 345;
+    const infoY = 365;
     const infoH = 65;
 
     ctx.fillStyle = "#edf8e9";
