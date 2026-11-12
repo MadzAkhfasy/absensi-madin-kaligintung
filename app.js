@@ -2946,7 +2946,11 @@ async function renderDashboard() {
   };
 
   try {
-    setText("dashTotalStudents", students.length);
+    const activeStudents = students.filter(
+  s => (s.status || "Aktif") === "Aktif"
+);
+
+setText("dashTotalStudents", activeStudents.length);
 
     const visibleClasses = canAccessAllClasses()
       ? classes
@@ -2980,7 +2984,7 @@ async function renderDashboard() {
     );
 
     const activeStudentIds = new Set(
-  students.map(s => s.id)
+  activeStudents.map(s => s.id)
 );
 
 const attendance = snap.docs
@@ -3072,7 +3076,7 @@ attendanceChartData = chartSnap.docs
           : 0;
 
         // HITUNG SANTRI TERJAIN DI KELAS INI
-        const ranked = students
+        const ranked = activeStudents
           .filter(s => s.classId === c.id)
           .map(s => ({
             ...s,
