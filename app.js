@@ -3683,7 +3683,7 @@ const selectedStudent = $("studentPdfStudent").value;
           }
 
           @page {
-  size: ${type === "table" ? "A4 landscape" : "A4 portrait"};
+  size: ${type === "table" ? "297mm 210mm" : "210mm 297mm"};
   margin: ${type === "table" ? "10mm" : "12mm"};
 }
 
