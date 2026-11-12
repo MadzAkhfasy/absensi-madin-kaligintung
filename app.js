@@ -1619,11 +1619,17 @@ const attendanceQuery = allClasses || selectedSpecial
       attendanceQuery
     ]);
 
-const eligibleStudentDocs = ss.docs.filter(d =>
-  selectedSpecial
-    ? d.data().classId === specialClass?.id
-    : d.data().classId !== specialClass?.id
-);
+const eligibleStudentDocs = ss.docs.filter(d => {
+  const s = d.data();
+
+  const statusAktif = (s.status || "Aktif") === "Aktif";
+
+  const kelasSesuai = selectedSpecial
+    ? s.classId === specialClass?.id
+    : s.classId !== specialClass?.id;
+
+  return statusAktif && kelasSesuai;
+});;
 
 const eligibleStudentIds = new Set(
   eligibleStudentDocs.map(d => d.id)
