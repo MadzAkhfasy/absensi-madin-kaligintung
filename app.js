@@ -1445,7 +1445,9 @@ $("attendanceDate").onchange=renderAttendance;$("attendanceClass").onchange=rend
 async function renderAttendance(){
  if(!currentUser||(!canAccessAllClasses()&&!myClass()))return;
  const classId=selectedClass();if(!classId)return;
- const list=students.filter(s=>s.classId===classId);
+const list=students.filter(s=>
+  s.classId===classId && (s.status || "Aktif")==="Aktif"
+);
  $("attendanceClassName").textContent=clsName(classId);
  const date=$("attendanceDate").value;
   // Periksa libur tanggal tertentu
