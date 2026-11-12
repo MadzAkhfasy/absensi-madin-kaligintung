@@ -2972,52 +2972,48 @@ setText("dashTotalStudents", activeStudents.length);
 
     const startStr = dateString(start);
 
-    // AMBIL DATA ABSENSI 30 HARI
-    const snap = await getDocs(query(
-      collection(db, "attendance"),
-      where("date", ">=", startStr),
-      where("date", "<=", todayStr)
-    ));
+        // DATA ABSENSI TAHUN AJARAN
+    // Dipakai bersama untuk grafik dan statistik 30 hari
 
     const classIds = new Set(
       visibleClasses.map(c => c.id)
     );
 
     const activeStudentIds = new Set(
-  activeStudents.map(s => s.id)
-);
+      activeStudents.map(s => s.id)
+    );
 
-const attendance = snap.docs
-  .map(d => d.data())
-  .filter(a =>
-    classIds.has(a.classId) &&
-    activeStudentIds.has(a.studentId)
-  );
+    const now = new Date();
 
-    // AMBIL DATA ABSENSI UNTUK GRAFIK TAHUN AJARAN
-const now = new Date();
+    const academicYearStart = new Date(
+      now.getFullYear() - (now.getMonth() < 10 ? 1 : 0),
+      10,
+      1
+    );
 
-const academicYearStart = new Date(
-  now.getFullYear() - (now.getMonth() < 10 ? 1 : 0),
-  10,
-  1
-);
+    const chartStartStr = dateString(academicYearStart);
 
-const chartStartStr = dateString(academicYearStart);
+    const chartSnap = await getDocs(query(
+      collection(db, "attendance"),
+      where("date", ">=", chartStartStr),
+      where("date", "<=", todayStr)
+    ));
 
-const chartSnap = await getDocs(query(
-  collection(db, "attendance"),
-  where("date", ">=", chartStartStr),
-  where("date", "<=", todayStr)
-));
+    const allAttendance = chartSnap.docs.map(d => d.data());
 
-attendanceChartData = chartSnap.docs
-  .map(d => d.data())
-  .filter(a =>
-    classIds.has(a.classId) &&
-    activeStudentIds.has(a.studentId) &&
-    a.classId !== classes.find(c => c.name === "Kelas Khusus")?.id
-  );
+    attendanceChartData = allAttendance.filter(a =>
+      classIds.has(a.classId) &&
+      activeStudentIds.has(a.studentId) &&
+      a.classId !== classes.find(c => c.name === "Kelas Khusus")?.id
+    );
+
+    const attendance = allAttendance.filter(a =>
+      a.date >= startStr &&
+      classIds.has(a.classId) &&
+      activeStudentIds.has(a.studentId)
+    );
+
+    renderAttendanceChart();;
     renderAttendanceChart();
     
     const todayData = attendance.filter(
