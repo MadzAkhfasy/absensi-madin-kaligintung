@@ -2022,7 +2022,8 @@ tr {
       <div class="letterhead">
   <img src="https://madzakhfasy.github.io/absensi-madin-kaligintung/LOGO%20MADIN%20REMOVE%20BG.png" alt="Logo Madrasah Diniyah Kaligintung">
   <div class="letterhead-text">
-    <div class="organizer">PENGURUS</div>
+  <div class="arabic-title">المدرسة الدنية كالي ڮينتوڠ</div>
+  <div class="organizer">PENGURUS</div>
     <div class="school">MADRASAH DINIYAH KALIGINTUNG</div>
     <div class="address">Sekretariat: Dusun Kaligintung Rt. 05/ Rw. 03 Cilibang - Jeruklegi 53252</div>
   </div>
