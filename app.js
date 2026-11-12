@@ -3682,14 +3682,14 @@ const selectedStudent = $("studentPdfStudent").value;
             break-after: auto;
           }
 
-          @media print {
+          @page {
+  size: ${type === "table" ? "A4 landscape" : "A4 portrait"};
+  margin: ${type === "table" ? "10mm" : "12mm"};
+}
+
+@media print {
   body {
     margin: 10mm;
-  }
-
-  @page {
-    size: ${type === "table" ? "A4 landscape" : "A4 portrait"};
-    margin: ${type === "table" ? "10mm" : "12mm"};
   }
 
   body:has(.biodata-table) {
