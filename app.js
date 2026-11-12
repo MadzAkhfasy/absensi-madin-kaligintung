@@ -1255,6 +1255,7 @@ showToast(`Pemeriksaan foto: URL=${!!photoData.photoUrl}, ID=${!!photoData.photo
         name,
         classId,
         nis,
+        status: r.querySelector(".edit-status").value,
         gender: r.querySelector(".edit-gender").value,
         birthplace: r.querySelector(".edit-birthplace").value.trim(),
         birthdate: r.querySelector(".edit-birthdate").value,
