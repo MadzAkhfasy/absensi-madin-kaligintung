@@ -4412,7 +4412,7 @@ const formattedMonth = new Date(
   year: "numeric"
 });
 
-ctx.fillText(`KELAS: ${reportClassValue}`, 240, 397);
+ctx.fillText(`${reportClassValue}`.toUpperCase(), 240, 397);
 ctx.fillText(`BULAN: ${formattedMonth}`, 600, 397);
 ctx.fillText(`TOTAL SANTRI: ${reportRows.length}`, 970, 397);
 
