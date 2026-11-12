@@ -305,6 +305,7 @@ this.value = "";
 
 // KELOLA PROFIL PETUGAS OLEH ADMIN
 let staffProfiles = [];
+let staffProfilesLoaded = false;
 
 async function loadStaffProfiles() {
   if (!isAdmin()) return;
