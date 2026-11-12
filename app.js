@@ -309,6 +309,10 @@ let staffProfilesLoaded = false;
 
 async function loadStaffProfiles() {
   if (!isAdmin()) return;
+    if (staffProfilesLoaded) {
+    renderStaffProfiles();
+    return;
+    }
 
   const select = $("staffSelect");
   select.innerHTML = '<option value="">Memuat akun petugas...</option>';
