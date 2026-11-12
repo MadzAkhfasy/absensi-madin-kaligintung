@@ -1149,6 +1149,13 @@ ${
       <label>NIS</label>
       <input class="edit-nis" value="${esc(s.nis || "")}">
 
+<label>Status Santri</label>
+<select class="edit-status">
+  <option value="Aktif" ${(s.status || "Aktif") === "Aktif" ? "selected" : ""}>Aktif</option>
+  <option value="Belum Aktif" ${s.status === "Belum Aktif" ? "selected" : ""}>Belum Aktif</option>
+  <option value="Nonaktif" ${s.status === "Nonaktif" ? "selected" : ""}>Nonaktif</option>
+</select>
+
       <label>Jenis Kelamin</label>
       <select class="edit-gender">
         <option value="">Pilih jenis kelamin</option>
