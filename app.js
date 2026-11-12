@@ -1983,9 +1983,15 @@ tbody tr {
 }
 
         .note {
-          font-size: 10px;
-          margin-top: 24px;
-          color: #555;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  font-size: 9px;
+  color: #555;
+  text-align: left;
+}
         }
 
         @media print {
