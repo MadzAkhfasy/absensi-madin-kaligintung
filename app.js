@@ -3364,15 +3364,27 @@ const selectedStudent = $("studentPdfStudent").value;
     const logo = "https://madzakhfasy.github.io/absensi-madin-kaligintung/LOGO%20MADIN%20REMOVE%20BG.png";
 
     const header = `
-      <div class="letterhead">
-        <img src="${logo}" alt="Logo Madin">
-        <div>
-          <h2>MADRASAH DINIYAH KALIGINTUNG</h2>
-          <p>Dusun Kaligintung, Desa Cilibang</p>
-          <p>Kec. Jeruklegi, Kab. Cilacap</p>
-        </div>
+  <div class="letterhead">
+    <img src="${logo}" alt="Logo Madin">
+
+    <div class="letterhead-text">
+      <div class="arabic-title">
+        المدرسة الدنية كالي ڮينتوڠ
       </div>
-    `;
+
+      <div class="organizer">PENGURUS</div>
+
+      <div class="school">
+        MADRASAH DINIYAH KALIGINTUNG
+      </div>
+
+      <div class="address">
+        Sekretariat: Dusun Kaligintung Rt. 05/ Rw. 03
+        Cilibang - Jeruklegi 53252
+      </div>
+    </div>
+  </div>
+`;
 
     let content = "";
     let title = "";
@@ -3524,31 +3536,59 @@ const selectedStudent = $("studentPdfStudent").value;
           }
 
           .letterhead {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            border-bottom: 3px double #222;
-            padding-bottom: 12px;
-            margin-bottom: 25px;
-            text-align: center;
-          }
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+  margin-bottom: 26px;
+  padding-bottom: 15px;
+  border-bottom: 3px double #176b45;
+}
 
-          .letterhead img {
-            width: 75px;
-            height: 75px;
-            object-fit: contain;
-          }
+.letterhead img {
+  width: 115px;
+  height: 115px;
+  object-fit: contain;
+  flex: 0 0 115px;
+}
 
-          .letterhead h2 {
-            margin: 0 0 5px;
-            font-size: 19px;
-          }
+.letterhead-text {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  color: #075b32;
+}
 
-          .letterhead p {
-            margin: 3px;
-          }
+.arabic-title {
+  font-family: "Noto Naskh Arabic", "Amiri", "Traditional Arabic", serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.5;
+  direction: rtl;
+  margin-bottom: 4px;
+}
 
+.organizer {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin-bottom: 5px;
+}
+
+.school {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.address {
+  color: #222;
+  font-size: 13px;
+  line-height: 1.5;
+}
           .document-title {
             text-align: center;
             margin: 25px 0;
