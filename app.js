@@ -414,8 +414,7 @@ function renderStaffProfiles() {
   });
 
   if (!staffProfiles.length) {
-    select.innerHTML = '<option value="">Belum ada akun petugas</option>';
-  }
+    select.innerHTML = '<option value="">Belum ada akun</option>';
 }
 async function loadClasses(){
  const snap=await getDocs(collection(db,"classes"));
