@@ -416,6 +416,7 @@ function renderStaffProfiles() {
   if (!staffProfiles.length) {
     select.innerHTML = '<option value="">Belum ada akun</option>';
 }
+}
 async function loadClasses(){
  const snap=await getDocs(collection(db,"classes"));
  classes=snap.docs.map(d=>({id:d.id,...d.data()}));
