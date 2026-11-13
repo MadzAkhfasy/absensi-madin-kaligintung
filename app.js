@@ -322,7 +322,7 @@ async function loadStaffProfiles() {
 
     staffProfiles = snap.docs
       .map(d => ({ id: d.id, ...d.data() }))
-      .filter(u => u.role === "petugas");
+      .filter(u => ["admin", "petugas"].includes(u.role));
 
     staffProfilesLoaded = true;
 renderStaffProfiles();
@@ -404,12 +404,12 @@ $("saveStaffProfileBtn").onclick = async function() {
 function renderStaffProfiles() {
   const select = $("staffSelect");
 
-  select.innerHTML = '<option value="">Pilih akun petugas</option>';
+  select.innerHTML = '<option value="">Pilih akun</option>';
 
   staffProfiles.forEach(u => {
     const option = document.createElement("option");
     option.value = u.id;
-    option.textContent = u.displayName || u.name || u.email || u.id;
+    option.textContent = u.displayRole || (u.role === "admin" ? "ADMIN MADIN" : "PETUGAS ABSENSI");
     select.appendChild(option);
   });
 
