@@ -1506,6 +1506,18 @@ if (specialHoliday) {
  const snap=await getDocs(query(collection(db,"attendance"),where("classId","==",classId),where("date","==",date)));
   attendanceLoadedKey = `${classId}_${date}`;
 attendanceAlreadySaved = !snap.empty;
+  attendanceBaseline = new Map(
+  list.map(s => {
+    const record = snap.docs.find(
+      d => d.data().studentId === s.id
+    );
+
+    return [
+      s.id,
+      record ? record.data().status : null
+    ];
+  })
+);
  const old=new Map(snap.docs.map(d=>[d.data().studentId,d.data().status]));
  $("attendanceList").innerHTML="";
  if(!list.length){$("attendanceList").innerHTML="<p class='muted'>Belum ada santri di kelas ini.</p>";$("saveAttendanceBtn").classList.add("hidden");return;}
