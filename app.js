@@ -1576,7 +1576,8 @@ attendanceInputs.forEach(el => {
 });
 
 await batch.commit();
-
+attendanceLoadedKey = `${classId}_${date}`;
+attendanceAlreadySaved = true;
 msg(
   "attendanceMsg",
   `Absensi berhasil disimpan untuk ${attendanceInputs.length} santri.`
