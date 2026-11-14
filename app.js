@@ -1469,6 +1469,7 @@ function isSpecialHoliday(classId, date) {
 }
 let attendanceLoadedKey = "";
 let attendanceAlreadySaved = false;
+let attendanceBaseline = new Map();
 $("attendanceDate").onchange=renderAttendance;$("attendanceClass").onchange=renderAttendance;
 async function renderAttendance(){
  if(!currentUser||(!canAccessAllClasses()&&!myClass()))return;
