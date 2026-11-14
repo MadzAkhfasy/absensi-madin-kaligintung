@@ -776,13 +776,11 @@ async function loadPhotoStats() {
   try {
     $("photoStatsMsg").textContent = "Menghitung foto santri...";
 
-    const snap = await getDocs(collection(db, "students"));
-    const total = snap.size;
+    const total = students.length;
 
-    const uploaded = snap.docs.filter(docSnap => {
-      const data = docSnap.data();
-      return data.photoUrl && data.photoUrl.trim() !== "";
-    }).length;
+const uploaded = students.filter(s =>
+  s.photoUrl && s.photoUrl.trim() !== ""
+).length;
 
     const missing = total - uploaded;
     const percentage = total > 0
