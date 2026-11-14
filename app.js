@@ -1452,6 +1452,8 @@ function isSpecialHoliday(classId, date) {
     return (h.classIds || []).includes(classId);
   }) || null;
 }
+let attendanceLoadedKey = "";
+let attendanceAlreadySaved = false;
 $("attendanceDate").onchange=renderAttendance;$("attendanceClass").onchange=renderAttendance;
 async function renderAttendance(){
  if(!currentUser||(!canAccessAllClasses()&&!myClass()))return;
@@ -1459,8 +1461,6 @@ async function renderAttendance(){
 const list=students.filter(s=>
   s.classId===classId && (s.status || "Aktif")==="Aktif"
 );
-  let attendanceLoadedKey = "";
-let attendanceAlreadySaved = false;
  $("attendanceClassName").textContent=clsName(classId);
  const date=$("attendanceDate").value;
 
