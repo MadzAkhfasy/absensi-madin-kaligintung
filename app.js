@@ -1626,7 +1626,25 @@ msg(
 );
   } catch (e) {
     console.error(e);
-    msg("attendanceMsg", "Gagal menyimpan absensi: " + e.message, true);
+
+    if (e.message.startsWith("ABSENSI_BERUBAH:")) {
+      try {
+        await renderAttendance();
+        msg(
+          "attendanceMsg",
+          "Data absensi berubah dari perangkat lain. Data terbaru sudah dimuat. Silakan periksa kembali sebelum menyimpan.",
+          true
+        );
+      } catch (refreshError) {
+        msg(
+          "attendanceMsg",
+          "Data absensi berubah dari perangkat lain. Silakan muat ulang absensi.",
+          true
+        );
+      }
+    } else {
+      msg("attendanceMsg", "Gagal menyimpan absensi: " + e.message, true);
+    }
   } finally {
     btn.disabled = false;
   }
