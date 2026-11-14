@@ -1659,19 +1659,42 @@ const eligibleStudentIds = new Set(
   eligibleStudentDocs.map(d => d.id)
 );
 
+const attByStudent = new Map();
+
+aa.docs.forEach(d => {
+  const a = d.data();
+  if (!eligibleStudentIds.has(a.studentId)) return;
+
+  if (!attByStudent.has(a.studentId)) {
+    attByStudent.set(a.studentId, []);
+  }
+
+  attByStudent.get(a.studentId).push(a);
+});
+
 const att = aa.docs
   .map(d => d.data())
   .filter(a => eligibleStudentIds.has(a.studentId));
-    const meetingCount = allClasses
-      ? new Set(att.map(a => a.classId + "|" + a.date)).size
-      : new Set(att.map(a => a.date)).size;
 
-    const counts = Object.fromEntries(
-      STATUSES.map(st => [
-        st,
-        att.filter(a => a.status === st).length
-      ])
-    );
+const meetingDatesByClass = new Map();
+
+att.forEach(a => {
+  if (!meetingDatesByClass.has(a.classId)) {
+    meetingDatesByClass.set(a.classId, new Set());
+  }
+  meetingDatesByClass.get(a.classId).add(a.date);
+});
+
+const meetingCount = allClasses
+  ? new Set(att.map(a => a.classId + "|" + a.date)).size
+  : new Set(att.map(a => a.date)).size;
+
+const counts = Object.fromEntries(
+  STATUSES.map(st => [
+    st,
+    att.filter(a => a.status === st).length
+  ])
+);
 
     $("reportSummary").innerHTML =
       STATUSES.map(st => `
