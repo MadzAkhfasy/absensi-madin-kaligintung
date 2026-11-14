@@ -1461,6 +1461,8 @@ const list=students.filter(s=>
 );
  $("attendanceClassName").textContent=clsName(classId);
  const date=$("attendanceDate").value;
+  let attendanceLoadedKey = "";
+let attendanceAlreadySaved = false;
   // Periksa libur tanggal tertentu
 const specialHoliday = isSpecialHoliday(classId, date);
 
