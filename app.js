@@ -1386,11 +1386,7 @@ $("generateNisBtn")?.addEventListener("click", async () => {
   button.textContent = "Memproses...";
 
   try {
-    const snapshot = await getDocs(collection(db, "students"));
-
-    const usedNis = snapshot.docs.map(item =>
-      item.data().nis || ""
-    );
+    const usedNis = students.map(s => s.nis || "");
 
     const newNis = nextAvailableNis(usedNis);
 
