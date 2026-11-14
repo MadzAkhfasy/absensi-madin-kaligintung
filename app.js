@@ -590,13 +590,23 @@ async function saveHoliday() {
       }
     }
 
-    await addDoc(collection(db, "holidays"), {
-      date,
-      name,
-      scope,
-      classIds,
-      createdAt: serverTimestamp()
-    });
+    const holidayRef = await addDoc(collection(db, "holidays"), {
+  date,
+  name,
+  scope,
+  classIds,
+  createdAt: serverTimestamp()
+});
+
+specialHolidays.push({
+  id: holidayRef.id,
+  date,
+  name,
+  scope,
+  classIds
+});
+
+specialHolidaysLoaded = true;
 
     $("holidayDate").value = "";
     $("holidayName").value = "";
