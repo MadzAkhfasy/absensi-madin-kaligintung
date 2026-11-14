@@ -1543,33 +1543,29 @@ if (specialHoliday) {
 
   try {
     btn.disabled = true;
-
-    // Periksa status absensi menggunakan cache
+    
+// Pastikan data awal sesuai kelas dan tanggal
 const attendanceKey = `${classId}_${date}`;
 
 if (attendanceLoadedKey !== attendanceKey) {
-  const existingSnap = await getDocs(
-    query(
-      collection(db, "attendance"),
-      where("classId", "==", classId),
-      where("date", "==", date)
-    )
+  await renderAttendance();
+
+  showToast(
+    "Data absensi diperbarui. Silakan periksa kembali sebelum menyimpan.",
+    true
   );
 
-  attendanceLoadedKey = attendanceKey;
-  attendanceAlreadySaved = !existingSnap.empty;
+  return;
 }
 
+// Konfirmasi jika absensi sudah pernah tersimpan
 if (attendanceAlreadySaved) {
   const lanjut = confirm(
     "Absensi tanggal ini sudah pernah disimpan.\n\n" +
     "Apakah Anda yakin ingin mengubah data absensi tersebut?"
   );
 
-  if (!lanjut) {
-    btn.disabled = false;
-    return;
-  }
+  if (!lanjut) return;
 }
 
     // Simpan seluruh absensi menggunakan Firestore Batch
