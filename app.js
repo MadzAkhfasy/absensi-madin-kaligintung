@@ -491,30 +491,35 @@ function renderHolidayClassPicker() {
 
 // Memuat daftar libur dari Firestore
 async function loadHolidays() {
-  try {
-    const snap = await getDocs(collection(db, "holidays"));
+try {
+if (!specialHolidaysLoaded) {
+const snap = await getDocs(collection(db, "holidays"));
 
-    const holidays = snap.docs.map(d => ({
-      id: d.id,
-      ...d.data()
-    }));
-specialHolidays = holidays;
-    holidays.sort((a, b) => a.date.localeCompare(b.date));
+  specialHolidays = snap.docs.map(d => ({
+    id: d.id,
+    ...d.data()
+  }));
 
-    renderHolidayList(holidays);
+  specialHolidaysLoaded = true;
+}
 
-    renderHolidayClassPicker();
+const holidays = [...specialHolidays].sort(
+  (a, b) => a.date.localeCompare(b.date)
+);
 
-    $("holidayClassScope").disabled = !isAdmin();
-    $("holidayDate").disabled = !isAdmin();
-    $("holidayName").disabled = !isAdmin();
+renderHolidayList(holidays);
+renderHolidayClassPicker();
 
-    $("saveHolidayBtn").classList.toggle("hidden", !isAdmin());
+$("holidayClassScope").disabled = !isAdmin();
+$("holidayDate").disabled = !isAdmin();
+$("holidayName").disabled = !isAdmin();
 
-  } catch (error) {
-    console.error(error);
-    msg("holidayMsg", "Gagal memuat daftar libur: " + error.message, true);
-  }
+$("saveHolidayBtn").classList.toggle("hidden", !isAdmin());
+
+} catch (error) {
+console.error(error);
+msg("holidayMsg", "Gagal memuat daftar libur: " + error.message, true);
+}
 }
 
 // Menampilkan daftar libur
