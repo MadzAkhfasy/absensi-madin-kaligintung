@@ -114,6 +114,7 @@ let attendanceChartData = [];
 let attendanceChartReady = false;
 let weeklyDaysOff = {};
 let specialHolidays = [];
+let specialHolidaysLoaded = false;
 const WEEK_DAYS = [
   "Minggu",
   "Senin",
