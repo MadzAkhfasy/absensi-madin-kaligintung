@@ -634,9 +634,13 @@ async function deleteHoliday(id) {
   if (!yakin) return;
 
   try {
-    await deleteDoc(doc(db, "holidays", id));
+        await deleteDoc(doc(db, "holidays", id));
 
-    await loadHolidays();
+    specialHolidays = specialHolidays.filter(h => h.id !== id);
+
+    renderHolidayList(
+      [...specialHolidays].sort((a, b) => a.date.localeCompare(b.date))
+    );
 
     msg("holidayMsg", "Tanggal libur berhasil dibatalkan.");
 
