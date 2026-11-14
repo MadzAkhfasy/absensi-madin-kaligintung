@@ -1488,6 +1488,8 @@ if (specialHoliday) {
   return;
   }
  const snap=await getDocs(query(collection(db,"attendance"),where("classId","==",classId),where("date","==",date)));
+  attendanceLoadedKey = `${classId}_${date}`;
+attendanceAlreadySaved = !snap.empty;
  const old=new Map(snap.docs.map(d=>[d.data().studentId,d.data().status]));
  $("attendanceList").innerHTML="";
  if(!list.length){$("attendanceList").innerHTML="<p class='muted'>Belum ada santri di kelas ini.</p>";$("saveAttendanceBtn").classList.add("hidden");return;}
