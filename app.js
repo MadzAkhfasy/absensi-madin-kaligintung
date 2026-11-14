@@ -1712,8 +1712,7 @@ const counts = Object.fromEntries(
     const rows = eligibleStudentDocs.map(d => {
       const s = d.data();
 
-      const mine = att.filter(a => a.studentId === d.id);
-
+      const mine = attByStudent.get(d.id) || [];
       const Hadir = mine.filter(a => a.status === "Hadir").length;
       const Izin = mine.filter(a => a.status === "Izin").length;
       const Sakit = mine.filter(a => a.status === "Sakit").length;
@@ -1722,13 +1721,8 @@ const counts = Object.fromEntries(
       const total = Hadir + Izin + Sakit + Alpa;
 
       const studentMeetingCount = allClasses
-        ? new Set(
-            att
-              .filter(a => a.classId === s.classId)
-              .map(a => a.date)
-          ).size
-        : meetingCount;
-
+  ? (meetingDatesByClass.get(s.classId)?.size || 0)
+  : meetingCount;
       const persen = studentMeetingCount
         ? Math.round(Hadir / studentMeetingCount * 100)
         : 0;
