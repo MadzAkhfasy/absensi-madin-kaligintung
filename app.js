@@ -1568,8 +1568,7 @@ if (attendanceAlreadySaved) {
   if (!lanjut) return;
 }
 
-    // Simpan seluruh absensi menggunakan Firestore Batch
-cons// Simpan absensi dengan pemeriksaan perubahan dari perangkat lain
+// Simpan absensi dengan pemeriksaan perubahan dari perangkat lain
 const attendanceInputs = [
   ...document.querySelectorAll("#attendanceList select")
 ];
