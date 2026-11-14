@@ -1459,10 +1459,11 @@ async function renderAttendance(){
 const list=students.filter(s=>
   s.classId===classId && (s.status || "Aktif")==="Aktif"
 );
- $("attendanceClassName").textContent=clsName(classId);
- const date=$("attendanceDate").value;
   let attendanceLoadedKey = "";
 let attendanceAlreadySaved = false;
+ $("attendanceClassName").textContent=clsName(classId);
+ const date=$("attendanceDate").value;
+
   // Periksa libur tanggal tertentu
 const specialHoliday = isSpecialHoliday(classId, date);
 
