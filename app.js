@@ -612,12 +612,13 @@ specialHolidaysLoaded = true;
     $("holidayName").value = "";
     $("holidayClassScope").value = "all";
 
-    renderHolidayClassPicker();
+        renderHolidayClassPicker();
 
-    await loadHolidays();
+    renderHolidayList(
+      [...specialHolidays].sort((a, b) => a.date.localeCompare(b.date))
+    );
 
     msg("holidayMsg", "Tanggal libur berhasil disimpan.");
-
   } catch (error) {
     console.error(error);
     msg("holidayMsg", "Gagal menyimpan libur: " + error.message, true);
