@@ -1569,6 +1569,7 @@ if (attendanceAlreadySaved) {
 }
 
     // Simpan seluruh absensi menggunakan Firestore Batch
+cons// Simpan absensi dengan pemeriksaan perubahan dari perangkat lain
 const attendanceInputs = [
   ...document.querySelectorAll("#attendanceList select")
 ];
@@ -1579,28 +1580,46 @@ if (attendanceInputs.length > 500) {
   );
 }
 
-const batch = writeBatch(db);
+await runTransaction(db, async (transaction) => {
+  const records = attendanceInputs.map(el => ({
+    el,
+    ref: doc(db, "attendance", `${date}_${el.dataset.id}`)
+  }));
 
-attendanceInputs.forEach(el => {
-  const id = el.dataset.id;
-  const docId = `${date}_${id}`;
+  const snapshots = await Promise.all(
+    records.map(item => transaction.get(item.ref))
+  );
 
-  batch.set(
-    doc(db, "attendance", docId),
-    {
-      studentId: id,
+  for (let i = 0; i < records.length; i++) {
+    const id = records[i].el.dataset.id;
+    const latestStatus = snapshots[i].exists()
+      ? snapshots[i].data().status
+      : null;
+
+    if (latestStatus !== attendanceBaseline.get(id)) {
+      throw new Error(
+        "ABSENSI_BERUBAH: Data absensi telah diubah dari perangkat lain."
+      );
+    }
+  }
+
+  records.forEach(item => {
+    transaction.set(item.ref, {
+      studentId: item.el.dataset.id,
       classId,
       date,
-      status: el.value,
+      status: item.el.value,
       markedBy: currentUser.uid,
       updatedAt: serverTimestamp()
-    },
-    { merge: true }
-  );
+    }, { merge: true });
+  });
 });
 
-await batch.commit();
-attendanceLoadedKey = `${classId}_${date}`;
+attendanceBaseline = new Map(
+  attendanceInputs.map(el => [el.dataset.id, el.value])
+);
+
+attendanceLoadedKey = attendanceKey;
 attendanceAlreadySaved = true;
 msg(
   "attendanceMsg",
