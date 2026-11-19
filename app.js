@@ -271,6 +271,7 @@ $("welcomeUserRole").textContent = profileRole;
 $("reportClassWrap").classList.toggle("hidden",!canAccessAllClasses());
   if(!canAccessAllClasses()&&!myClass()){$("attendanceList").innerHTML='<p class="muted">Akun Anda belum diberi kelas. Hubungi admin Madin.</p>';$("saveAttendanceBtn").classList.add("hidden");}
   await fillClassSelects();await loadStudents();await renderAttendance();await renderDashboard();
+   showMainMenu();
  }catch(e){console.error(e);alert("Gagal memuat data: "+e.message);}
 });
 
