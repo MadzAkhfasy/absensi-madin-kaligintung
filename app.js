@@ -1752,7 +1752,7 @@ tabs.classList.toggle(
   back.textContent = "← Kembali ke Menu Utama";
   back.onclick = showMainMenu;
 
-  tabs.after(back);
+  $("roleInfo").after(back);
 
   if (target === "studentsPanel") renderStudentList();
   if (target === "staffPanel") loadStaffProfiles();
