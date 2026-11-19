@@ -4503,15 +4503,22 @@ linear-gradient(
 }
 
 #closeAttendanceStatus {
-  width: 40px;
-  height: 40px;
-  border: none;
-  border-radius: 50%;
-  background: #e8f1e9;
-  color: #104b32;
-  font-size: 20px;
-  font-weight: bold;
-  cursor: pointer;
+width: 40px;
+height: 40px;
+min-width: 40px;
+padding: 0;
+border: none;
+border-radius: 50%;
+background: #e8f1e9;
+color: #104b32;
+font-size: 20px;
+font-weight: bold;
+line-height: 40px;
+text-align: center;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
 }
 
 .attendance-status-item {
