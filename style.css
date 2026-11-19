@@ -2544,6 +2544,38 @@ border: 0 !important;
   font-weight: 800;
 }
 
+/* Dropdown format cetak rekap */
+#reportsPanel .report-format-label {
+  display: block;
+  margin-top: 18px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #104b32;
+}
+
+#reportsPanel #reportPrintFormat {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 8px;
+  padding: 0 14px;
+  border: 1px solid #c9a64f;
+  border-radius: 12px;
+  background: #fff;
+  color: #104b32;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Tombol proses cetak */
+#reportsPanel #printReportBtn {
+  min-height: 48px;
+  margin-top: 12px;
+  background: linear-gradient(120deg, #176b45, #0b3d2e);
+  color: #fff !important;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 800;
+}
 /* Pesan */
 #reportsPanel #reportMsg {
   margin-top: 14px;
