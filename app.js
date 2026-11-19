@@ -3424,12 +3424,46 @@ async function showAttendanceByStatus(status) {
       return;
     }
 
-    list.innerHTML = matching.map(item => `
-      <div class="attendance-status-item">
-        <strong>${esc(item.student.name)}</strong>
-        <span>${esc(clsName(item.classId))}</span>
-      </div>
-    `).join("");
+    const classOrder = [
+  "Kelas Jilid 5",
+  "Kelas Jilid 4",
+  "Kelas Jilid 3",
+  "Kelas Jilid 2",
+  "Kelas Jilid 1",
+  "Kelas Jilid Pemula"
+];
+
+const orderedClasses = visibleClasses.slice().sort((a, b) =>
+  classOrder.indexOf(a.name) - classOrder.indexOf(b.name)
+);
+
+const grouped = orderedClasses.map(cls => ({
+  name: cls.name,
+  students: matching
+    .filter(item => item.classId === cls.id)
+    .sort((a, b) =>
+      a.student.name.localeCompare(b.student.name, "id")
+    )
+})).filter(group => group.students.length);
+
+list.innerHTML = grouped.map(group => `
+  <div class="attendance-class-group">
+    <h3>
+      ${esc(group.name)}
+      <span>${group.students.length} santri</span>
+    </h3>
+    <table class="attendance-status-table">
+      <tbody>
+        ${group.students.map((item, index) => `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${esc(item.student.name)}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  </div>
+`).join("");
 
   } catch (error) {
     console.error("Gagal memuat daftar absensi:", error);
