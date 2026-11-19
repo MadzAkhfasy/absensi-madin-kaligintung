@@ -2399,12 +2399,13 @@ border: 0 !important;
 /* Tombol tampilkan rekap */
 #reportsPanel #loadReportBtn {
   min-height: 49px;
-  margin-bottom: 18px;
+  margin-bottom: 5px;
   border-radius: 13px;
   background: linear-gradient(120deg, #08784f, #034b33);
   box-shadow: 0 6px 15px rgba(3,75,51,.16);
   font-size: 13px;
   font-weight: 800;
+  color: #ffffff !important;
 }
 
 /* Statistik rekap */
@@ -2547,7 +2548,7 @@ border: 0 !important;
 /* Dropdown format cetak rekap */
 #reportsPanel .report-format-label {
   display: block;
-  margin-top: 18px;
+  margin-top: 5px;
   font-size: 13px;
   font-weight: 800;
   color: #104b32;
