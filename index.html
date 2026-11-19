@@ -117,21 +117,78 @@
 <section id="dataDashboardPanel" class="panel hidden">
   <div class="card">
     <h2>Dashboard Data Santri</h2>
-    <p class="muted">Ringkasan data santri Madin Kaligintung.</p>
+    <p class="muted">Ringkasan data santri Madin Kaligintung.</p><div class="summary-grid">
+  <div class="stat">
+    <strong id="dashTotalStudents">0</strong>
+    <span>Total Santri</span>
+  </div>
+  <div class="stat">
+    <strong id="dashTotalClasses">6</strong>
+    <span>Jumlah Kelas</span>
+  </div>
+</div>
 
-    <div class="summary-grid">
-      <div class="stat">
-        <strong id="dashTotalStudents">0</strong>
-        <span>Total Santri</span>
-      </div>
-      <div class="stat">
-        <strong id="dashTotalClasses">6</strong>
-        <span>Jumlah Kelas</span>
-      </div>
-    </div>
+<hr>
+<h3>Jumlah Santri Setiap Jilid</h3>
+<div class="summary-grid">
+  <div class="stat">
+    <strong id="countPemula">0</strong>
+    <span>Jilid Pemula</span>
+  </div>
+  <div class="stat">
+    <strong id="countJilid1">0</strong>
+    <span>Jilid 1</span>
+  </div>
+  <div class="stat">
+    <strong id="countJilid2">0</strong>
+    <span>Jilid 2</span>
+  </div>
+  <div class="stat">
+    <strong id="countJilid3">0</strong>
+    <span>Jilid 3</span>
+  </div>
+  <div class="stat">
+    <strong id="countJilid4">0</strong>
+    <span>Jilid 4</span>
+  </div>
+  <div class="stat">
+    <strong id="countJilid5">0</strong>
+    <span>Jilid 5</span>
+  </div>
+</div>
+
+<hr>
+<h3>Kelengkapan Biodata Santri</h3>
+<div class="summary-grid">
+  <div class="stat">
+    <strong id="biodataComplete">0</strong>
+    <span>Biodata Lengkap</span>
+  </div>
+  <div class="stat">
+    <strong id="biodataIncomplete">0</strong>
+    <span>Belum Lengkap</span>
+  </div>
+  <div class="stat">
+    <strong id="biodataPercentage">0%</strong>
+    <span>Kelengkapan Biodata</span>
+  </div>
+</div>
+
+<div class="card admin-only">
+  <h3>📸 Pemantauan Foto Santri</h3>
+  <p>Total Santri: <strong id="photoTotal">-</strong></p>
+  <p>Sudah Ada Foto: <strong id="photoUploaded">-</strong></p>
+  <p>Belum Ada Foto: <strong id="photoMissing">-</strong></p>
+  <p>Kelengkapan Foto: <strong id="photoPercentage">-</strong></p>
+
+  <button id="refreshPhotoStatsBtn" class="secondary full">
+    Perbarui Jumlah Foto
+  </button>
+  <div id="photoStatsMsg" class="message"></div>
+</div>
+
   </div>
 </section>
-
 <section id="dashboardPanel" class="panel">
   <div class="card">
   <div class="dash-section-title">
@@ -492,20 +549,6 @@
     <h2>Backup dan Restore Data</h2>
     <hr>
 
-<h3>📸 Pemantauan Foto Santri</h3>
-
-<div class="card">
-  <p>Total Santri: <strong id="photoTotal">-</strong></p>
-  <p>Sudah Ada Foto: <strong id="photoUploaded">-</strong></p>
-  <p>Belum Ada Foto: <strong id="photoMissing">-</strong></p>
-  <p>Kelengkapan Foto: <strong id="photoPercentage">-</strong></p>
-
-  <button id="refreshPhotoStatsBtn" class="secondary full">
-    Perbarui Jumlah Foto
-  </button>
-
-  <div id="photoStatsMsg" class="message"></div>
-</div>
     <p class="muted">Simpan cadangan data santri, kelas, dan absensi.</p>
 
     <button id="backupDataBtn" class="primary full">
