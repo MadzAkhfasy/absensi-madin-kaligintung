@@ -370,9 +370,17 @@
           <button id="loadReportBtn" class="secondary full">Tampilkan rekap</button>
           <div id="reportSummary" class="summary-grid"></div>
           <div id="reportTable" class="table-wrap"></div>
-          <button id="exportBtn" class="primary full hidden">Unduh Excel (CSV)</button>
-          <button id="printReportBtn" class="secondary full">Cetak / Simpan PDF</button>
-          <button id="shareImageBtn" class="primary full hidden">Simpan Rekap sebagai Gambar</button>
+          <label class="report-format-label">
+  Pilih Format Cetak
+  <select id="reportPrintFormat">
+    <option value="pdf">PDF</option>
+    <option value="png">Gambar (PNG)</option>
+  </select>
+</label>
+
+<button id="printReportBtn" class="primary full">
+  Proses Cetak
+</button>
           <div id="reportMsg" class="message"></div>
         </div>
       </section>
