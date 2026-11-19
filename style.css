@@ -4418,3 +4418,49 @@ linear-gradient(
   background: #dcebe0;
   transform: scale(0.98);
 }
+/* DASHBOARD ABSENSI - BAGIAN LIPAT */
+.dashboard-fold {
+  margin: 12px 0;
+  padding: 0;
+  border: 1px solid #d8e5dc;
+  border-radius: 12px;
+  background: #ffffff;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(16, 75, 50, 0.06);
+}
+
+.dashboard-fold summary {
+  padding: 14px 16px;
+  background: #edf5ef;
+  color: #104b32;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  list-style: none;
+  position: relative;
+}
+
+.dashboard-fold summary::-webkit-details-marker {
+  display: none;
+}
+
+.dashboard-fold summary::after {
+  content: "+";
+  position: absolute;
+  right: 16px;
+  color: #c9a64f;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.dashboard-fold[open] summary::after {
+  content: "−";
+}
+
+.dashboard-fold .fold-content {
+  padding: 14px;
+}
+
+.dashboard-fold[open] summary {
+  border-bottom: 1px solid #d8e5dc;
+}
