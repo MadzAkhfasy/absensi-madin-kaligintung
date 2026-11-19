@@ -833,7 +833,8 @@ function isStudentBiodataComplete(s) {
     s.birthdate,
     s.fatherName,
     s.motherName,
-    s.address
+    s.address,
+    s.photoUrl
   ];
 
   return requiredFields.every(value =>
@@ -3121,6 +3122,24 @@ async function renderDashboard() {
 );
 
 setText("dashTotalStudents", activeStudents.length);
+    
+    // STATISTIK KELENGKAPAN BIODATA
+const completeStudents = activeStudents.filter(
+  s => isStudentBiodataComplete(s)
+);
+
+const incompleteCount =
+  activeStudents.length - completeStudents.length;
+
+const biodataPercentage = activeStudents.length
+  ? Math.round(
+      (completeStudents.length / activeStudents.length) * 100
+    )
+  : 0;
+
+setText("biodataComplete", completeStudents.length);
+setText("biodataIncomplete", incompleteCount);
+setText("biodataPercentage", biodataPercentage + "%");
 
     const visibleClasses = canAccessAllClasses()
       ? classes
