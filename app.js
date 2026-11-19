@@ -1657,6 +1657,107 @@ document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
   if(b.dataset.tab==="studentsPanel") renderStudentList();
   if(b.dataset.tab==="staffPanel") loadStaffProfiles();
 });
+// =====================================
+// NAVIGASI MODUL ADMINISTRASI MADIN
+// =====================================
+
+function showMainMenu() {
+  $("mainMenu").classList.remove("hidden");
+  document.querySelector(".tabs").classList.add("hidden");
+
+  document.querySelectorAll(".panel").forEach(panel => {
+    panel.classList.add("hidden");
+  });
+
+  document.querySelectorAll(".module-back").forEach(btn => {
+    btn.remove();
+  });
+}
+
+function openModule(module) {
+  $("mainMenu").classList.add("hidden");
+
+  const tabs = document.querySelector(".tabs");
+  tabs.classList.remove("hidden");
+
+  const groups = {
+    absensi: [
+      "dashboardPanel",
+      "attendancePanel",
+      "reportsPanel",
+      "calendarSettingsPanel",
+      "staffPanel"
+    ],
+    data: [
+      "studentsPanel",
+      "formPanel",
+      "printStudentsPanel",
+      "backupPanel"
+    ]
+  };
+
+  const allowed = groups[module] || [];
+
+  document.querySelectorAll(".tab").forEach(tab => {
+    tab.classList.toggle(
+      "hidden",
+      !allowed.includes(tab.dataset.tab)
+    );
+    tab.classList.remove("active");
+  });
+
+  document.querySelectorAll(".panel").forEach(panel => {
+    panel.classList.add("hidden");
+  });
+
+  let target = allowed[0];
+
+  if (module === "evaluasi" || module === "keuangan") {
+    target = "modulePlaceholder";
+
+    let placeholder = $("modulePlaceholder");
+
+    if (!placeholder) {
+      placeholder = document.createElement("section");
+      placeholder.id = "modulePlaceholder";
+      placeholder.className = "panel";
+      tabs.after(placeholder);
+    }
+
+    placeholder.innerHTML = `
+      <div class="card">
+        <h2>${module === "evaluasi"
+          ? "Evaluasi Pembelajaran Santri"
+          : "Manajemen Keuangan Madin"}</h2>
+        <p class="muted">Modul ini sedang disiapkan.</p>
+      </div>
+    `;
+
+    placeholder.classList.remove("hidden");
+  } else {
+    $(target).classList.remove("hidden");
+    const firstTab = document.querySelector(
+      '.tab[data-tab="' + target + '"]'
+    );
+    if (firstTab) firstTab.classList.add("active");
+  }
+
+  let back = document.createElement("button");
+  back.className = "module-back";
+  back.textContent = "← Kembali ke Menu Utama";
+  back.onclick = showMainMenu;
+
+  tabs.before(back);
+
+  if (target === "studentsPanel") renderStudentList();
+  if (target === "staffPanel") loadStaffProfiles();
+}
+
+document.querySelectorAll("[data-module]").forEach(button => {
+  button.onclick = () => openModule(button.dataset.module);
+});
+
+// AKHIR NAVIGASI MODUL
 $("loadReportBtn").onclick=loadReport;
 async function loadReport() {
   const month = $("reportMonth").value;
