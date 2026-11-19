@@ -3374,7 +3374,6 @@ visibleClasses.forEach(cls => {
 
 // DAFTAR BIODATA SANTRI
 function showBiodataByStatus(status) {
-function showBiodataByStatus(status) {
 if (!isAdmin()) return;
 
 const modal = $("biodataStatusModal");
