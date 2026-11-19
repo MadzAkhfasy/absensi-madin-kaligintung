@@ -1693,11 +1693,12 @@ tabs.classList.toggle(
       "staffPanel"
     ],
     data: [
-      "studentsPanel",
-      "formPanel",
-      "printStudentsPanel",
-      "backupPanel"
-    ]
+  "dataDashboardPanel",
+  "studentsPanel",
+  "formPanel",
+  "printStudentsPanel",
+  "backupPanel"
+]
   };
 
   const allowed = groups[module] || [];
