@@ -1957,7 +1957,6 @@ const counts = Object.fromEntries(
       </p>
     `;
 
-    $("exportBtn").classList.remove("hidden");
 $("shareImageBtn").classList.remove("hidden");
     msg(
       "reportMsg",
@@ -1968,49 +1967,6 @@ $("shareImageBtn").classList.remove("hidden");
     msg("reportMsg", e.message, true);
   }
 } 
-$("exportBtn").onclick = () => {
-  const csv = [
-    [
-      "Kelas",
-      "Nama Santri",
-      "Hadir",
-      "Izin",
-      "Sakit",
-      "Alpa",
-      "Total Tercatat",
-      "Persentase Kehadiran"
-    ],
-
-    ...reportRows.map(r => [
-      r.className,
-      r.name,
-      r.Hadir,
-      r.Izin,
-      r.Sakit,
-      r.Alpa,
-      r.total,
-      r.Persentase + "%"
-    ])
-
-  ].map(row =>
-    row.map(v =>
-      '"' + String(v).replaceAll('"', '""') + '"'
-    ).join(",")
-  ).join("\r\n");
-
-  const blob = new Blob(
-    ["\ufeff" + csv],
-    { type: "text/csv;charset=utf-8" }
-  );
-
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "rekap-absensi-madin-semua-kelas.csv";
-  a.click();
-
-  URL.revokeObjectURL(a.href);
-};
-
 
 // Cetak laporan bulanan; pada Android pengguna dapat memilih "Save as PDF".
 $("printReportBtn").onclick = () => {
