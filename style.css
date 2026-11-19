@@ -4503,7 +4503,8 @@ linear-gradient(
   border-bottom: 1px solid #d8e5dc;
 }
 /* JENDELA DAFTAR ABSENSI HARI INI */
-#attendanceStatusModal:not(.hidden) {
+#attendanceStatusModal:not(.hidden),
+#biodataStatusModal:not(.hidden) {
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -4540,7 +4541,8 @@ linear-gradient(
   font-size: 19px;
 }
 
-#closeAttendanceStatus {
+#closeAttendanceStatus,
+#closeBiodataStatus {
 width: 40px;
 height: 40px;
 min-width: 40px;
