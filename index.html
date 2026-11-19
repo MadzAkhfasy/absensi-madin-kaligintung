@@ -160,17 +160,31 @@
 <hr>
 <h3>Kelengkapan Biodata Santri</h3>
 <div class="summary-grid">
-  <div class="stat">
+  <div class="stat biodata-stat" role="button" tabindex="0"
+       data-biodata-status="complete">
     <strong id="biodataComplete">0</strong>
     <span>Biodata Lengkap</span>
   </div>
-  <div class="stat">
+
+  <div class="stat biodata-stat" role="button" tabindex="0"
+       data-biodata-status="incomplete">
     <strong id="biodataIncomplete">0</strong>
     <span>Belum Lengkap</span>
   </div>
+
   <div class="stat">
     <strong id="biodataPercentage">0%</strong>
     <span>Kelengkapan Biodata</span>
+  </div>
+</div>
+
+<div id="biodataStatusModal" class="hidden">
+  <div class="attendance-status-content">
+    <div class="attendance-status-header">
+      <h2 id="biodataStatusTitle">Daftar Santri</h2>
+      <button type="button" id="closeBiodataStatus">✕</button>
+    </div>
+    <div id="biodataStatusList"></div>
   </div>
 </div>
 
