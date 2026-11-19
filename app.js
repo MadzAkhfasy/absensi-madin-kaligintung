@@ -3129,6 +3129,29 @@ setText("dashTotalStudents", activeStudents.length);
 
     setText("dashTotalClasses", visibleClasses.length);
 
+    // MENGHITUNG JUMLAH SANTRI SETIAP JILID
+const classCountTargets = {
+"Kelas Jilid Pemula": "countPemula",
+"Kelas Jilid 1": "countJilid1",
+"Kelas Jilid 2": "countJilid2",
+"Kelas Jilid 3": "countJilid3",
+"Kelas Jilid 4": "countJilid4",
+"Kelas Jilid 5": "countJilid5"
+};
+
+Object.values(classCountTargets).forEach(id => setText(id, 0));
+
+visibleClasses.forEach(cls => {
+  const targetId = classCountTargets[cls.name];
+  if (!targetId) return;
+
+  const total = activeStudents.filter(
+    s => s.classId === cls.id
+  ).length;
+
+  setText(targetId, total);
+});
+    
     const pad = n => String(n).padStart(2, "0");
 
     const dateString = d =>
