@@ -1624,8 +1624,9 @@ attendanceAlreadySaved = true;
 msg(
   "attendanceMsg",
   `Absensi berhasil disimpan untuk ${attendanceInputs.length} santri.`
-  await renderDashboard();
 );
+
+await renderDashboard();
   } catch (e) {
     console.error(e);
 
