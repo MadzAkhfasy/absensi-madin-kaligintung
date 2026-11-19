@@ -1919,7 +1919,7 @@ border: 0 !important;
 /* Input tanggal */
 #attendancePanel label:has(#attendanceDate) {
   display: block;
-  margin-bottom: 17px;
+  margin-bottom: 10px;
   font-weight: 750;
   color: #315b46;
 }
@@ -1930,7 +1930,7 @@ border: 0 !important;
   box-sizing: border-box;
   display: block;
   min-height: 49px;
-  margin-top: 8px;
+  margin-top: 3px;
   padding: 11px 14px;
   border: 1px solid #d5e5da;
   border-radius: 13px;
