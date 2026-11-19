@@ -3367,6 +3367,103 @@ setText("dashTotalStudents", activeStudents.length);
     });
   } 
 }
+// DAFTAR SANTRI BERDASARKAN STATUS ABSENSI HARI INI
+async function showAttendanceByStatus(status) {
+  const modal = $("attendanceStatusModal");
+  const title = $("attendanceStatusTitle");
+  const list = $("attendanceStatusList");
+
+  title.textContent = "Santri " + status + " Hari Ini";
+  list.innerHTML = '<p class="muted">Memuat data santri...</p>';
+  modal.classList.remove("hidden");
+
+  try {
+    const now = new Date();
+    const pad = n => String(n).padStart(2, "0");
+    const todayStr =
+      `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+
+    const visibleClasses = canAccessAllClasses()
+      ? classes
+      : classes.filter(c => c.id === myClass());
+
+    const classIds = new Set(visibleClasses.map(c => c.id));
+
+    const activeStudents = students.filter(
+      s => (s.status || "Aktif") === "Aktif"
+    );
+
+    const studentMap = new Map(
+      activeStudents.map(s => [s.id, s])
+    );
+
+    const snap = await getDocs(query(
+      collection(db, "attendance"),
+      where("date", "==", todayStr)
+    ));
+
+    const matching = snap.docs
+      .map(d => d.data())
+      .filter(a =>
+        a.status === status &&
+        classIds.has(a.classId) &&
+        studentMap.has(a.studentId)
+      )
+      .map(a => ({
+        student: studentMap.get(a.studentId),
+        classId: a.classId
+      }))
+      .sort((a, b) =>
+        a.student.name.localeCompare(b.student.name, "id")
+      );
+
+    if (!matching.length) {
+      list.innerHTML =
+        '<p class="muted">Belum ada santri dengan status ' +
+        esc(status) + ' hari ini.</p>';
+      return;
+    }
+
+    list.innerHTML = matching.map(item => `
+      <div class="attendance-status-item">
+        <strong>${esc(item.student.name)}</strong>
+        <span>${esc(clsName(item.classId))}</span>
+      </div>
+    `).join("");
+
+  } catch (error) {
+    console.error("Gagal memuat daftar absensi:", error);
+    list.innerHTML =
+      '<p class="muted">Gagal memuat data. Silakan coba lagi.</p>';
+  }
+}
+
+// KLIK KOTAK STATISTIK
+document.querySelectorAll(
+  "#dashboardPanel .dash-four .stat[data-status]"
+).forEach(box => {
+  box.addEventListener("click", () => {
+    showAttendanceByStatus(box.dataset.status);
+  });
+
+  box.addEventListener("keydown", event => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      showAttendanceByStatus(box.dataset.status);
+    }
+  });
+});
+
+// TUTUP JENDELA DAFTAR SANTRI
+$("closeAttendanceStatus").addEventListener("click", () => {
+  $("attendanceStatusModal").classList.add("hidden");
+});
+
+$("attendanceStatusModal").addEventListener("click", event => {
+  if (event.target.id === "attendanceStatusModal") {
+    $("attendanceStatusModal").classList.add("hidden");
+  }
+});
 // DROPDOWN CUSTOM MADIN
 function enhanceCustomDropdown(select) {
   if (select.dataset.customized === "true") return;
