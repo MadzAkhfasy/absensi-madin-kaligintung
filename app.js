@@ -1970,6 +1970,10 @@ $("shareImageBtn").classList.remove("hidden");
 
 // Cetak laporan bulanan; pada Android pengguna dapat memilih "Save as PDF".
 $("printReportBtn").onclick = () => {
+    if ($("reportPrintFormat").value === "png") {
+    $("shareImageBtn").click();
+    return;
+  }
   if (!reportRows.length) {
     msg("reportMsg", "Tampilkan rekap terlebih dahulu sebelum mencetak.", true);
     return;
