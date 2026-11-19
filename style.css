@@ -4636,3 +4636,60 @@ font-weight: 600;
     font-size: 20px;
   }
 }
+/* =================================
+HEADER HIJAU SEMUA HALAMAN UTAMA
+================================= */
+
+/* Header judul utama setiap tab */
+#appView > .panel > .card > h2,
+#appView > .panel > .card > .section-head,
+#dashboardPanel .dash-section-title {
+background: linear-gradient(120deg, #176b45, #0b3d2e) !important;
+color: #ffffff !important;
+border-radius: 14px 14px 0 0;
+padding: 18px 20px !important;
+margin: -20px -20px 18px !important;
+}
+
+/* Tulisan judul */
+#appView > .panel > .card > h2,
+#appView > .panel > .card .section-head h2,
+#dashboardPanel .dash-section-title h2 {
+color: #ffffff !important;
+margin: 0 !important;
+padding: 0 !important;
+font-size: 20px;
+font-weight: 800;
+}
+
+/* Hilangkan garis hias */
+#appView > .panel > .card > h2::after,
+#appView > .panel > .card .section-head h2::after,
+#dashboardPanel .dash-section-title h2::after {
+display: none !important;
+content: none !important;
+}
+
+/* Keterangan di bawah judul */
+#appView > .panel > .card .section-head p,
+#dashboardPanel .dash-section-title p {
+color: rgba(255,255,255,.85) !important;
+margin: 6px 0 0 !important;
+font-size: 12px;
+}
+
+/* Khusus halaman absensi */
+#attendancePanel > .card .section-head {
+margin: -24px -24px 18px !important;
+}
+
+/* Tampilan HP */
+@media (max-width: 600px) {
+#appView > .panel > .card > h2,
+#appView > .panel > .card > .section-head,
+#dashboardPanel .dash-section-title {
+padding: 15px 16px !important;
+margin: -16px -16px 15px !important;
+font-size: 19px;
+}
+}
