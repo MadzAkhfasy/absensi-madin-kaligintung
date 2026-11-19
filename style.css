@@ -3558,7 +3558,7 @@ border: 0 !important;
   padding: 6px 10px;
   border-radius: 20px;
   background: #eaf4ee;
-  color: #216b45;
+  color: #c9a64f;
   font-size: 11px;
   font-weight: 800;
   white-space: nowrap;
@@ -4610,7 +4610,7 @@ font-weight: 600;
 #attendancePanel .section-head h2 {
   margin: 0 !important;
   padding: 0 !important;
-  color: #ffffff !important;
+  color: #c9a64f !important;
   font-size: 22px;
 }
 
@@ -4645,7 +4645,7 @@ HEADER HIJAU SEMUA HALAMAN UTAMA
 #appView > .panel > .card > .section-head,
 #dashboardPanel .dash-section-title {
 background: linear-gradient(120deg, #176b45, #0b3d2e) !important;
-color: #ffffff !important;
+color: #c9a64f !important;
 border-radius: 14px 14px 0 0;
 padding: 18px 20px !important;
 margin: -20px -20px 18px !important;
@@ -4655,7 +4655,7 @@ margin: -20px -20px 18px !important;
 #appView > .panel > .card > h2,
 #appView > .panel > .card .section-head h2,
 #dashboardPanel .dash-section-title h2 {
-color: #ffffff !important;
+color: #c9a64f !important;
 margin: 0 !important;
 padding: 0 !important;
 font-size: 20px;
