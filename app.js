@@ -3371,6 +3371,94 @@ visibleClasses.forEach(cls => {
     });
   } 
 }
+
+// DAFTAR BIODATA SANTRI
+function showBiodataByStatus(status) {
+  if (!isAdmin()) return;
+
+  const modal = $("biodataStatusModal");
+  const title = $("biodataStatusTitle");
+  const list = $("biodataStatusList");
+
+  const activeStudents = students.filter(
+    s => (s.status || "Aktif") === "Aktif"
+  );
+
+  const matching = activeStudents.filter(s =>
+    status === "complete"
+      ? isStudentBiodataComplete(s)
+      : !isStudentBiodataComplete(s)
+  );
+
+  title.textContent = status === "complete"
+    ? "Daftar Biodata Lengkap"
+    : "Daftar Biodata Belum Lengkap";
+
+  if (!matching.length) {
+    list.innerHTML = '<p class="muted">Tidak ada data santri.</p>';
+  } else {
+    const fieldLabels = [
+      ["nis", "NIS"],
+      ["name", "Nama"],
+      ["classId", "Kelas"],
+      ["gender", "Jenis Kelamin"],
+      ["birthplace", "Tempat Lahir"],
+      ["birthdate", "Tanggal Lahir"],
+      ["fatherName", "Nama Ayah"],
+      ["motherName", "Nama Ibu"],
+      ["address", "Alamat"],
+      ["photoUrl", "Foto"]
+    ];
+
+    list.innerHTML = matching
+      .sort((a, b) => a.name.localeCompare(b.name, "id"))
+      .map(s => {
+        const missing = fieldLabels
+          .filter(([key]) =>
+            String(s[key] ?? "").trim() === ""
+          )
+          .map(([, label]) => label);
+
+        return `
+          <div class="attendance-status-item">
+            <strong>${esc(s.name)}</strong>
+            <span>${esc(clsName(s.classId))}</span>
+            ${missing.length
+              ? `<p class="muted">Belum diisi: ${missing.join(", ")}</p>`
+              : ""}
+          </div>
+        `;
+      })
+      .join("");
+  }
+
+  modal.classList.remove("hidden");
+}
+
+// AKTIFKAN KLIK ANGKA BIODATA
+document.querySelectorAll(".biodata-stat").forEach(box => {
+  box.addEventListener("click", () => {
+    showBiodataByStatus(box.dataset.biodataStatus);
+  });
+
+  box.addEventListener("keydown", event => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      showBiodataByStatus(box.dataset.biodataStatus);
+    }
+  });
+});
+
+// TUTUP JENDELA BIODATA
+$("closeBiodataStatus").addEventListener("click", () => {
+  $("biodataStatusModal").classList.add("hidden");
+});
+
+$("biodataStatusModal").addEventListener("click", event => {
+  if (event.target.id === "biodataStatusModal") {
+    $("biodataStatusModal").classList.add("hidden");
+  }
+});
 // DAFTAR SANTRI BERDASARKAN STATUS ABSENSI HARI INI
 async function showAttendanceByStatus(status) {
   const modal = $("attendanceStatusModal");
