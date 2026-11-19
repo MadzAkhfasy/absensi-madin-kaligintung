@@ -1678,7 +1678,10 @@ function openModule(module) {
   $("mainMenu").classList.add("hidden");
 
   const tabs = document.querySelector(".tabs");
-  tabs.classList.remove("hidden");
+tabs.classList.toggle(
+  "hidden",
+  module === "evaluasi" || module === "keuangan"
+);
 
   const groups = {
     absensi: [
@@ -1699,10 +1702,11 @@ function openModule(module) {
   const allowed = groups[module] || [];
 
   document.querySelectorAll(".tab").forEach(tab => {
-    tab.classList.toggle(
-      "hidden",
-      !allowed.includes(tab.dataset.tab)
-    );
+  tab.classList.toggle(
+    "hidden",
+    !allowed.includes(tab.dataset.tab) ||
+    (tab.classList.contains("admin-only") && !isAdmin())
+  );
     tab.classList.remove("active");
   });
 
