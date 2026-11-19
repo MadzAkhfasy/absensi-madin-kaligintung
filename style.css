@@ -4278,3 +4278,85 @@ linear-gradient(
     padding: 6px 9px;
   }
 }
+/* =====================================
+   MENU UTAMA ADMINISTRASI MADIN
+===================================== */
+
+#mainMenu {
+  padding: 18px 0;
+}
+
+#mainMenu .card {
+  border-top: 3px solid var(--gold);
+  border-radius: 18px;
+  padding: 20px 16px;
+  background: linear-gradient(145deg, #ffffff, #f1f7f3);
+}
+
+#mainMenu h2 {
+  color: var(--green-deep);
+  margin: 0 0 6px;
+  font-size: 21px;
+  font-weight: 800;
+}
+
+#mainMenu .muted {
+  margin-bottom: 20px;
+}
+
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+}
+
+.module-card {
+  min-height: 135px;
+  padding: 18px 10px;
+  border: 1px solid #d9e8dd;
+  border-bottom: 3px solid var(--gold);
+  border-radius: 15px;
+  background: #ffffff;
+  color: var(--green-deep);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.module-card:active {
+  transform: scale(0.97);
+  background: var(--green-light);
+}
+
+.module-icon {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.module-card strong {
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 800;
+}
+
+@media (max-width: 360px) {
+  .module-grid {
+    gap: 9px;
+  }
+
+  .module-card {
+    min-height: 125px;
+    padding: 14px 7px;
+  }
+
+  .module-card strong {
+    font-size: 12px;
+  }
+}
+
+/* AKHIR MENU UTAMA */
