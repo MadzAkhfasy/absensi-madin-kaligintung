@@ -99,21 +99,24 @@
   </div>
 </section>
 <!-- AKHIR MENU UTAMA -->
-      <nav class="tabs">
+<nav class="tabs">
   <button class="tab active" data-tab="dashboardPanel">Dashboard</button>
   <button class="tab" data-tab="attendancePanel">Absensi</button>
+  <button class="tab" data-tab="dataDashboardPanel">Dashboard Data</button>
   <button class="tab" data-tab="studentsPanel">Santri</button>
   <button class="tab admin-only" data-tab="formPanel">Formulir</button>
   <button class="tab" data-tab="reportsPanel">Rekap</button>
-        <button class="tab" data-tab="calendarSettingsPanel">
-  Kalender Madin
-        </button>
-        <button class="tab admin-only" data-tab="printStudentsPanel">Cetak PDF</button>
-        <button class="tab admin-only" data-tab="backupPanel">Backup Data</button>
-        <button class="tab admin-only" data-tab="staffPanel">Kelola Petugas</button>
-      </nav><section id="dashboardPanel" class="panel">
+  <button class="tab" data-tab="calendarSettingsPanel">
+    Kalender Madin
+  </button>
+  <button class="tab admin-only" data-tab="printStudentsPanel">Cetak PDF</button>
+  <button class="tab admin-only" data-tab="backupPanel">Backup Data</button>
+  <button class="tab admin-only" data-tab="staffPanel">Kelola Petugas</button>
+</nav>
+
+<section id="dataDashboardPanel" class="panel hidden">
   <div class="card">
-    <h2>Dashboard Madin</h2>
+    <h2>Dashboard Data Santri</h2>
     <p class="muted">Ringkasan data santri Madin Kaligintung.</p>
 
     <div class="summary-grid">
@@ -127,7 +130,9 @@
       </div>
     </div>
   </div>
+</section>
 
+<section id="dashboardPanel" class="panel">
   <div class="card">
   <div class="dash-section-title">
     <div>
