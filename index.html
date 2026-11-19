@@ -154,95 +154,82 @@
     </div>
   </div>
 </div><details class="dashboard-fold attendance-chart-card">
-  <summary>Analisis Kehadiran Santri</summary>
-  <div class="fold-content">
+</div><details class="dashboard-fold attendance-chart-card">
+  <summary>Analisis Kehadiran Santri</summary>  <div class="fold-content">
+    <p class="muted">
+      Statistik kehadiran santri Madin Kaligintung.
+    </p><label class="chart-filter-label">
+  Pilih Kelas
+  <select id="attendanceChartClass">
+    <option value="all">Semua Kelas</option>
+  </select>
+</label>
 
-  <p class="muted">
-    Statistik kehadiran santri Madin Kaligintung.
-  </p>
-
-  <label class="chart-filter-label">
-    Pilih Kelas
-    <select id="attendanceChartClass">
-      <option value="all">Semua Kelas</option>
-    </select>
-  </label>
-
-  <div class="chart-period-tabs">
-    <button type="button"
-      class="chart-period-btn active"
-      data-period="weekly">
-      Mingguan
-    </button>
-
-    <button type="button"
-      class="chart-period-btn"
-      data-period="monthly">
-      Bulanan
-    </button>
-
-    <button type="button"
-      class="chart-period-btn"
-      data-period="yearly">
-      Tahunan
-    </button>
-  </div>
-
-  <p id="attendanceChartPeriodLabel" class="muted">
-    Ringkasan kehadiran mingguan
-  </p>
-
-  <h3>Komposisi Kehadiran</h3>
-
-  <div id="attendanceDonutChart">
-    <p class="muted">Diagram utama akan ditampilkan di sini.</p>
-  </div>
-
-  <div class="dash-mini-stats">
-    <span>Hadir <strong id="chartHadir">0</strong></span>
-    <span>Izin <strong id="chartIzin">0</strong></span>
-    <span>Sakit <strong id="chartSakit">0</strong></span>
-    <span>Alpa <strong id="chartAlpa">0</strong></span>
-  </div>
-
-  <div class="chart-attendance-rate">
-    Persentase Kehadiran:
-    <strong id="chartAttendanceRate">0%</strong>
-  </div>
-
-  <hr>
-
-  <details class="dashboard-fold">
-  <summary>Analisis Detail</summary>
-
-  <label class="chart-filter-label">
-    Pilih Jenis Analisis
-    <select id="attendanceDetailType">
-      <option value="trend">Tren Kehadiran</option>
-      <option value="status">Perbandingan Status</option>
-      <option value="class">Kehadiran per Kelas</option>
-      <option value="history">Riwayat Kehadiran</option>
-    </select>
-  </label>
-
-  <div id="attendanceChart">
-    <p class="muted">Memuat analisis detail...</p>
-    </div>
-  </details>
+<div class="chart-period-tabs">
+  <button type="button" class="chart-period-btn active" data-period="weekly">
+    Mingguan
+  </button>
+  <button type="button" class="chart-period-btn" data-period="monthly">
+    Bulanan
+  </button>
+  <button type="button" class="chart-period-btn" data-period="yearly">
+    Tahunan
+  </button>
 </div>
 
+<p id="attendanceChartPeriodLabel" class="muted">
+  Ringkasan kehadiran mingguan
+</p>
+
+<h3>Komposisi Kehadiran</h3>
+
+<div id="attendanceDonutChart">
+  <p class="muted">Diagram utama akan ditampilkan di sini.</p>
+</div>
+
+<div class="dash-mini-stats">
+  <span>Hadir <strong id="chartHadir">0</strong></span>
+  <span>Izin <strong id="chartIzin">0</strong></span>
+  <span>Sakit <strong id="chartSakit">0</strong></span>
+  <span>Alpa <strong id="chartAlpa">0</strong></span>
+</div>
+
+<div class="chart-attendance-rate">
+  Persentase Kehadiran:
+  <strong id="chartAttendanceRate">0%</strong>
+</div>
+
+<hr>
+
 <details class="dashboard-fold">
+  <summary>Analisis Detail</summary>
+
+  <div class="fold-content">
+    <label class="chart-filter-label">
+      Pilih Jenis Analisis
+      <select id="attendanceDetailType">
+        <option value="trend">Tren Kehadiran</option>
+        <option value="status">Perbandingan Status</option>
+        <option value="class">Kehadiran per Kelas</option>
+        <option value="history">Riwayat Kehadiran</option>
+      </select>
+    </label>
+
+    <div id="attendanceChart">
+      <p class="muted">Memuat analisis detail...</p>
+    </div>
+  </div>
+</details>
+
+  </div>
+</details><details class="dashboard-fold">
   <summary>Kehadiran per Kelas</summary>
   <div class="fold-content">
     <p class="muted">Persentase kehadiran selama 30 hari terakhir.</p>
     <div id="dashClassStats"></div>
-    </div>
-  </details>
   </div>
-</details>
-
-<details class="dashboard-fold">
-  <summary>Kehadiran per Kelas</summary>
+</details><details class="dashboard-fold">
+  <summary>Riwayat Absensi Terbaru</summary>
   <div class="fold-content">
     <div id="dashRecentDays"></div>
   </div>
