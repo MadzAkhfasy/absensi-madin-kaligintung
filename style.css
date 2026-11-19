@@ -4403,7 +4403,7 @@ linear-gradient(
 .module-back {
   display: block;
   width: fit-content;
-  margin: 10px 0 12px auto;
+  margin: 10px 0 0;
   padding: 7px 12px;
   border: 1px solid #cbd9ce;
   border-radius: 20px;
