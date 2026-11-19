@@ -4598,3 +4598,41 @@ text-align: center;
 .attendance-status-table td:last-child {
 font-weight: 600;
 }
+/* HEADER HIJAU HALAMAN ABSENSI */
+#attendancePanel > .card .section-head {
+  display: block;
+  margin: -24px -24px 18px !important;
+  padding: 18px 24px;
+  background: linear-gradient(120deg, #176b45, #0b3d2e);
+  border-radius: 20px 20px 0 0;
+}
+
+#attendancePanel .section-head h2 {
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #ffffff !important;
+  font-size: 22px;
+}
+
+#attendancePanel .section-head h2::after {
+  content: none !important;
+  display: none !important;
+}
+
+#attendancePanel .section-head p {
+  margin: 6px 0 0 !important;
+  color: rgba(255,255,255,.85) !important;
+  font-size: 12px;
+}
+
+/* PENYESUAIAN TAMPILAN HP */
+@media (max-width: 600px) {
+  #attendancePanel > .card .section-head {
+    margin: -16px -16px 15px !important;
+    padding: 15px 16px;
+  }
+
+  #attendancePanel .section-head h2 {
+    font-size: 20px;
+  }
+}
