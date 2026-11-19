@@ -3374,65 +3374,100 @@ visibleClasses.forEach(cls => {
 
 // DAFTAR BIODATA SANTRI
 function showBiodataByStatus(status) {
-  if (!isAdmin()) return;
+function showBiodataByStatus(status) {
+if (!isAdmin()) return;
 
-  const modal = $("biodataStatusModal");
-  const title = $("biodataStatusTitle");
-  const list = $("biodataStatusList");
+const modal = $("biodataStatusModal");
+const title = $("biodataStatusTitle");
+const list = $("biodataStatusList");
 
-  const activeStudents = students.filter(
-    s => (s.status || "Aktif") === "Aktif"
-  );
+const activeStudents = students.filter(
+s => (s.status || "Aktif") === "Aktif"
+);
 
-  const matching = activeStudents.filter(s =>
-    status === "complete"
-      ? isStudentBiodataComplete(s)
-      : !isStudentBiodataComplete(s)
-  );
+const matching = activeStudents.filter(s =>
+status === "complete"
+? isStudentBiodataComplete(s)
+: !isStudentBiodataComplete(s)
+);
 
-  title.textContent = status === "complete"
-    ? "Daftar Biodata Lengkap"
-    : "Daftar Biodata Belum Lengkap";
+title.textContent = status === "complete"
+? "Daftar Biodata Lengkap"
+: "Daftar Biodata Belum Lengkap";
 
-  if (!matching.length) {
-    list.innerHTML = '<p class="muted">Tidak ada data santri.</p>';
-  } else {
-    const fieldLabels = [
-      ["nis", "NIS"],
-      ["name", "Nama"],
-      ["classId", "Kelas"],
-      ["gender", "Jenis Kelamin"],
-      ["birthplace", "Tempat Lahir"],
-      ["birthdate", "Tanggal Lahir"],
-      ["fatherName", "Nama Ayah"],
-      ["motherName", "Nama Ibu"],
-      ["address", "Alamat"],
-      ["photoUrl", "Foto"]
-    ];
+if (!matching.length) {
+list.innerHTML = '<p class="muted">Tidak ada data santri.</p>';
+} else {
+const fieldLabels = [
+["nis", "NIS"],
+["name", "Nama"],
+["classId", "Kelas"],
+["gender", "Jenis Kelamin"],
+["birthplace", "Tempat Lahir"],
+["birthdate", "Tanggal Lahir"],
+["fatherName", "Nama Ayah"],
+["motherName", "Nama Ibu"],
+["address", "Alamat"],
+["photoUrl", "Foto"]
+];
 
-    list.innerHTML = matching
-      .sort((a, b) => a.name.localeCompare(b.name, "id"))
-      .map(s => {
-        const missing = fieldLabels
-          .filter(([key]) =>
-            String(s[key] ?? "").trim() === ""
-          )
-          .map(([, label]) => label);
+const classOrder = [
+  "Kelas Jilid 5",
+  "Kelas Jilid 4",
+  "Kelas Jilid 3",
+  "Kelas Jilid 2",
+  "Kelas Jilid 1",
+  "Kelas Jilid Pemula"
+];
 
-        return `
-          <div class="attendance-status-item">
-            <strong>${esc(s.name)}</strong>
-            <span>${esc(clsName(s.classId))}</span>
-            ${missing.length
-              ? `<p class="muted">Belum diisi: ${missing.join(", ")}</p>`
-              : ""}
-          </div>
-        `;
-      })
-      .join("");
-  }
+const orderedClasses = classes.slice().sort((a, b) =>
+  classOrder.indexOf(a.name) - classOrder.indexOf(b.name)
+);
 
-  modal.classList.remove("hidden");
+const grouped = orderedClasses.map(cls => ({
+  name: cls.name,
+  students: matching
+    .filter(s => s.classId === cls.id)
+    .sort((a, b) =>
+      a.name.localeCompare(b.name, "id")
+    )
+})).filter(group => group.students.length);
+
+list.innerHTML = grouped.map(group => `
+  <div class="attendance-class-group">
+    <h3>
+      ${esc(group.name)} :
+      <span>${group.students.length} santri</span>
+    </h3>
+    <table class="attendance-status-table">
+      <tbody>
+        ${group.students.map((s, index) => {
+          const missing = fieldLabels
+            .filter(([key]) =>
+              String(s[key] ?? "").trim() === ""
+            )
+            .map(([, label]) => label);
+
+          return `
+            <tr>
+              <td>${index + 1}</td>
+              <td>
+                <strong>${esc(s.name)}</strong>
+                ${missing.length
+                  ? `<p class="muted">Belum diisi: ${esc(missing.join(", "))}</p>`
+                  : ""}
+              </td>
+            </tr>
+          `;
+        }).join("")}
+      </tbody>
+    </table>
+  </div>
+`).join("");
+
+}
+
+modal.classList.remove("hidden");
 }
 
 // AKTIFKAN KLIK ANGKA BIODATA
