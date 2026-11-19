@@ -252,6 +252,7 @@ await loadClasses();
 await loadWeeklySchedule();
 await loadHolidays();
 fillStudentPdfClass();
+   showMainMenu();
   $("authView").classList.add("hidden");$("appView").classList.remove("hidden");$("logoutBtn").classList.remove("hidden");
 $("hello").textContent="Halo, "+(profile.displayName || profile.name || user.email);
 $("roleInfo").textContent=isAdmin()?"Admin/Pengurus":"Admin Absensi · Semua Kelas";
@@ -271,7 +272,6 @@ $("welcomeUserRole").textContent = profileRole;
 $("reportClassWrap").classList.toggle("hidden",!canAccessAllClasses());
   if(!canAccessAllClasses()&&!myClass()){$("attendanceList").innerHTML='<p class="muted">Akun Anda belum diberi kelas. Hubungi admin Madin.</p>';$("saveAttendanceBtn").classList.add("hidden");}
   await fillClassSelects();await loadStudents();await renderAttendance();await renderDashboard();
-   showMainMenu();
  }catch(e){console.error(e);alert("Gagal memuat data: "+e.message);}
 });
 
