@@ -446,6 +446,29 @@ async function loadClasses(){
 
  classes.sort((a,b)=>(a.order||0)-(b.order||0));
 }
+// NAVIGASI PENILAIAN MEMBACA YANBU'A
+
+$("openReadingAssessmentBtn").onclick = () => {
+$("evaluasiAspectMenu").classList.add("hidden");
+$("readingAssessmentView").classList.remove("hidden");
+
+const select = $("readingClassSelect");
+select.innerHTML = '<option value="">Pilih kelas</option>';
+
+classes
+.filter(kelas => kelas.name.startsWith("Kelas Jilid"))
+.forEach(kelas => {
+const option = document.createElement("option");
+option.value = kelas.id;
+option.textContent = kelas.name;
+select.appendChild(option);
+});
+};
+
+$("backReadingAssessmentBtn").onclick = () => {
+$("readingAssessmentView").classList.add("hidden");
+$("evaluasiAspectMenu").classList.remove("hidden");
+};
 // MEMUAT JADWAL LIBUR MINGGUAN
 async function loadWeeklySchedule() {
   try {
