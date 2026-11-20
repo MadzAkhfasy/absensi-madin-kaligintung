@@ -4759,3 +4759,30 @@ margin: -16px -16px 15px !important;
 font-size: 19px;
 }
 }
+
+/* =========================================
+   LATAR SOLID GLOBAL SEMUA TAB
+   ========================================= */
+
+/* Semua panel utama */
+#appView > .panel {
+  background: #ffffff !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Semua kartu di dalam panel */
+#appView > .panel .card {
+  background: #ffffff !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Hilangkan ornamen yang menembus latar */
+#appView > .panel::before,
+#appView > .panel::after {
+  display: none !important;
+  content: none !important;
+}
