@@ -4761,16 +4761,38 @@ font-size: 19px;
 }
 
 /* =========================================
-   WATERMARK DI BELAKANG KARTU
+   PERBAIKAN FINAL LAPISAN WATERMARK MADIN
+   LOGO DI BELAKANG, KONTEN DI DEPAN
    ========================================= */
 
-/* Panel tetap transparan */
+/* Jadikan area aplikasi sebagai lapisan utama */
+#appView {
+  position: relative !important;
+  isolation: isolate !important;
+}
+
+/* Logo watermark berada di lapisan belakang */
+#appView::before {
+  z-index: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Semua bagian utama aplikasi berada di depan logo */
+#appView > .welcome,
+#appView > .tabs,
+#appView > .panel,
+#appView > #mainMenu {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Panel transparan agar watermark tetap terlihat di sekitarnya */
 #appView > .panel {
   background: transparent !important;
   background-image: none !important;
 }
 
-/* Kartu berada di atas watermark */
+/* Semua kartu konten harus putih solid */
 #appView > .panel .card {
   position: relative !important;
   z-index: 2 !important;
