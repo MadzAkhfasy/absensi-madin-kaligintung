@@ -4633,6 +4633,26 @@ text-align: center;
 .attendance-status-table td:last-child {
 font-weight: 600;
 }
+
+/* KETERANGAN BIODATA BELUM LENGKAP */
+#biodataStatusList .attendance-status-table td {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  vertical-align: top;
+}
+
+#biodataStatusList .attendance-status-table td:last-child {
+  font-weight: 400;
+}
+
+#biodataStatusList .attendance-status-table p {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+  margin: 5px 0 0;
+  font-size: 12px;
+}
+
 /* HEADER HIJAU HALAMAN ABSENSI */
 #attendancePanel > .card .section-head {
   display: block;
