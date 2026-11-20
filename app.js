@@ -1684,25 +1684,33 @@ function openModule(module) {
   const tabs = document.querySelector(".tabs");
 tabs.classList.toggle(
   "hidden",
-  module === "evaluasi" || module === "keuangan"
+  module === "keuangan"
 );
 
   const groups = {
-    absensi: [
-      "dashboardPanel",
-      "attendancePanel",
-      "reportsPanel",
-      "calendarSettingsPanel",
-      "staffPanel"
-    ],
-    data: [
-  "dataDashboardPanel",
-  "studentsPanel",
-  "formPanel",
-  "printStudentsPanel",
-  "backupPanel"
-]
-  };
+  absensi: [
+    "dashboardPanel",
+    "attendancePanel",
+    "reportsPanel",
+    "calendarSettingsPanel",
+    "staffPanel"
+  ],
+
+  data: [
+    "dataDashboardPanel",
+    "studentsPanel",
+    "formPanel",
+    "printStudentsPanel",
+    "backupPanel"
+  ],
+
+  evaluasi: [
+    "evaluasiDashboardPanel",
+    "evaluasiPenilaianPanel",
+    "evaluasiBulananPanel",
+    "evaluasiRaporPanel"
+  ]
+};
 
   const allowed = groups[module] || [];
 
@@ -1721,7 +1729,7 @@ tabs.classList.toggle(
 
   let target = allowed[0];
 
-  if (module === "evaluasi" || module === "keuangan") {
+  if (module === "keuangan") {
     target = "modulePlaceholder";
 
     let placeholder = $("modulePlaceholder");
