@@ -1521,26 +1521,22 @@ color: #66796e;
 /* DASHBOARD */
 
 #dashboardPanel > .card:first-child {
-overflow: hidden;
-border: 1px solid rgba(221,190,111,.7);
-
-background:
-radial-gradient(circle at 95% 0%, rgba(255,255,255,.15), transparent 30%),
-linear-gradient(125deg,#064a34,#08744d);
-
-color: #fff;
+  overflow: hidden;
+  border: 1px solid rgba(201,166,79,.45);
+  background: #ffffff;
+  color: #234b38;
 }
 
 #dashboardPanel > .card:first-child h2 {
-color: #fff;
+  color: #07583b;
 }
 
 #dashboardPanel > .card:first-child h2::after {
-background: linear-gradient(90deg,#e5c66f 0 65%,rgba(255,255,255,.7) 65% 100%);
+  background: linear-gradient(90deg,#08784f 0 65%,#d2ad50 65% 100%);
 }
 
 #dashboardPanel > .card:first-child .muted {
-color: rgba(255,255,255,.78);
+  color: #66796e;
 }
 
 #dashboardPanel .summary-grid {
@@ -4148,18 +4144,7 @@ linear-gradient(
 #e8f0e5 100%
 ) !important;
 }
-/* PERBAIKAN KONTRAS KARTU DASHBOARD */
-#dashboardPanel > .card:first-child {
-  background:
-    radial-gradient(circle at 95% 0%, rgba(255,255,255,.15), transparent 30%),
-    linear-gradient(125deg, #064a34, #08744d) !important;
-  color: #ffffff;
-}
 
-#dashboardPanel > .card:first-child h2,
-#dashboardPanel > .card:first-child .muted {
-  color: #ffffff !important;
-}
 /* LOGO MADIN STATIS - POSISI STABIL DI HP */
 
 #appView::before {
@@ -4178,19 +4163,6 @@ linear-gradient(
   pointer-events: none;
 }
 
-/* PERBAIKAN TAMPILAN KARTU DASHBOARD MADIN */
-
-#dashboardPanel > .card:first-child {
-  background: rgba(255, 253, 247, .82) !important;
-}
-
-#dashboardPanel > .card:first-child h2 {
-  color: #c9a64f !important;
-}
-
-#dashboardPanel > .card:first-child > p {
-  color: #52685b !important;
-}
 /* FOTO PROFIL DI BAWAH TANGGAL WELCOME */
 
 #appView .welcome-profile {
