@@ -3576,7 +3576,7 @@ list.innerHTML = grouped.map(group => `
   <div class="attendance-class-group">
     <h3>
   ${esc(group.name)} :
-  <span>${group.students.length} santri :</span>
+  <span>${group.students.length} santri</span>
 </h3>
     <table class="attendance-status-table">
       <tbody>
