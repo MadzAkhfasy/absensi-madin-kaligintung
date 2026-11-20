@@ -4131,18 +4131,7 @@ linear-gradient(
 
 background-attachment: fixed;
 }
-/* =========================================
-GRADASI KARTU HALAMAN MADIN
-========================================= */
 
-#appView > .panel > .card {
-background: linear-gradient(
-145deg,
-#fffdf7 0%,
-#f7f9f3 55%,
-#edf5ee 100%
-);
-}
 /* AKSEN EMAS LEMBUT PANEL */
 
 #appView > .panel {
