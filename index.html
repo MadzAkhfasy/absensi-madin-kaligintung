@@ -112,6 +112,22 @@
   <button class="tab admin-only" data-tab="printStudentsPanel">Cetak PDF</button>
   <button class="tab admin-only" data-tab="backupPanel">Backup Data</button>
   <button class="tab admin-only" data-tab="staffPanel">Kelola Petugas</button>
+  <!-- TAB MODUL EVALUASI -->
+<button class="tab evaluasi-tab" data-tab="evaluasiDashboardPanel">
+  Dashboard Evaluasi
+</button>
+
+<button class="tab evaluasi-tab" data-tab="evaluasiPenilaianPanel">
+  Penilaian
+</button>
+
+<button class="tab evaluasi-tab" data-tab="evaluasiBulananPanel">
+  Evaluasi
+</button>
+
+<button class="tab evaluasi-tab" data-tab="evaluasiRaporPanel">
+  Rapor
+</button>
 </nav>
 
 <section id="dataDashboardPanel" class="panel hidden">
@@ -640,6 +656,42 @@
   </div>
 </section>
     </section>
+    <!-- MODUL EVALUASI PEMBELAJARAN -->
+
+<section id="evaluasiDashboardPanel" class="panel hidden">
+  <div class="card">
+    <h2>Dashboard Evaluasi</h2>
+    <p class="muted">Ringkasan perkembangan pembelajaran santri.</p>
+  </div>
+</section>
+
+<section id="evaluasiPenilaianPanel" class="panel hidden">
+  <div class="card">
+    <h2>Penilaian Pembelajaran</h2>
+
+    <div class="summary-grid">
+      <button class="stat">Membaca</button>
+      <button class="stat">Menulis</button>
+      <button class="stat">Hafalan</button>
+    </div>
+  </div>
+</section>
+
+<section id="evaluasiBulananPanel" class="panel hidden">
+  <div class="card">
+    <h2>Evaluasi Bulanan</h2>
+    <p class="muted">Rekap perkembangan pembelajaran setiap bulan.</p>
+  </div>
+</section>
+
+<section id="evaluasiRaporPanel" class="panel hidden">
+  <div class="card">
+    <h2>Rapor Akhir Tahun</h2>
+    <p class="muted">Laporan hasil pembelajaran santri.</p>
+  </div>
+</section>
+
+<!-- AKHIR MODUL EVALUASI -->
   </main>
 
   <footer>Madrasah Diniyah Kaligintung · Absensi Santri</footer>
