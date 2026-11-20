@@ -135,6 +135,17 @@ main {
   box-shadow: var(--shadow);
 }
 
+/* LATAR SOLID MODUL PENILAIAN */
+#evaluasiPenilaianPanel {
+  background: #ffffff;
+  background-image: none;
+}
+
+#evaluasiPenilaianPanel .card {
+  background: #ffffff;
+  background-image: none;
+}
+
 .card {
   padding: 20px;
   margin-bottom: 18px;
