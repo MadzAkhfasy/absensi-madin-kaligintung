@@ -666,15 +666,48 @@
 </section>
 
 <section id="evaluasiPenilaianPanel" class="panel hidden">
-  <div class="card">
+
+  <div id="evaluasiAspectMenu" class="card">
     <h2>Penilaian Pembelajaran</h2>
+    <p class="muted">Pilih aspek pembelajaran yang akan dinilai.</p>
 
     <div class="summary-grid">
-      <button class="stat">Membaca</button>
-      <button class="stat">Menulis</button>
-      <button class="stat">Hafalan</button>
+      <button type="button" class="stat" id="openReadingAssessmentBtn">
+        Membaca
+      </button>
+
+      <button type="button" class="stat">
+        Menulis
+      </button>
+
+      <button type="button" class="stat">
+        Hafalan
+      </button>
     </div>
   </div>
+
+  <div id="readingAssessmentView" class="hidden">
+
+    <div class="card">
+      <button type="button" class="secondary" id="backReadingAssessmentBtn">
+        ← Kembali
+      </button>
+
+      <h2>Penilaian Membaca Yanbu'a</h2>
+      <p class="muted">
+        Penilaian kelancaran membaca santri berdasarkan halaman Yanbu'a.
+      </p>
+
+      <label for="readingClassSelect">Pilih Jilid / Kelas</label>
+      <select id="readingClassSelect">
+        <option value="">Pilih kelas</option>
+      </select>
+
+      <div id="readingStudentList"></div>
+    </div>
+
+  </div>
+
 </section>
 
 <section id="evaluasiBulananPanel" class="panel hidden">
