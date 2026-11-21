@@ -3911,18 +3911,30 @@ async function showAttendanceByStatus(status) {
       activeStudents.map(s => [s.id, s])
     );
 
-    const snap = await getDocs(query(
-      collection(db, "attendance"),
-      where("date", "==", todayStr)
-    ));
+    let todayAttendance;
 
-    const matching = snap.docs
-      .map(d => d.data())
-      .filter(a =>
-        a.status === status &&
-        classIds.has(a.classId) &&
-        studentMap.has(a.studentId)
-      )
+if (
+  dashboardAttendanceCache &&
+  dashboardAttendanceCache.end === todayStr &&
+  Date.now() - dashboardAttendanceCache.loadedAt < 60000
+) {
+  todayAttendance = dashboardAttendanceCache.data;
+} else {
+  const snap = await getDocs(query(
+    collection(db, "attendance"),
+    where("date", "==", todayStr)
+  ));
+
+  todayAttendance = snap.docs.map(d => d.data());
+}
+
+const matching = todayAttendance
+  .filter(a =>
+    a.date === todayStr &&
+    a.status === status &&
+    classIds.has(a.classId) &&
+    studentMap.has(a.studentId)
+  )
       .map(a => ({
         student: studentMap.get(a.studentId),
         classId: a.classId
