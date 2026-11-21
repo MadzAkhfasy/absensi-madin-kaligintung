@@ -477,17 +477,9 @@ $("readingClassSelect").onchange = async () => {
   list.innerHTML = "<p class='muted'>Memuat daftar santri...</p>";
 
   try {
-    const snap = await getDocs(
-      query(
-        collection(db, "students"),
-        where("classId", "==", classId)
-      )
-    );
-
-    const santri = snap.docs
-      .map(d => ({ id: d.id, ...d.data() }))
-      .filter(s => s.status === "Aktif")
-      .sort((a, b) => a.name.localeCompare(b.name));
+    const santri = students
+  .filter(s => s.classId === classId)
+  .sort((a, b) => a.name.localeCompare(b.name));
 
     list.innerHTML = "";
 
