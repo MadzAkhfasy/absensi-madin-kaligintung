@@ -465,6 +465,57 @@ select.appendChild(option);
 });
 };
 
+// MEMUAT DAFTAR SANTRI UNTUK PENILAIAN MEMBACA
+$("readingClassSelect").onchange = async () => {
+  const classId = $("readingClassSelect").value;
+  const list = $("readingStudentList");
+
+  list.innerHTML = "";
+
+  if (!classId) return;
+
+  list.innerHTML = "<p class='muted'>Memuat daftar santri...</p>";
+
+  try {
+    const snap = await getDocs(
+      query(
+        collection(db, "students"),
+        where("classId", "==", classId)
+      )
+    );
+
+    const santri = snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(s => s.status === "Aktif")
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+    list.innerHTML = "";
+
+    if (!santri.length) {
+      list.innerHTML = "<p class='muted'>Belum ada santri aktif di kelas ini.</p>";
+      return;
+    }
+
+    santri.forEach((s, index) => {
+      const row = document.createElement("div");
+      row.className = "list-row";
+
+      row.innerHTML = `
+        <div class="student-info">
+          <strong>${index + 1}. ${esc(s.name)}</strong>
+          <small>NIS: ${esc(s.nis || "-")}</small>
+        </div>
+      `;
+
+      list.appendChild(row);
+    });
+
+  } catch (error) {
+    console.error(error);
+    list.innerHTML =
+      "<p class='muted'>Gagal memuat daftar santri.</p>";
+  }
+};
 $("backReadingAssessmentBtn").onclick = () => {
 $("readingAssessmentView").classList.add("hidden");
 $("evaluasiAspectMenu").classList.remove("hidden");
