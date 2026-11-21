@@ -526,7 +526,7 @@ $("readingClassSelect").onchange = async () => {
       '#readingStudentList .reading-matrix .reading-score{width:42px;height:36px;padding:2px;border:1px solid #cbd8ce;border-radius:9px;font-size:17px;font-weight:700;color:#174b35;cursor:pointer}' +
       '#readingStudentList .reading-matrix .reading-score.red{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}' +
       '#readingStudentList .reading-matrix .reading-score-menu{position:absolute;z-index:20;background:white;border:1px solid #d9e2dc;border-radius:10px;padding:5px;box-shadow:0 5px 15px rgba(0,0,0,.15)}' +
-      '#readingStudentList .reading-matrix .reading-score-menu button{display:block;width:100%;min-width:75px;margin:3px 0;padding:8px;border:0;border-radius:7px;font-size:16px;font-weight:700}' +p
+      '#readingStudentList .reading-matrix .reading-score-menu button{display:block;width:100%;min-width:75px;margin:3px 0;padding:8px;border:0;border-radius:7px;font-size:16px;font-weight:700}' +
       '#readingStudentList .reading-matrix select:focus{border-color:#c9a64f!important;outline:none!important}' +
       '#readingStudentList .reading-matrix select option{background:#fff;color:#174b35}' +
       '@media(max-width:600px){#readingStudentList .reading-matrix .reading-student-name,#readingStudentList .reading-matrix .reading-name-head{min-width:145px}}' +
@@ -568,6 +568,7 @@ $("readingClassSelect").onchange = async () => {
           '" data-result="' + chosen +
           '" style="background:' + bg + '">' +
           symbol + '</button></td>';
+      }
 
       table += '</tr>';
     });
