@@ -518,9 +518,9 @@ $("readingClassSelect").onchange = async () => {
       '#readingStudentList .reading-matrix-wrap{max-height:65vh;overflow:auto;border:1px solid #d9e2dc;border-radius:12px;background:#fff;-webkit-overflow-scrolling:touch}' +
       '#readingStudentList .reading-matrix{border-collapse:separate;border-spacing:0;font-size:12px;white-space:nowrap;min-width:max-content;width:100%}' +
       '#readingStudentList .reading-matrix th{padding:9px 8px;background:#104b32;color:#fff;font-weight:700;text-align:center}' +
-      '#readingStudentList .reading-matrix .reading-name-head{position:sticky;top:0;left:0;z-index:4;min-width:155px;text-align:left}' +
+      '#readingStudentList .reading-matrix .reading-name-head{position:-webkit-sticky!important;position:sticky!important;top:0!important;left:0!important;z-index:10!important;min-width:155px;background:#104b32!important;text-align:left;box-shadow:2px 0 4px rgba(0,0,0,.12)}' +
       '#readingStudentList .reading-matrix .reading-page-head{position:sticky;top:0;z-index:2;min-width:46px}' +
-      '#readingStudentList .reading-matrix .reading-student-name{position:sticky;left:0;z-index:1;min-width:155px;padding:9px 8px;background:#f1f7f3!important;color:#174b35!important;text-align:left;font-size:12px;font-weight:600;border-bottom:1px solid #e5ebe6}' +
+      '#readingStudentList .reading-matrix .reading-student-name{position:-webkit-sticky!important;position:sticky!important;left:0!important;z-index:5!important;min-width:155px;padding:9px 8px;background:#f1f7f3!important;color:#174b35!important;text-align:left;font-size:12px;font-weight:600;border-bottom:1px solid #e5ebe6;box-shadow:2px 0 4px rgba(0,0,0,.08)}' +
       '#readingStudentList .reading-matrix tbody tr:nth-child(even) .reading-student-name{background:#e5f0e8!important}' +
       '#readingStudentList .reading-matrix td{padding:4px;text-align:center;border-bottom:1px solid #e5ebe6;border-left:1px solid #edf1ed;background:#fff}' +
       '#readingStudentList .reading-matrix .reading-score{width:42px;height:36px;padding:2px;border:1px solid #cbd8ce;border-radius:9px;font-size:17px;font-weight:700;color:#174b35;cursor:pointer}' +
