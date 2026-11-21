@@ -546,7 +546,11 @@ $("readingClassSelect").onchange = async () => {
       .filter(s => s.classId === classId)
       .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
 
-    const assessmentSnap = await getDocs(collection(db, "readingAssessments"));
+    const assessmentSnap = await getDocs(query(
+  collection(db, "readingAssessments"),
+  where("classId", "==", classId)
+));
+    
     const assessments = assessmentSnap.docs
       .map(d => ({ id: d.id, ...d.data() }))
       .filter(a => a.classId === classId);
