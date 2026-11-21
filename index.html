@@ -666,48 +666,86 @@
 </section>
 
 <section id="evaluasiPenilaianPanel" class="panel hidden">
-
-  <div id="evaluasiAspectMenu" class="card">
+  <div class="card">
     <h2>Penilaian Pembelajaran</h2>
-    <p class="muted">Pilih aspek pembelajaran yang akan dinilai.</p>
+    <p class="muted">Pilih aspek pembelajaran. Buka satu bagian untuk menampilkan penilaiannya.</p><style>
+  .assessment-accordion-item {
+    margin: 10px 0;
+    border: 1px solid #dce7df;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+  }
 
-    <div class="summary-grid">
-      <button type="button" class="stat" id="openReadingAssessmentBtn">
-        Membaca
-      </button>
+  .assessment-accordion-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: #104b32;
+    color: #fff;
+    border: 0;
+    border-radius: 0;
+    font-weight: 700;
+    text-align: left;
+  }
 
-      <button type="button" class="stat">
-        Menulis
-      </button>
+  .assessment-accordion-toggle:after {
+    content: '＋';
+    font-size: 20px;
+    color: #e3c66d;
+  }
 
-      <button type="button" class="stat">
-        Hafalan
-      </button>
-    </div>
+  .assessment-accordion-toggle[aria-expanded="true"]:after {
+    content: '−';
+  }
+
+  .assessment-accordion-content {
+    padding: 14px;
+    background: #fff;
+  }
+</style>
+
+<div class="assessment-accordion-item">
+  <button type="button" class="assessment-accordion-toggle" id="openReadingAssessmentBtn" aria-expanded="false">
+    01. Penilaian Membaca
+  </button>
+
+  <div id="readingAssessmentView" class="assessment-accordion-content hidden">
+    <h3>Penilaian Membaca Yanbu'a</h3>
+    <p class="muted">Penilaian kelancaran membaca santri berdasarkan halaman Yanbu'a.</p>
+
+    <label for="readingClassSelect">Pilih Jilid / Kelas</label>
+    <select id="readingClassSelect">
+      <option value="">Pilih kelas</option>
+    </select>
+
+    <div id="readingStudentList"></div>
   </div>
+</div>
 
-  <div id="readingAssessmentView" class="hidden">
+<div class="assessment-accordion-item">
+  <button type="button" class="assessment-accordion-toggle" id="openWritingAssessmentBtn" aria-expanded="false">
+    02. Penilaian Menulis
+  </button>
 
-    <div class="card">
-      <button type="button" class="secondary" id="backReadingAssessmentBtn">
-        ← Kembali
-      </button>
+  <div id="writingAssessmentView" class="assessment-accordion-content hidden">
+    <p class="muted">Modul penilaian menulis Arab akan ditampilkan di bagian ini.</p>
+  </div>
+</div>
 
-      <h2>Penilaian Membaca Yanbu'a</h2>
-      <p class="muted">
-        Penilaian kelancaran membaca santri berdasarkan halaman Yanbu'a.
-      </p>
+<div class="assessment-accordion-item">
+  <button type="button" class="assessment-accordion-toggle" id="openMemorizationAssessmentBtn" aria-expanded="false">
+    03. Penilaian Menghafal
+  </button>
 
-      <label for="readingClassSelect">Pilih Jilid / Kelas</label>
-      <select id="readingClassSelect">
-        <option value="">Pilih kelas</option>
-      </select>
-
-      <div id="readingStudentList"></div>
-    </div>
+  <div id="memorizationAssessmentView" class="assessment-accordion-content hidden">
+    <p class="muted">Modul penilaian hafalan akan ditampilkan di bagian ini.</p>
+  </div>
+</div>
 
   </div>
-
 </section>
 
 <section id="evaluasiBulananPanel" class="panel hidden">
