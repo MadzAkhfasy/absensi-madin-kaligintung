@@ -730,6 +730,49 @@ $("readingClassSelect").onchange = async () => {
           menu.appendChild(button);
         });
 
+        const divider = document.createElement("div");
+divider.style.cssText = "height:1px;background:#e5ebe6;margin:5px 2px;";
+menu.appendChild(divider);
+
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.className = "reading-score-delete";
+    deleteButton.textContent = "✕ Hapus";
+    deleteButton.style.cssText = "width:100%;padding:7px 3px;margin:2px 0;border:0;border-radius:7px;background:#fff0f0;color:#c62828;font-size:12px;font-weight:700;";
+
+    deleteButton.onclick = async () => {
+      const studentId = input.dataset.student;
+      const page = Number(input.dataset.page);
+      const recordKey = studentId + "_" + page;
+      const existingRecord = latest[recordKey];
+
+      if (!existingRecord) {
+        menu.remove();
+        return;
+      }
+
+      if (!confirm("Hapus hasil penilaian halaman ini?")) return;
+
+      deleteButton.disabled = true;
+      deleteButton.textContent = "Menghapus...";
+
+      try {
+        await deleteDoc(doc(db, "readingAssessments", existingRecord.id));
+        delete latest[recordKey];
+        input.textContent = "";
+        input.dataset.result = "";
+        input.style.background = "";
+        input.classList.remove("red");
+        menu.remove();
+      } catch (error) {
+        console.error(error);
+        alert("Nilai gagal dihapus. Periksa koneksi internet.");
+        deleteButton.disabled = false;
+        deleteButton.textContent = "✕ Hapus";
+      }
+    };
+
+    menu.appendChild(deleteButton);
                 document.body.appendChild(menu);
 
         const buttonRect = input.getBoundingClientRect();
