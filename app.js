@@ -615,20 +615,48 @@ $("readingClassSelect").onchange = async () => {
             input.disabled = true;
 
             try {
-              await addDoc(collection(db, "readingAssessments"), {
-                studentId: input.dataset.student,
-                studentName: santri.find(s => s.id === input.dataset.student)?.name || "",
+                            const studentId = input.dataset.student;
+              const page = Number(input.dataset.page);
+              const recordKey = studentId + "_" + page;
+              const existingRecord = latest[recordKey];
+              const recordId = classId + "_" + studentId + "_" + page;
+              const assessedAt = existingRecord?.assessedAt || new Date().toISOString();
+
+              const recordData = {
+                studentId,
+                studentName: santri.find(s => s.id === studentId)?.name || "",
                 classId,
                 className: selectedClass.name,
-                page: Number(input.dataset.page),
+                page,
                 result: key,
                 symbol: outcome.symbol,
                 color: outcome.color,
                 description: outcome.label,
-                assessedAt: new Date().toISOString(),
-                createdAt: serverTimestamp()
-              });
+                assessedAt,
+                updatedAt: serverTimestamp()
+              };
 
+              if (existingRecord?.id) {
+                await updateDoc(
+                  doc(db, "readingAssessments", existingRecord.id),
+                  recordData
+                );
+              } else {
+                await setDoc(
+                  doc(db, "readingAssessments", recordId),
+                  {
+                    ...recordData,
+                    createdAt: serverTimestamp()
+                  }
+                );
+              }
+
+              latest[recordKey] = {
+                ...existingRecord,
+                ...recordData,
+                id: existingRecord?.id || recordId
+              };
+              
               input.textContent = symbol;
               input.dataset.result = key;
               input.style.background = bg;
