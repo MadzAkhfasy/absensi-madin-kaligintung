@@ -517,6 +517,7 @@ $("readingClassSelect").onchange = async () => {
   let table = '<style>' +
       '#readingStudentList .reading-matrix-wrap{max-height:65vh;overflow:auto;border:1px solid #d9e2dc;border-radius:12px;background:#fff;-webkit-overflow-scrolling:touch}' +
       '#readingStudentList .reading-matrix{border-collapse:separate;border-spacing:0;font-size:12px;white-space:nowrap;min-width:max-content;width:100%}' +
+      '#readingStudentList .reading-matrix{overflow:visible!important;border-radius:0!important}' +
       '#readingStudentList .reading-matrix th{padding:9px 8px;background:#104b32;color:#fff;font-weight:700;text-align:center}' +
       '#readingStudentList .reading-matrix .reading-name-head{position:-webkit-sticky!important;position:sticky!important;top:0!important;left:0!important;z-index:10!important;min-width:155px;background:#104b32!important;text-align:left;box-shadow:2px 0 4px rgba(0,0,0,.12)}' +
       '#readingStudentList .reading-matrix .reading-page-head{position:sticky;top:0;z-index:2;min-width:46px}' +
