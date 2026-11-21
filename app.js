@@ -1986,7 +1986,8 @@ msg(
   "attendanceMsg",
   `Absensi berhasil disimpan untuk ${attendanceInputs.length} santri.`
 );
-
+    
+dashboardAttendanceCache = null;
 await renderDashboard();
   } catch (e) {
     console.error(e);
