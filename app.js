@@ -514,43 +514,72 @@ $("readingClassSelect").onchange = async () => {
       return;
     }
 
-    let table = '<div style="max-height:65vh;overflow:auto;border:1px solid #d9e2dc;border-radius:10px;"><table style="border-collapse:separate;border-spacing:0;font-size:12px;white-space:nowrap;min-width:max-content;width:100%"><thead><tr>';
-    table += '<th style="position:sticky;top:0;left:0;z-index:4;background:#104b32;color:white;padding:9px 10px;text-align:left;min-width:165px">Nama Santri</th>';
+  let table = '<style>' +
+      '#readingStudentList .reading-matrix-wrap{max-height:65vh;overflow:auto;border:1px solid #d9e2dc;border-radius:12px;background:#fff;-webkit-overflow-scrolling:touch}' +
+      '#readingStudentList .reading-matrix{border-collapse:separate;border-spacing:0;font-size:12px;white-space:nowrap;min-width:max-content;width:100%}' +
+      '#readingStudentList .reading-matrix th{padding:9px 8px;background:#104b32;color:#fff;font-weight:700;text-align:center}' +
+      '#readingStudentList .reading-matrix .reading-name-head{position:sticky;top:0;left:0;z-index:4;min-width:155px;text-align:left}' +
+      '#readingStudentList .reading-matrix .reading-page-head{position:sticky;top:0;z-index:2;min-width:46px}' +
+      '#readingStudentList .reading-matrix .reading-student-name{position:sticky;left:0;z-index:1;min-width:155px;padding:9px 8px;background:#f1f7f3!important;color:#174b35!important;text-align:left;font-size:12px;font-weight:600;border-bottom:1px solid #e5ebe6}' +
+      '#readingStudentList .reading-matrix tbody tr:nth-child(even) .reading-student-name{background:#e5f0e8!important}' +
+      '#readingStudentList .reading-matrix td{padding:4px;text-align:center;border-bottom:1px solid #e5ebe6;border-left:1px solid #edf1ed;background:#fff}' +
+      '#readingStudentList .reading-matrix select{appearance:none!important;-webkit-appearance:none!important;background-image:none!important;width:44px!important;min-width:44px!important;height:36px!important;min-height:36px!important;padding:2px!important;margin:0!important;border:1px solid #cbd8ce!important;border-radius:9px!important;text-align:center!important;font-size:15px!important;font-weight:700!important;color:#174b35!important;box-shadow:none!important}' +
+      '#readingStudentList .reading-matrix select:focus{border-color:#c9a64f!important;outline:none!important}' +
+      '#readingStudentList .reading-matrix select option{background:#fff;color:#174b35}' +
+      '@media(max-width:600px){#readingStudentList .reading-matrix .reading-student-name,#readingStudentList .reading-matrix .reading-name-head{min-width:145px}}' +
+      '</style><div class="reading-matrix-wrap"><table class="reading-matrix"><thead><tr>';
+
+    table += '<th class="reading-name-head">Nama Santri</th>';
+
     for (let page = 1; page <= pageCount; page++) {
-      table += '<th style="position:sticky;top:0;z-index:2;background:#104b32;color:white;padding:8px 5px;text-align:center;min-width:42px">' + page + '</th>';
+      table += '<th class="reading-page-head">' + page + '</th>';
     }
+
     table += '</tr></thead><tbody>';
 
     santri.forEach((s, index) => {
       table += '<tr>';
-      table += '<th style="position:sticky;left:0;z-index:1;background:#f5f8f5;padding:8px 10px;text-align:left;border-bottom:1px solid #e5ebe6">' +
+      table += '<th class="reading-student-name">' +
         (index + 1) + '. ' + esc(s.name || "-") + '</th>';
 
       for (let page = 1; page <= pageCount; page++) {
         const value = latest[s.id + "_" + page];
+
         const choices = [
-          ["", "—", ""],
-          ["green", "ص", "#d9f2df"],
-          ["yellow", "ص", "#fff1b8"],
-          ["orange", "ص", "#ffdfbd"],
-          ["red", "ص̲", "#ffd6d6"]
+          ["", "＋", ""],
+          ["green", "🟢 ص", "#d9f2df"],
+          ["yellow", "🟡 ص", "#fff1b8"],
+          ["orange", "🟠 ص", "#ffdfbd"],
+          ["red", "🔴 ص̲", "#ffd6d6"]
         ];
+
         const chosen = value?.result || "";
+
         const optionHtml = choices.map(([key, label]) =>
-          '<option value="' + key + '"' + (chosen === key ? " selected" : "") + '>' + label + '</option>'
+          '<option value="' + key + '"' +
+          (chosen === key ? " selected" : "") +
+          '>' + label + '</option>'
         ).join("");
+
         const bg = choices.find(c => c[0] === chosen)?.[2] || "#ffffff";
-        table += '<td style="padding:3px;text-align:center;border-bottom:1px solid #e5ebe6;border-left:1px solid #edf1ed">' +
-          '<select aria-label="Penilaian ' + esc(s.name || "") + ' halaman ' + page + '" data-student="' + s.id + '" data-page="' + page + '" style="width:39px;height:32px;padding:2px;border:1px solid #cbd8ce;border-radius:6px;text-align:center;font-weight:700;background:' + bg + '">' +
+
+        table += '<td>' +
+          '<select aria-label="Penilaian ' + esc(s.name || "") +
+          ' halaman ' + page +
+          '" data-student="' + s.id +
+          '" data-page="' + page +
+          '" style="background-color:' + bg + '">' +
           optionHtml + '</select></td>';
       }
+
       table += '</tr>';
     });
 
     table += '</tbody></table></div>';
-    table += '<p class="muted" style="font-size:11px;margin-top:8px">Tekan sel pada halaman yang dinilai, lalu pilih warna hasil ص. Sel kosong berarti belum ada nilai.</p>';
+    table += '<p class="muted" style="font-size:11px;margin-top:8px">Tekan sel untuk memilih hasil penilaian. Hijau: percobaan pertama, kuning: setelah 1 خ, oranye: setelah 2 خ, merah: belum lancar pada percobaan ketiga.</p>';
     list.innerHTML = table;
 
+  
     list.querySelectorAll("select[data-student]").forEach(input => {
       input.onchange = async () => {
         const result = input.value;
