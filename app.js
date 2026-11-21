@@ -466,48 +466,141 @@ select.appendChild(option);
 };
 
 // MEMUAT DAFTAR SANTRI UNTUK PENILAIAN MEMBACA
+// TABEL INPUT PENILAIAN MEMBACA YANBU'A
+const READING_PAGE_COUNTS = {
+  "Kelas Jilid Pemula": 48,
+  "Kelas Jilid 1": 44,
+  "Kelas Jilid 2": 43,
+  "Kelas Jilid 3": 44,
+  "Kelas Jilid 4": 45,
+  "Kelas Jilid 5": 46
+};
+
 $("readingClassSelect").onchange = async () => {
   const classId = $("readingClassSelect").value;
   const list = $("readingStudentList");
-
   list.innerHTML = "";
-
   if (!classId) return;
 
-  list.innerHTML = "<p class='muted'>Memuat daftar santri...</p>";
+  const selectedClass = classes.find(k => k.id === classId);
+  const pageCount = READING_PAGE_COUNTS[selectedClass?.name] || 0;
+  list.innerHTML = "<p class='muted'>Memuat tabel penilaian...</p>";
 
   try {
     const santri = students
-  .filter(s => s.classId === classId)
-  .sort((a, b) => a.name.localeCompare(b.name));
+      .filter(s => s.classId === classId)
+      .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
 
-    list.innerHTML = "";
+    const assessmentSnap = await getDocs(collection(db, "readingAssessments"));
+    const assessments = assessmentSnap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(a => a.classId === classId);
+
+    const latest = {};
+    assessments.forEach(a => {
+      const key = a.studentId + "_" + a.page;
+      if (!latest[key] || (a.assessedAt || "") > (latest[key].assessedAt || "")) {
+        latest[key] = a;
+      }
+    });
 
     if (!santri.length) {
-      list.innerHTML = "<p class='muted'>Belum ada santri aktif di kelas ini.</p>";
+      list.innerHTML = "<p class='muted'>Belum ada santri yang terdaftar pada kelas ini. Periksa penempatan kelas di Data Santri.</p>";
       return;
     }
 
+    if (!pageCount) {
+      list.innerHTML = "<p class='muted'>Jumlah halaman jilid ini belum ditentukan.</p>";
+      return;
+    }
+
+    let table = '<div style="max-height:65vh;overflow:auto;border:1px solid #d9e2dc;border-radius:10px;"><table style="border-collapse:separate;border-spacing:0;font-size:12px;white-space:nowrap;min-width:max-content;width:100%"><thead><tr>';
+    table += '<th style="position:sticky;top:0;left:0;z-index:4;background:#104b32;color:white;padding:9px 10px;text-align:left;min-width:165px">Nama Santri</th>';
+    for (let page = 1; page <= pageCount; page++) {
+      table += '<th style="position:sticky;top:0;z-index:2;background:#104b32;color:white;padding:8px 5px;text-align:center;min-width:42px">' + page + '</th>';
+    }
+    table += '</tr></thead><tbody>';
+
     santri.forEach((s, index) => {
-      const row = document.createElement("div");
-      row.className = "list-row";
+      table += '<tr>';
+      table += '<th style="position:sticky;left:0;z-index:1;background:#f5f8f5;padding:8px 10px;text-align:left;border-bottom:1px solid #e5ebe6">' +
+        (index + 1) + '. ' + esc(s.name || "-") + '</th>';
 
-      row.innerHTML = `
-        <div class="student-info">
-          <strong>${index + 1}. ${esc(s.name)}</strong>
-          <small>NIS: ${esc(s.nis || "-")}</small>
-        </div>
-      `;
+      for (let page = 1; page <= pageCount; page++) {
+        const value = latest[s.id + "_" + page];
+        const choices = [
+          ["", "—", ""],
+          ["green", "ص", "#d9f2df"],
+          ["yellow", "ص", "#fff1b8"],
+          ["orange", "ص", "#ffdfbd"],
+          ["red", "ص̲", "#ffd6d6"]
+        ];
+        const chosen = value?.result || "";
+        const optionHtml = choices.map(([key, label]) =>
+          '<option value="' + key + '"' + (chosen === key ? " selected" : "") + '>' + label + '</option>'
+        ).join("");
+        const bg = choices.find(c => c[0] === chosen)?.[2] || "#ffffff";
+        table += '<td style="padding:3px;text-align:center;border-bottom:1px solid #e5ebe6;border-left:1px solid #edf1ed">' +
+          '<select aria-label="Penilaian ' + esc(s.name || "") + ' halaman ' + page + '" data-student="' + s.id + '" data-page="' + page + '" style="width:39px;height:32px;padding:2px;border:1px solid #cbd8ce;border-radius:6px;text-align:center;font-weight:700;background:' + bg + '">' +
+          optionHtml + '</select></td>';
+      }
+      table += '</tr>';
+    });
 
-      list.appendChild(row);
+    table += '</tbody></table></div>';
+    table += '<p class="muted" style="font-size:11px;margin-top:8px">Tekan sel pada halaman yang dinilai, lalu pilih warna hasil ص. Sel kosong berarti belum ada nilai.</p>';
+    list.innerHTML = table;
+
+    list.querySelectorAll("select[data-student]").forEach(input => {
+      input.onchange = async () => {
+        const result = input.value;
+        if (!result) return;
+        const studentId = input.dataset.student;
+        const page = Number(input.dataset.page);
+        const colors = {
+          green: { symbol: "ص", color: "hijau", label: "Lancar percobaan pertama" },
+          yellow: { symbol: "ص", color: "kuning", label: "Lancar setelah 1 خ" },
+          orange: { symbol: "ص", color: "oranye", label: "Lancar setelah 2 خ" },
+          red: { symbol: "ص̲", color: "merah", label: "Belum lancar pada percobaan ketiga" }
+        };
+        const outcome = colors[result];
+        input.disabled = true;
+        try {
+          await addDoc(collection(db, "readingAssessments"), {
+            studentId,
+            studentName: santri.find(s => s.id === studentId)?.name || "",
+            classId,
+            className: selectedClass.name,
+            page,
+            result,
+            symbol: outcome.symbol,
+            color: outcome.color,
+            description: outcome.label,
+            assessedAt: new Date().toISOString(),
+            createdAt: serverTimestamp()
+          });
+          input.style.background = {
+            green: "#d9f2df",
+            yellow: "#fff1b8",
+            orange: "#ffdfbd",
+            red: "#ffd6d6"
+          }[result];
+        } catch (error) {
+          console.error(error);
+          alert("Nilai belum tersimpan. Periksa koneksi atau izin database.");
+          input.value = "";
+        } finally {
+          input.disabled = false;
+        }
+      };
     });
 
   } catch (error) {
     console.error(error);
-    list.innerHTML =
-      "<p class='muted'>Gagal memuat daftar santri.</p>";
+    list.innerHTML = "<p class='muted'>Gagal memuat tabel penilaian: " + esc(error.message || "Kesalahan tidak diketahui") + "</p>";
   }
 };
+
 $("backReadingAssessmentBtn").onclick = () => {
 $("readingAssessmentView").classList.add("hidden");
 $("evaluasiAspectMenu").classList.remove("hidden");
