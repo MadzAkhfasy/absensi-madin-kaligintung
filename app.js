@@ -634,12 +634,13 @@ $("readingClassSelect").onchange = async () => {
 
       list.querySelectorAll(".reading-score").forEach(input => {
       input.onclick = () => {
-        const cell = input.parentElement;
-        const oldMenu = list.querySelector(".reading-score-menu");
+        const oldMenu = document.querySelector(".reading-score-menu");
         if (oldMenu) oldMenu.remove();
 
         const menu = document.createElement("div");
         menu.className = "reading-score-menu";
+        menu.style.position = "fixed";
+        menu.style.zIndex = "99999";
 
         const choices = [
           ["green", "ص", "#d9f2df"],
@@ -729,9 +730,26 @@ $("readingClassSelect").onchange = async () => {
           menu.appendChild(button);
         });
 
-        cell.appendChild(menu);
-      };
-    });
+                document.body.appendChild(menu);
+
+        const buttonRect = input.getBoundingClientRect();
+        const menuRect = menu.getBoundingClientRect();
+        const spaceBelow = window.innerHeight - buttonRect.bottom;
+
+        const showAbove = spaceBelow < menuRect.height + 12 &&
+          buttonRect.top > menuRect.height + 12;
+
+        let top = showAbove
+          ? buttonRect.top - menuRect.height - 6
+          : buttonRect.bottom + 6;
+
+        let left = buttonRect.left + (buttonRect.width - menuRect.width) / 2;
+
+        left = Math.max(8, Math.min(left, window.innerWidth - menuRect.width - 8));
+        top = Math.max(8, Math.min(top, window.innerHeight - menuRect.height - 8));
+
+        menu.style.top = top + "px";
+        menu.style.left = left + "px";
 
   } catch (error) {
     console.error(error);
