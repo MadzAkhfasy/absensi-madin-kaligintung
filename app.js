@@ -3474,6 +3474,7 @@ days.push(`
 
   attendanceChartReady = true;
 }
+let dashboardAttendanceCache = null;
 
 // DASHBOARD ANALITIK MADIN
 async function renderDashboard() {
