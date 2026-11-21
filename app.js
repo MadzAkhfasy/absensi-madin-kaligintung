@@ -523,7 +523,10 @@ $("readingClassSelect").onchange = async () => {
       '#readingStudentList .reading-matrix .reading-student-name{position:sticky;left:0;z-index:1;min-width:155px;padding:9px 8px;background:#f1f7f3!important;color:#174b35!important;text-align:left;font-size:12px;font-weight:600;border-bottom:1px solid #e5ebe6}' +
       '#readingStudentList .reading-matrix tbody tr:nth-child(even) .reading-student-name{background:#e5f0e8!important}' +
       '#readingStudentList .reading-matrix td{padding:4px;text-align:center;border-bottom:1px solid #e5ebe6;border-left:1px solid #edf1ed;background:#fff}' +
-      '#readingStudentList .reading-matrix select{appearance:none!important;-webkit-appearance:none!important;background-image:none!important;width:44px!important;min-width:44px!important;height:36px!important;min-height:36px!important;padding:2px!important;margin:0!important;border:1px solid #cbd8ce!important;border-radius:9px!important;text-align:center!important;font-size:15px!important;font-weight:700!important;color:#174b35!important;box-shadow:none!important}' +
+      '#readingStudentList .reading-matrix .reading-score{width:42px;height:36px;padding:2px;border:1px solid #cbd8ce;border-radius:9px;font-size:17px;font-weight:700;color:#174b35;cursor:pointer}' +
+      '#readingStudentList .reading-matrix .reading-score.red{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}' +
+      '#readingStudentList .reading-matrix .reading-score-menu{position:absolute;z-index:20;background:white;border:1px solid #d9e2dc;border-radius:10px;padding:5px;box-shadow:0 5px 15px rgba(0,0,0,.15)}' +
+      '#readingStudentList .reading-matrix .reading-score-menu button{display:block;width:100%;min-width:75px;margin:3px 0;padding:8px;border:0;border-radius:7px;font-size:16px;font-weight:700}' +p
       '#readingStudentList .reading-matrix select:focus{border-color:#c9a64f!important;outline:none!important}' +
       '#readingStudentList .reading-matrix select option{background:#fff;color:#174b35}' +
       '@media(max-width:600px){#readingStudentList .reading-matrix .reading-student-name,#readingStudentList .reading-matrix .reading-name-head{min-width:145px}}' +
@@ -545,32 +548,26 @@ $("readingClassSelect").onchange = async () => {
       for (let page = 1; page <= pageCount; page++) {
         const value = latest[s.id + "_" + page];
 
-        const choices = [
-          ["", "＋", ""],
-          ["green", "🟢 ص", "#d9f2df"],
-          ["yellow", "🟡 ص", "#fff1b8"],
-          ["orange", "🟠 ص", "#ffdfbd"],
-          ["red", "🔴 ص̲", "#ffd6d6"]
+                const choices = [
+          ["green", "ص", "#d9f2df"],
+          ["yellow", "ص", "#fff1b8"],
+          ["orange", "ص", "#ffdfbd"],
+          ["red", "ص", "#ffd6d6"]
         ];
 
         const chosen = value?.result || "";
+        const selected = choices.find(c => c[0] === chosen);
+        const symbol = selected ? selected[1] : "＋";
+        const bg = selected ? selected[2] : "#ffffff";
+        const redClass = chosen === "red" ? " red" : "";
 
-        const optionHtml = choices.map(([key, label]) =>
-          '<option value="' + key + '"' +
-          (chosen === key ? " selected" : "") +
-          '>' + label + '</option>'
-        ).join("");
-
-        const bg = choices.find(c => c[0] === chosen)?.[2] || "#ffffff";
-
-        table += '<td>' +
-          '<select aria-label="Penilaian ' + esc(s.name || "") +
-          ' halaman ' + page +
+        table += '<td style="position:relative;text-align:center;padding:4px">' +
+          '<button type="button" class="reading-score' + redClass +
           '" data-student="' + s.id +
           '" data-page="' + page +
-          '" style="background-color:' + bg + '">' +
-          optionHtml + '</select></td>';
-      }
+          '" data-result="' + chosen +
+          '" style="background:' + bg + '">' +
+          symbol + '</button></td>';
 
       table += '</tr>';
     });
@@ -579,48 +576,77 @@ $("readingClassSelect").onchange = async () => {
     table += '<p class="muted" style="font-size:11px;margin-top:8px">Tekan sel untuk memilih hasil penilaian. Hijau: percobaan pertama, kuning: setelah 1 خ, oranye: setelah 2 خ, merah: belum lancar pada percobaan ketiga.</p>';
     list.innerHTML = table;
 
-  
-    list.querySelectorAll("select[data-student]").forEach(input => {
-      input.onchange = async () => {
-        const result = input.value;
-        if (!result) return;
-        const studentId = input.dataset.student;
-        const page = Number(input.dataset.page);
-        const colors = {
-          green: { symbol: "ص", color: "hijau", label: "Lancar percobaan pertama" },
-          yellow: { symbol: "ص", color: "kuning", label: "Lancar setelah 1 خ" },
-          orange: { symbol: "ص", color: "oranye", label: "Lancar setelah 2 خ" },
-          red: { symbol: "ص̲", color: "merah", label: "Belum lancar pada percobaan ketiga" }
-        };
-        const outcome = colors[result];
-        input.disabled = true;
-        try {
-          await addDoc(collection(db, "readingAssessments"), {
-            studentId,
-            studentName: santri.find(s => s.id === studentId)?.name || "",
-            classId,
-            className: selectedClass.name,
-            page,
-            result,
-            symbol: outcome.symbol,
-            color: outcome.color,
-            description: outcome.label,
-            assessedAt: new Date().toISOString(),
-            createdAt: serverTimestamp()
-          });
-          input.style.background = {
-            green: "#d9f2df",
-            yellow: "#fff1b8",
-            orange: "#ffdfbd",
-            red: "#ffd6d6"
-          }[result];
-        } catch (error) {
-          console.error(error);
-          alert("Nilai belum tersimpan. Periksa koneksi atau izin database.");
-          input.value = "";
-        } finally {
-          input.disabled = false;
-        }
+      list.querySelectorAll(".reading-score").forEach(input => {
+      input.onclick = () => {
+        const cell = input.parentElement;
+        const oldMenu = list.querySelector(".reading-score-menu");
+        if (oldMenu) oldMenu.remove();
+
+        const menu = document.createElement("div");
+        menu.className = "reading-score-menu";
+
+        const choices = [
+          ["green", "ص", "#d9f2df"],
+          ["yellow", "ص", "#fff1b8"],
+          ["orange", "ص", "#ffdfbd"],
+          ["red", "ص", "#ffd6d6"]
+        ];
+
+        choices.forEach(([key, symbol, bg]) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.textContent = symbol;
+          button.style.background = bg;
+
+          if (key === "red") {
+            button.style.textDecoration = "underline";
+            button.style.textUnderlineOffset = "3px";
+          }
+
+          button.onclick = async () => {
+            const colors = {
+              green: { symbol: "ص", color: "hijau", label: "Lancar percobaan pertama" },
+              yellow: { symbol: "ص", color: "kuning", label: "Lancar setelah 1 خ" },
+              orange: { symbol: "ص", color: "oranye", label: "Lancar setelah 2 خ" },
+              red: { symbol: "ص̲", color: "merah", label: "Belum lancar pada percobaan ketiga" }
+            };
+
+            const outcome = colors[key];
+            input.disabled = true;
+
+            try {
+              await addDoc(collection(db, "readingAssessments"), {
+                studentId: input.dataset.student,
+                studentName: santri.find(s => s.id === input.dataset.student)?.name || "",
+                classId,
+                className: selectedClass.name,
+                page: Number(input.dataset.page),
+                result: key,
+                symbol: outcome.symbol,
+                color: outcome.color,
+                description: outcome.label,
+                assessedAt: new Date().toISOString(),
+                createdAt: serverTimestamp()
+              });
+
+              input.textContent = symbol;
+              input.dataset.result = key;
+              input.style.background = bg;
+              input.classList.toggle("red", key === "red");
+              menu.remove();
+
+            } catch (error) {
+              console.error(error);
+              alert("Nilai belum tersimpan. Periksa koneksi atau izin database.");
+            } finally {
+              input.disabled = false;
+            }
+          };
+
+          menu.appendChild(button);
+        });
+
+        cell.appendChild(menu);
       };
     });
 
