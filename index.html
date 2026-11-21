@@ -669,13 +669,19 @@
   <div class="card">
     <h2>Penilaian Pembelajaran</h2>
     <p class="muted">Pilih aspek pembelajaran. Buka satu bagian untuk menampilkan penilaiannya.</p><style>
-  .assessment-accordion-item {
-    margin: 10px 0;
-    border: 1px solid #dce7df;
-    border-radius: 12px;
-    overflow: hidden;
-    background: #fff;
-  }
+  
+.assessment-accordion-item {
+  position: relative;
+  margin: 10px 0;
+  border: 1px solid #dce7df;
+  border-radius: 12px;
+  overflow: visible;
+  background: #fff;
+}
+
+.assessment-accordion-item:has(.custom-select-wrap.is-open) {
+  z-index: 20;
+}
 
   .assessment-accordion-toggle {
     width: 100%;
