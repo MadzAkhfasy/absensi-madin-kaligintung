@@ -750,7 +750,9 @@ $("readingClassSelect").onchange = async () => {
 
         menu.style.top = top + "px";
         menu.style.left = left + "px";
-
+      };
+    });
+    
   } catch (error) {
     console.error(error);
     list.innerHTML = "<p class='muted'>Gagal memuat tabel penilaian: " + esc(error.message || "Kesalahan tidak diketahui") + "</p>";
