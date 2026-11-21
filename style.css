@@ -1480,6 +1480,21 @@ transform: rotate(45deg);
 pointer-events: none;
 }
 
+/* WATERMARK DI DALAM LATAR PANEL */
+#appView > .panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background-image: url("LOGO%20MADIN%20REMOVE%20BG.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: min(68vw, 340px) auto;
+  opacity: .12;
+  pointer-events: none;
+}
+
 /* KARTU KONTEN */
 
 #appView > .panel > .card {
@@ -4132,22 +4147,8 @@ linear-gradient(
 background-attachment: fixed;
 }
 
-/* LOGO MADIN STATIS - POSISI STABIL DI HP */
-
 #appView::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100svh;
-  z-index: 0;
-  background-image: url("LOGO%20MADIN%20REMOVE%20BG.png");
-  background-repeat: no-repeat;
-  background-position: center calc(50svh + 45px);
-  background-size: min(68vw, 340px) auto;
-  opacity: .20;
-  pointer-events: none;
+  display: none !important;
 }
 
 /* FOTO PROFIL DI BAWAH TANGGAL WELCOME */
