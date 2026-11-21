@@ -446,23 +446,78 @@ async function loadClasses(){
 
  classes.sort((a,b)=>(a.order||0)-(b.order||0));
 }
-// NAVIGASI PENILAIAN MEMBACA YANBU'A
+// NAVIGASI ACCORDION PENILAIAN
+
+function closeAssessmentPanels() {
+  [
+    "readingAssessmentView",
+    "writingAssessmentView",
+    "memorizationAssessmentView"
+  ].forEach(id => {
+    const panel = $(id);
+    if (panel) panel.classList.add("hidden");
+  });
+
+  [
+    "openReadingAssessmentBtn",
+    "openWritingAssessmentBtn",
+    "openMemorizationAssessmentBtn"
+  ].forEach(id => {
+    const button = $(id);
+    if (button) button.setAttribute("aria-expanded", "false");
+  });
+}
+
+function toggleAssessmentPanel(panelId, buttonId) {
+  const panel = $(panelId);
+  const button = $(buttonId);
+
+  if (!panel || !button) return;
+
+  const wasOpen = !panel.classList.contains("hidden");
+
+  closeAssessmentPanels();
+
+  if (!wasOpen) {
+    panel.classList.remove("hidden");
+    button.setAttribute("aria-expanded", "true");
+  }
+}
 
 $("openReadingAssessmentBtn").onclick = () => {
-$("evaluasiAspectMenu").classList.add("hidden");
-$("readingAssessmentView").classList.remove("hidden");
+  const select = $("readingClassSelect");
 
-const select = $("readingClassSelect");
-select.innerHTML = '<option value="">Pilih kelas</option>';
+  if (select.options.length <= 1) {
+    select.innerHTML = '<option value="">Pilih kelas</option>';
 
-classes
-.filter(kelas => kelas.name.startsWith("Kelas Jilid"))
-.forEach(kelas => {
-const option = document.createElement("option");
-option.value = kelas.id;
-option.textContent = kelas.name;
-select.appendChild(option);
-});
+    classes
+      .filter(kelas => kelas.name.startsWith("Kelas Jilid"))
+      .forEach(kelas => {
+        const option = document.createElement("option");
+        option.value = kelas.id;
+        option.textContent = kelas.name;
+        select.appendChild(option);
+      });
+  }
+
+  toggleAssessmentPanel(
+    "readingAssessmentView",
+    "openReadingAssessmentBtn"
+  );
+};
+
+$("openWritingAssessmentBtn").onclick = () => {
+  toggleAssessmentPanel(
+    "writingAssessmentView",
+    "openWritingAssessmentBtn"
+  );
+};
+
+$("openMemorizationAssessmentBtn").onclick = () => {
+  toggleAssessmentPanel(
+    "memorizationAssessmentView",
+    "openMemorizationAssessmentBtn"
+  );
 };
 
 // MEMUAT DAFTAR SANTRI UNTUK PENILAIAN MEMBACA
@@ -684,10 +739,6 @@ $("readingClassSelect").onchange = async () => {
   }
 };
 
-$("backReadingAssessmentBtn").onclick = () => {
-$("readingAssessmentView").classList.add("hidden");
-$("evaluasiAspectMenu").classList.remove("hidden");
-};
 // MEMUAT JADWAL LIBUR MINGGUAN
 async function loadWeeklySchedule() {
   try {
