@@ -3574,13 +3574,31 @@ visibleClasses.forEach(cls => {
 
     const chartStartStr = dateString(academicYearStart);
 
-    const chartSnap = await getDocs(query(
-      collection(db, "attendance"),
-      where("date", ">=", chartStartStr),
-      where("date", "<=", todayStr)
-    ));
+    let allAttendance;
 
-    const allAttendance = chartSnap.docs.map(d => d.data());
+if (
+  dashboardAttendanceCache &&
+  dashboardAttendanceCache.start === chartStartStr &&
+  dashboardAttendanceCache.end === todayStr &&
+  Date.now() - dashboardAttendanceCache.loadedAt < 60000
+) {
+  allAttendance = dashboardAttendanceCache.data;
+} else {
+  const chartSnap = await getDocs(query(
+    collection(db, "attendance"),
+    where("date", ">=", chartStartStr),
+    where("date", "<=", todayStr)
+  ));
+
+  allAttendance = chartSnap.docs.map(d => d.data());
+
+  dashboardAttendanceCache = {
+    start: chartStartStr,
+    end: todayStr,
+    loadedAt: Date.now(),
+    data: allAttendance
+  };
+}
 
     attendanceChartData = allAttendance.filter(a =>
       classIds.has(a.classId) &&
