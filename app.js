@@ -524,9 +524,9 @@ $("readingClassSelect").onchange = async () => {
       '#readingStudentList .reading-matrix tbody tr:nth-child(even) .reading-student-name{background:#e5f0e8!important}' +
       '#readingStudentList .reading-matrix td{padding:4px;text-align:center;border-bottom:1px solid #e5ebe6;border-left:1px solid #edf1ed;background:#fff}' +
       '#readingStudentList .reading-matrix .reading-score{width:42px;height:36px;padding:2px;border:1px solid #cbd8ce;border-radius:9px;font-size:17px;font-weight:700;color:#174b35;cursor:pointer}' +
-      '#readingStudentList .reading-matrix .reading-score.red{text-decoration-line:underline;text-decoration-color:#c62828;text-decoration-thickness:2px;text-underline-offset:4px;color:#174b35!important;background:#ffd6d6!important}' +
+      '#readingStudentList .reading-matrix .reading-score.red{text-decoration-line:underline;text-decoration-color:#c62828;text-decoration-thickness:2px;text-underline-offset:7px;color:#174b35!important;background:#ffd6d6!important}' +
       '#readingStudentList .reading-matrix .reading-score-menu{position:absolute;z-index:20;background:white;border:1px solid #d9e2dc;border-radius:10px;padding:5px;box-shadow:0 5px 15px rgba(0,0,0,.15)}' +
-      '#readingStudentList .reading-matrix .reading-score-menu button{display:block;width:100%;min-width:75px;margin:3px 0;padding:8px;border:0;border-radius:7px;font-size:16px;font-weight:700}' +
+      '#readingStudentList .reading-matrix .reading-score-menu button{display:block;width:100%;min-width:48px;margin:3px 0;padding:8px 4px;border:0;border-radius:7px;font-size:16px;font-weight:700}' +
       '#readingStudentList .reading-matrix select option{background:#fff;color:#174b35}' +
       '@media(max-width:600px){#readingStudentList .reading-matrix .reading-student-name,#readingStudentList .reading-matrix .reading-name-head{min-width:145px}}' +
       '</style><div class="reading-matrix-wrap"><table class="reading-matrix"><thead><tr>';
