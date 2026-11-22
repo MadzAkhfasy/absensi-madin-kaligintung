@@ -1,4 +1,4 @@
-const CACHE = "absensi-madin-v50";
+const CACHE = "absensi-madin-v51";
 
 self.addEventListener("install", event => {
   self.skipWaiting();
@@ -10,7 +10,7 @@ self.addEventListener("install", event => {
         "./",
         "./index.html",
         "./style.css?v=38",
-        "./app.js?v=35",
+        "./app.js?v=36",
         "./manifest.json",
         "./LOGO%20MADIN%20REMOVE%20BG.png",
         "./santri-mengaji-transparent-hd.png",
@@ -25,7 +25,7 @@ self.addEventListener("activate", event => {
     Promise.all([
       caches.keys().then(keys =>
         Promise.all(
-          keys.filter(key => key !== CACHE).map(key => caches.delete(key))
+          keys.filter(key => key.startsWith("absensi-madin-") && key !== CACHE).map(key => caches.delete(key))
         )
       ),
       self.clients.claim()

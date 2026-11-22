@@ -736,9 +736,22 @@
     02. Penilaian Menulis
   </button>
 
-  <div id="writingAssessmentView" class="assessment-accordion-content hidden">
-    <p class="muted">Modul penilaian menulis Arab akan ditampilkan di bagian ini.</p>
-  </div>
+<div id="writingAssessmentView" class="assessment-accordion-content hidden">
+  <h3>Penilaian Menulis Arab</h3>
+  <p class="muted">
+    Penilaian kemampuan menulis Arab santri berdasarkan halaman Yanbu'a.
+  </p>
+
+  <label for="writingClassSelect">Pilih Jilid / Kelas</label>
+  <select id="writingClassSelect">
+    <option value="">Pilih kelas</option>
+  </select>
+
+  <label for="writingAssessmentDate">Tanggal Penilaian</label>
+  <input type="date" id="writingAssessmentDate">
+
+  <div id="writingStudentList"></div>
+</div>
 </div>
 
 <div class="assessment-accordion-item">
@@ -756,8 +769,60 @@
 
 <section id="evaluasiBulananPanel" class="panel hidden">
   <div class="card">
-    <h2>Evaluasi Bulanan</h2>
-    <p class="muted">Rekap perkembangan pembelajaran setiap bulan.</p>
+    <h2>Rekap Penilaian Membaca Yanbu'a</h2>
+    <p class="muted">
+      Rekap perkembangan membaca santri berdasarkan hasil penilaian
+      pada bulan yang dipilih.
+    </p>
+
+    <div class="form-grid">
+      <label>
+        Pilih Kelas
+        <select id="readingRecapClass">
+          <option value="">Pilih kelas</option>
+        </select>
+      </label>
+
+      <label>
+        Pilih Bulan
+        <input type="month" id="readingRecapMonth">
+      </label>
+    </div>
+
+    <button type="button" class="primary" id="showReadingRecapBtn">
+      Tampilkan Rekap
+    </button>
+
+    <div id="readingRecapMessage" class="message"></div>
+    <div id="readingRecapResult"></div>
+
+    <hr style="margin:25px 0">
+
+<h2>Rekap Penilaian Menulis Arab</h2>
+<p class="muted">
+  Rekap nilai rata-rata menulis Arab santri setiap bulan.
+</p>
+
+<div class="form-grid">
+  <label>
+    Pilih Kelas
+    <select id="writingRecapClass">
+      <option value="">Pilih kelas</option>
+    </select>
+  </label>
+
+  <label>
+    Pilih Bulan
+    <input type="month" id="writingRecapMonth">
+  </label>
+</div>
+
+<button type="button" class="primary" id="showWritingRecapBtn">
+  Tampilkan Rekap
+</button>
+
+<div id="writingRecapMessage" class="message"></div>
+<div id="writingRecapResult"></div>
   </div>
 </section>
 
@@ -815,7 +880,7 @@
   });
 })();
 </script>
-  <script type="module" src="app.js?v=35"></script>
+  <script type="module" src="app.js?v=36"></script>
 <script>
 (function () {
 

@@ -16,7 +16,6 @@ const PHOTO_UPLOAD_URL = "https://script.google.com/macros/s/AKfycbyfKk9m9PNhv8q
 
 async function uploadStudentPhoto(file) {
   if (!file) return {};
-
   if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
     throw new Error("Foto harus JPG, PNG, atau WebP.");
   }
@@ -249,6 +248,8 @@ onAuthStateChanged(auth,async user=>{
   if(!p.exists()){await signOut(auth);msg("authMsg","Profil belum dibuat. Hubungi admin.",true);return;}
   profile=p.data();
 await loadClasses();
+      setupReadingRecap();
+      setupWritingRecap();
 await loadWeeklySchedule();
 await loadHolidays();
 fillStudentPdfClass();
@@ -446,6 +447,635 @@ async function loadClasses(){
 
  classes.sort((a,b)=>(a.order||0)-(b.order||0));
 }
+
+// ======================================
+// REKAP BULANAN PENILAIAN MEMBACA YANBU'A
+// ======================================
+
+function setupReadingRecap() {
+  const classSelect = $("readingRecapClass");
+  const monthInput = $("readingRecapMonth");
+
+  classSelect.innerHTML = '<option value="">Pilih kelas</option>';
+
+  classes
+    .filter(k => k.name.startsWith("Kelas Jilid"))
+    .forEach(k => {
+      const option = document.createElement("option");
+      option.value = k.id;
+      option.textContent = k.name;
+      classSelect.appendChild(option);
+    });
+
+  monthInput.value = new Date()
+    .toLocaleDateString("sv-SE")
+    .slice(0, 7);
+}
+
+$("showReadingRecapBtn").onclick = async () => {
+  const classId = $("readingRecapClass").value;
+  const month = $("readingRecapMonth").value;
+  const resultBox = $("readingRecapResult");
+  const message = $("readingRecapMessage");
+
+  resultBox.innerHTML = "";
+  message.textContent = "";
+
+  if (!classId || !month) {
+    message.textContent = "Silakan pilih kelas dan bulan.";
+    return;
+  }
+
+  message.textContent = "Memuat rekap penilaian...";
+
+  try {
+    const selectedClass = classes.find(k => k.id === classId);
+
+    const santri = students
+      .filter(s => s.classId === classId)
+      .sort((a, b) =>
+        (a.name || "").localeCompare(b.name || "")
+      );
+
+    const snap = await getDocs(query(
+      collection(db, "readingAssessments"),
+      where("classId", "==", classId)
+    ));
+
+    const assessments = snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(a => {
+        if (!a.assessedAt) return false;
+
+        const date = new Date(a.assessedAt);
+        const assessedMonth =
+          date.getFullYear() + "-" +
+          String(date.getMonth() + 1).padStart(2, "0");
+
+        return assessedMonth === month;
+      });
+
+    if (!santri.length) {
+      message.textContent = "Belum ada santri di kelas ini.";
+      return;
+    }
+
+    if (!assessments.length) {
+      message.textContent =
+        "Belum ada hasil penilaian membaca pada bulan ini.";
+      return;
+    }
+
+    const latest = {};
+
+    assessments.forEach(a => {
+      latest[a.studentId + "_" + a.page] = a;
+    });
+
+    const farthestPage = Math.max(
+      ...assessments.map(a => Number(a.page) || 0)
+    );
+
+    const colors = {
+      green: "#d9f2df",
+      yellow: "#fff1b8",
+      orange: "#ffdfbd",
+      red: "#ffd6d6"
+    };
+
+;
+
+let table = `
+      <div style="margin-top:18px">
+        <h3>${esc(selectedClass.name)}</h3>
+        <p class="muted">
+          Rekap bulan ${esc(month)}
+        </p>
+
+        <div style="
+          max-height:65vh;
+          overflow:auto;
+          border:1px solid #d9e2dc;
+          border-radius:12px;
+          background:#fff;
+          -webkit-overflow-scrolling:touch;
+          overscroll-behavior:contain;
+        ">
+          <div style="
+            display:grid;
+            grid-template-columns:42px minmax(170px,210px) repeat(${farthestPage},54px);
+            width:max-content;
+            min-width:100%;
+            font-size:13px;
+          ">
+
+                        <div style="
+              position:sticky;
+              top:0;
+              left:0;
+              z-index:6;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              width:42px;
+              box-sizing:border-box;
+              background:#104b32;
+              color:white;
+              font-weight:700;
+              border-right:1px solid #47745f;
+              border-bottom:2px solid #c9a64f;
+            ">No.</div>
+
+            <div style="
+              position:sticky;
+              top:0;
+              left:42px;
+              z-index:5;
+              display:flex;
+              align-items:center;
+              padding:10px;
+              box-sizing:border-box;
+              background:#104b32;
+              color:white;
+              font-weight:700;
+              border-right:1px solid #47745f;
+              border-bottom:2px solid #c9a64f;
+            ">Nama Santri</div>
+    `;
+
+    for (let page = 1; page <= farthestPage; page++) {
+      table += `
+        <div style="
+          position:sticky;
+          top:0;
+          z-index:3;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          min-width:54px;
+          padding:10px 6px;
+          background:#104b32;
+          color:white;
+          font-size:13px;
+          font-weight:600;
+          border-right:1px solid #47745f;
+          border-bottom:2px solid #c9a64f;
+        ">${page}</div>
+      `;
+    }
+
+    santri.forEach((s, index) => {
+      table += `
+        <div style="
+          position:sticky;
+          left:0;
+          z-index:4;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          width:42px;
+          box-sizing:border-box;
+          padding:11px 4px;
+          background:#f1f7f3;
+          color:#174b35;
+          font-size:13px;
+          font-weight:600;
+          border-right:1px solid #d9e2dc;
+          border-bottom:1px solid #e5ebe6;
+        ">${index + 1}</div>
+
+        <div style="
+          position:sticky;
+          left:42px;
+          z-index:3;
+          display:flex;
+          align-items:center;
+          min-width:0;
+          padding:11px 10px;
+          background:#f1f7f3;
+          color:#174b35;
+          text-align:left;
+          line-height:1.4;
+          font-size:13px;
+          font-weight:600;
+          border-right:1px solid #d9e2dc;
+          border-bottom:1px solid #e5ebe6;
+          overflow-wrap:anywhere;
+        ">${esc(s.name || "-")}</div>
+      `;
+
+      for (let page = 1; page <= farthestPage; page++) {
+        const value = latest[s.id + "_" + page];
+
+        let symbolMarkup = "";
+        let background = "#fff";
+
+        if (value) {
+          if (value.result === "red") {
+            symbolMarkup = '<span style="display:inline-block;position:relative;padding-bottom:4px">ص<span style="position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:16px;border-bottom:2px solid #c62828"></span></span>';
+          } else {
+            symbolMarkup = "ص";
+          }
+
+          background = colors[value.result] || "#fff";
+        }
+
+        table += `
+          <div style="
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            min-width:54px;
+            padding:8px 6px;
+            font-size:18px;
+            font-weight:bold;
+            color:#174b35;
+            background:${background};
+            border-right:1px solid #e5ebe6;
+            border-bottom:1px solid #e5ebe6;
+          ">${symbolMarkup}</div>
+        `;
+      }
+    });
+
+    table += `
+          </div>
+        </div>
+
+        <p class="muted" style="font-size:11px;margin-top:10px">
+          Halaman ditampilkan sampai halaman terjauh yang dicapai
+          pada bulan terpilih. Sel kosong berarti belum ada hasil
+          penilaian pada bulan tersebut.
+        </p>
+      </div>
+    `;
+
+
+
+
+    resultBox.innerHTML = table;
+    message.textContent = "Rekap berhasil ditampilkan.";
+
+  } catch (error) {
+    console.error(error);
+    message.textContent =
+      "Gagal memuat rekap: " + error.message;
+  }
+};
+
+// ======================================
+// REKAP BULANAN PENILAIAN MENULIS ARAB
+// ======================================
+
+function setupWritingRecap() {
+  const classSelect = $("writingRecapClass");
+  const monthInput = $("writingRecapMonth");
+
+  classSelect.innerHTML = '<option value="">Pilih kelas</option>';
+
+  classes
+    .filter(k => k.name.startsWith("Kelas Jilid"))
+    .forEach(k => {
+      const option = document.createElement("option");
+      option.value = k.id;
+      option.textContent = k.name;
+      classSelect.appendChild(option);
+    });
+
+  monthInput.value = new Date()
+    .toLocaleDateString("sv-SE")
+    .slice(0, 7);
+}
+
+$("showWritingRecapBtn").onclick = async () => {
+  const classId = $("writingRecapClass").value;
+  const month = $("writingRecapMonth").value;
+  const resultBox = $("writingRecapResult");
+  const message = $("writingRecapMessage");
+
+  resultBox.innerHTML = "";
+  message.textContent = "";
+
+  if (!classId || !month) {
+    message.textContent = "Silakan pilih kelas dan bulan.";
+    return;
+  }
+
+  message.textContent = "Menghitung rekap nilai...";
+
+  try {
+    const selectedClass = classes.find(k => k.id === classId);
+
+    const santri = students
+      .filter(s => s.classId === classId)
+      .sort((a, b) =>
+        (a.name || "").localeCompare(b.name || "")
+      );
+
+    const snap = await getDocs(query(
+      collection(db, "writingAssessments"),
+      where("classId", "==", classId)
+    ));
+
+    const assessments = snap.docs
+      .map(d => d.data())
+      .filter(a =>
+        a.assessmentDate &&
+        a.assessmentDate.startsWith(month)
+    );
+
+    const recap = {};
+    let maxPage = 0;
+
+    assessments.forEach(a => {
+      const page = Number(a.page);
+      const score = Number(a.score);
+
+      if (
+        !a.studentId ||
+        !Number.isInteger(page) ||
+        page < 1 ||
+        !Number.isFinite(score)
+      ) return;
+
+      if (!recap[a.studentId]) {
+        recap[a.studentId] = {
+          total: 0,
+          count: 0,
+          pages: {}
+        };
+      }
+
+      recap[a.studentId].total += score;
+      recap[a.studentId].count++;
+      recap[a.studentId].pages[page] = score;
+
+      maxPage = Math.max(maxPage, page);
+    });
+
+    const monthLabel = new Date(
+      Number(month.slice(0, 4)),
+      Number(month.slice(5, 7)) - 1,
+      1
+    ).toLocaleDateString("id-ID", {
+      month: "long",
+      year: "numeric"
+    });
+
+      let table = `
+      <div style="margin-top:18px">
+
+        <h3 style="margin-bottom:3px">
+          ${esc(selectedClass?.name || "")}
+        </h3>
+
+        <p class="muted" style="margin:0 0 5px">
+          ${esc(monthLabel)}
+        </p>
+
+        <p style="font-size:13px;margin:0 0 12px">
+          Total santri: <strong>${santri.length}</strong>
+        </p>
+
+        <div style="
+          max-height:65vh;
+          overflow:auto;
+          border:1px solid #d9e2dc;
+          border-radius:12px;
+          background:#fff;
+          -webkit-overflow-scrolling:touch;
+          overscroll-behavior:contain;
+        ">
+
+          <div style="
+            display:grid;
+            grid-template-columns:42px 145px repeat(${maxPage},54px) 82px 150px;
+            width:max-content;
+            min-width:100%;
+            font-size:12px;
+          ">
+
+            <div style="
+              position:sticky;
+              top:0;
+              left:0;
+              z-index:6;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              background:#104b32;
+              color:white;
+              padding:8px 4px;
+              border-right:1px solid #47745f;
+              border-bottom:2px solid #c9a64f;
+              font-weight:700;
+            ">No.</div>
+
+            <div style="
+              position:sticky;
+              top:0;
+              left:42px;
+              z-index:6;
+              display:flex;
+              align-items:center;
+              background:#104b32;
+              color:white;
+              padding:8px;
+              border-right:1px solid #47745f;
+              border-bottom:2px solid #c9a64f;
+              font-weight:700;
+            ">Nama Santri</div>
+    `;
+
+    for (let page = 1; page <= maxPage; page++) {
+      table += `
+        <div style="
+          position:sticky;
+          top:0;
+          z-index:4;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          min-width:54px;
+          padding:8px 4px;
+          background:#104b32;
+          color:white;
+          border-right:1px solid #47745f;
+          border-bottom:2px solid #c9a64f;
+          font-weight:700;
+        ">Hal. ${page}</div>
+      `;
+    }
+
+    table += `
+            <div style="
+              position:sticky;
+              top:0;
+              z-index:4;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              padding:8px 4px;
+              background:#104b32;
+              color:white;
+              border-bottom:2px solid #c9a64f;
+              font-weight:700;
+            ">Rata-rata</div>
+
+            <div style="
+              position:sticky;
+              top:0;
+              z-index:4;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              padding:8px 4px;
+              background:#104b32;
+              color:white;
+              border-bottom:2px solid #c9a64f;
+              font-weight:700;
+            ">Predikat</div>
+    `;
+
+    santri.forEach((s, index) => {
+      const data = recap[s.id];
+
+      let average = null;
+      let grade = "-";
+      let description = "";
+
+      if (data && data.count > 0) {
+        average = data.total / data.count;
+
+        const rounded = Math.floor(average);
+
+        if (rounded >= 88) {
+          grade = "A";
+          description = "Sangat Baik";
+        } else if (rounded >= 83) {
+          grade = "B";
+          description = "Baik";
+        } else if (rounded >= 76) {
+          grade = "C";
+          description = "Cukup";
+        } else {
+          grade = "D";
+          description = "Perlu Bimbingan";
+        }
+      }
+
+      const rowBackground =
+        index % 2 === 0 ? "#ffffff" : "#f1f7f3";
+
+      table += `
+        <div style="
+          position:sticky;
+          left:0;
+          z-index:3;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          background:${rowBackground};
+          color:#174b35;
+          padding:8px 4px;
+          border-right:1px solid #d9e2dc;
+          border-bottom:1px solid #e5ebe6;
+        ">${index + 1}</div>
+
+        <div style="
+          position:sticky;
+          left:42px;
+          z-index:3;
+          display:flex;
+          align-items:center;
+          min-width:0;
+          white-space:normal;
+          overflow-wrap:anywhere;
+          background:${rowBackground};
+          color:#174b35;
+          padding:8px;
+          border-right:1px solid #d9e2dc;
+          border-bottom:1px solid #e5ebe6;
+          font-weight:600;
+        ">${esc(s.name || "-")}</div>
+      `;
+
+      for (let page = 1; page <= maxPage; page++) {
+        const score = data?.pages?.[page];
+
+        table += `
+          <div style="
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            min-width:54px;
+            padding:8px 4px;
+            background:${rowBackground};
+            border-right:1px solid #e5ebe6;
+            border-bottom:1px solid #e5ebe6;
+            font-weight:600;
+          ">${score === undefined ? "" : score}</div>
+        `;
+      }
+
+      table += `
+        <div style="
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          padding:8px 4px;
+          background:${rowBackground};
+          border-bottom:1px solid #e5ebe6;
+          font-weight:700;
+        ">${average === null ? "-" : average.toFixed(2)}</div>
+
+        <div style="
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          padding:8px 4px;
+          background:${rowBackground};
+          border-bottom:1px solid #e5ebe6;
+          text-align:center;
+          white-space:normal;
+        ">
+          <strong>${grade}${description ? " – " + description : ""}</strong>
+        </div>
+      `;
+    });
+
+    table += `
+          </div>
+        </div>
+
+        ${
+          maxPage === 0
+            ? '<p class="muted">Belum ada nilai pada bulan ini.</p>'
+            : ""
+        }
+
+        <p class="muted" style="
+          font-size:11px;
+          margin-top:10px;
+        ">
+          Keterangan: Kolom nilai kosong menunjukkan santri belum menulis di halaman tersebut.
+        </p>
+
+      </div>
+    `;
+    resultBox.innerHTML = table;
+
+    message.textContent =
+      "Rekap berhasil ditampilkan.";
+
+  } catch (error) {
+    console.error(error);
+
+    message.textContent =
+      "Gagal memuat rekap: " + error.message;
+  }
+};
+
 // NAVIGASI ACCORDION PENILAIAN
 
 function closeAssessmentPanels() {
@@ -578,21 +1208,24 @@ $("readingClassSelect").onchange = async () => {
       '#readingStudentList .reading-matrix{border-collapse:separate;border-spacing:0;font-size:12px;white-space:nowrap;min-width:max-content;width:100%}' +
       '#readingStudentList .reading-matrix{overflow:visible!important;border-radius:0!important}' +
       '#readingStudentList .reading-matrix th{padding:9px 8px;background:#104b32;color:#fff;font-weight:700;text-align:center}' +
-      '#readingStudentList .reading-matrix .reading-name-head{position:-webkit-sticky!important;position:sticky!important;top:0!important;left:0!important;z-index:10!important;min-width:155px;background:#104b32!important;text-align:left;box-shadow:2px 0 4px rgba(0,0,0,.12)}' +
-      '#readingStudentList .reading-matrix .reading-page-head{position:sticky;top:0;z-index:2;min-width:46px}' +
-      '#readingStudentList .reading-matrix .reading-student-name{position:-webkit-sticky!important;position:sticky!important;left:0!important;z-index:5!important;min-width:155px;padding:9px 8px;background:#f1f7f3!important;color:#174b35!important;text-align:left;font-size:12px;font-weight:600;border-bottom:1px solid #e5ebe6;box-shadow:2px 0 4px rgba(0,0,0,.08)}' +
+      '#readingStudentList .reading-matrix .reading-no-head{position:sticky!important;top:0!important;left:0!important;z-index:12!important;width:42px;min-width:42px;max-width:42px;background:#104b32!important;color:white;text-align:center}' +
+      '#readingStudentList .reading-matrix .reading-name-head{position:sticky!important;top:0!important;left:42px!important;z-index:11!important;min-width:155px;background:#104b32!important;text-align:left;box-shadow:2px 0 4px rgba(0,0,0,.12)}' +
+      '#readingStudentList .reading-matrix .reading-student-no{position:sticky!important;left:0!important;z-index:6!important;width:42px;min-width:42px;max-width:42px;padding:9px 4px;background:#f1f7f3!important;color:#174b35!important;text-align:center;font-weight:600;border-bottom:1px solid #e5ebe6}' +
+      '#readingStudentList .reading-matrix .reading-student-name{position:sticky!important;left:42px!important;z-index:5!important;min-width:155px;padding:9px 8px;background:#f1f7f3!important;color:#174b35!important;text-align:left;font-size:12px;font-weight:600;border-bottom:1px solid #e5ebe6;box-shadow:2px 0 4px rgba(0,0,0,.08)}' +
+      '#readingStudentList .reading-matrix tbody tr:nth-child(even) .reading-student-no,#readingStudentList .reading-matrix tbody tr:nth-child(even) .reading-student-name{background:#e5f0e8!important}' +
       '#readingStudentList .reading-matrix tbody tr:nth-child(even) .reading-student-name{background:#e5f0e8!important}' +
       '#readingStudentList .reading-matrix td{padding:4px;text-align:center;border-bottom:1px solid #e5ebe6;border-left:1px solid #edf1ed;background:#fff}' +
       '#readingStudentList .reading-matrix .reading-score{width:42px;height:36px;padding:2px;border:1px solid #cbd8ce;border-radius:9px;font-size:17px;font-weight:700;color:#174b35;cursor:pointer}' +
-      '#readingStudentList .reading-matrix .reading-score.red,#readingStudentList .reading-matrix .reading-score-menu button.red{text-decoration-line:underline;text-decoration-color:#c62828;text-decoration-thickness:2px;text-underline-offset:7px;color:#174b35!important;background:#ffd6d6!important}' +
+      '#readingStudentList .reading-matrix .reading-score.red{position:relative;color:#174b35!important;background:#ffd6d6!important}' +
       '.reading-score-menu{position:fixed;z-index:99999;width:44px;box-sizing:border-box;background:white;border:1px solid #d9e2dc;border-radius:10px;padding:4px;box-shadow:0 5px 15px rgba(0,0,0,.15)}' +
-      '.reading-score-menu button{display:block;width:100%;min-width:0;box-sizing:border-box;margin:3px 0;padding:6px 0;border:0;border-radius:7px;font-size:15px;font-weight:700}' +
+      '.reading-score-menu button{display:block;position:relative;width:100%;min-width:0;box-sizing:border-box;margin:3px 0;padding:6px 0;border:0;border-radius:7px;font-size:15px;font-weight:700}' +
+      '#readingStudentList .reading-matrix .reading-score.red::after,.reading-score-menu button.red::after{content:"";position:absolute;left:50%;bottom:4px;transform:translateX(-50%);width:16px;border-bottom:2px solid #c62828}' +
       '#readingStudentList .reading-matrix select option{background:#fff;color:#174b35}' +
       '@media(max-width:600px){#readingStudentList .reading-matrix .reading-student-name,#readingStudentList .reading-matrix .reading-name-head{min-width:145px}}' +
       '</style><div class="reading-matrix-wrap"><table class="reading-matrix"><thead><tr>';
 
+    table += '<th class="reading-no-head">No.</th>';
     table += '<th class="reading-name-head">Nama Santri</th>';
-
     for (let page = 1; page <= pageCount; page++) {
       table += '<th class="reading-page-head">' + page + '</th>';
     }
@@ -601,8 +1234,10 @@ $("readingClassSelect").onchange = async () => {
 
     santri.forEach((s, index) => {
       table += '<tr>';
+      table += '<th class="reading-student-no">' +
+     (index + 1) + '</th>';
       table += '<th class="reading-student-name">' +
-        (index + 1) + '. ' + esc(s.name || "-") + '</th>';
+  esc(s.name || "-") + '</th>';
 
       for (let page = 1; page <= pageCount; page++) {
         const value = latest[s.id + "_" + page];
@@ -741,7 +1376,7 @@ menu.appendChild(divider);
     const deleteButton = document.createElement("button");
     deleteButton.type = "button";
     deleteButton.className = "reading-score-delete";
-    deleteButton.textContent = "✕ Hapus";
+    deleteButton.textContent = "✕";
     deleteButton.style.cssText = "width:100%;padding:7px 3px;margin:2px 0;border:0;border-radius:7px;background:#fff0f0;color:#c62828;font-size:12px;font-weight:700;";
 
     deleteButton.onclick = async () => {
@@ -772,7 +1407,7 @@ menu.appendChild(divider);
         console.error(error);
         alert("Nilai gagal dihapus. Periksa koneksi internet.");
         deleteButton.disabled = false;
-        deleteButton.textContent = "✕ Hapus";
+        deleteButton.textContent = "✕";
       }
     };
 
@@ -805,6 +1440,205 @@ menu.appendChild(divider);
     list.innerHTML = "<p class='muted'>Gagal memuat tabel penilaian: " + esc(error.message || "Kesalahan tidak diketahui") + "</p>";
   }
 };
+
+// ======================================
+// PENILAIAN MENULIS ARAB YANBU'A
+// ======================================
+
+function getLocalDateString() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+$("openWritingAssessmentBtn").onclick = () => {
+  const select = $("writingClassSelect");
+
+  if (select.options.length <= 1) {
+    select.innerHTML = '<option value="">Pilih kelas</option>';
+
+    classes
+      .filter(kelas => kelas.name.startsWith("Kelas Jilid"))
+      .forEach(kelas => {
+        const option = document.createElement("option");
+        option.value = kelas.id;
+        option.textContent = kelas.name;
+        select.appendChild(option);
+      });
+  }
+
+  if (!$("writingAssessmentDate").value) {
+    $("writingAssessmentDate").value = getLocalDateString();
+  }
+
+  toggleAssessmentPanel(
+    "writingAssessmentView",
+    "openWritingAssessmentBtn"
+  );
+};
+
+async function loadWritingAssessmentTable() {
+  const classId = $("writingClassSelect").value;
+  const date = $("writingAssessmentDate").value;
+  const list = $("writingStudentList");
+
+  list.innerHTML = "";
+
+  if (!classId || !date) return;
+
+  const selectedClass = classes.find(k => k.id === classId);
+  const pageCount = READING_PAGE_COUNTS[selectedClass?.name] || 0;
+
+  list.innerHTML = "<p class='muted'>Memuat tabel penilaian...</p>";
+
+  try {
+    const santri = students
+      .filter(s => s.classId === classId)
+      .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+
+    const assessmentSnap = await getDocs(query(
+      collection(db, "writingAssessments"),
+      where("classId", "==", classId)
+    ));
+
+    const assessments = assessmentSnap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(a => a.assessmentDate === date);
+
+    const latest = {};
+
+    assessments.forEach(a => {
+      latest[a.studentId + "_" + a.page] = a;
+    });
+
+    if (!santri.length) {
+      list.innerHTML = "<p class='muted'>Belum ada santri pada kelas ini.</p>";
+      return;
+    }
+
+    if (!pageCount) {
+      list.innerHTML = "<p class='muted'>Jumlah halaman jilid belum ditentukan.</p>";
+      return;
+    }
+    
+    let table = '<style>' +
+      '#writingStudentList .writing-matrix-wrap{max-height:65vh;overflow:auto;border:1px solid #d9e2dc;border-radius:12px;background:#fff;-webkit-overflow-scrolling:touch}' +
+      '#writingStudentList .writing-matrix{border-collapse:separate;border-spacing:0;font-size:12px;white-space:nowrap;min-width:max-content;width:100%}' +
+      '#writingStudentList .writing-matrix{overflow:visible!important;border-radius:0!important}' +
+      '#writingStudentList .writing-matrix .writing-no-head{position:sticky!important;top:0!important;left:0!important;z-index:12!important;width:42px;min-width:42px;max-width:42px;background:#104b32!important;color:white;text-align:center}' +
+      '#writingStudentList .writing-matrix th{padding:9px 8px;background:#104b32;color:#fff;font-weight:700;text-align:center}' +
+      '#writingStudentList .writing-matrix .writing-name-head{position:sticky!important;top:0!important;left:42px!important;z-index:11!important;min-width:155px;background:#104b32!important;text-align:left;box-shadow:2px 0 4px rgba(0,0,0,.12)}' +
+      '#writingStudentList .writing-matrix .writing-student-no{position:sticky!important;left:0!important;z-index:6!important;width:42px;min-width:42px;max-width:42px;padding:9px 4px;background:#f1f7f3!important;color:#174b35!important;text-align:center;font-weight:600;border-bottom:1px solid #e5ebe6}' +
+      '#writingStudentList .writing-matrix .writing-student-name{position:sticky!important;left:42px!important;z-index:5!important;min-width:155px;padding:9px 8px;background:#f1f7f3!important;color:#174b35!important;text-align:left;font-size:12px;font-weight:600;border-bottom:1px solid #e5ebe6;box-shadow:2px 0 4px rgba(0,0,0,.08)}' +
+      '#writingStudentList .writing-matrix tbody tr:nth-child(even) .writing-student-no,#writingStudentList .writing-matrix tbody tr:nth-child(even) .writing-student-name{background:#e5f0e8!important}' +
+      '#writingStudentList .writing-matrix td{padding:4px;text-align:center;border-bottom:1px solid #e5ebe6;border-left:1px solid #edf1ed;background:#fff}' +
+      '#writingStudentList .writing-matrix .writing-score{width:42px;height:36px;padding:2px;border:1px solid #cbd8ce;border-radius:9px;font-size:14px;font-weight:700;color:#174b35;text-align:center;background:#fff}' +
+      '@media(max-width:600px){#writingStudentList .writing-matrix .writing-student-name,#writingStudentList .writing-matrix .writing-name-head{min-width:145px}}' +
+      '</style><div class="writing-matrix-wrap"><table class="writing-matrix"><thead><tr>';
+
+    table += '<th class="writing-no-head">No.</th>';
+    table += '<th class="writing-name-head">Nama Santri</th>';
+
+    for (let page = 1; page <= pageCount; page++) {
+      table += '<th class="writing-page-head">' + page + '</th>';
+    }
+
+    table += '</tr></thead><tbody>';
+
+    santri.forEach((s, index) => {
+      table += '<tr>';
+      table += '<th class="writing-student-no">' +
+      (index + 1) + '</th>';
+       table += '<th class="writing-student-name">' +
+        esc(s.name || "-") + '</th>';
+
+      for (let page = 1; page <= pageCount; page++) {
+        const record = latest[s.id + "_" + page];
+        const score = record?.score ?? "";
+
+        table += '<td><input type="number" class="writing-score"' +
+          ' min="70" max="90" step="1"' +
+          ' value="' + score + '"' +
+          ' data-student="' + s.id + '"' +
+          ' data-page="' + page + '"' +
+          ' placeholder="–"></td>';
+      }
+
+      table += '</tr>';
+    });
+
+    table += '</tbody></table></div>';
+    table += '<p class="muted" style="font-size:11px;margin-top:8px">Masukkan nilai 70–90 pada halaman yang dinilai. Nilai akan disimpan setelah kolom selesai diubah.</p>';
+
+    list.innerHTML = table;
+
+    list.querySelectorAll(".writing-score").forEach(input => {
+      input.onchange = async () => {
+        const rawValue = input.value.trim();
+        const studentId = input.dataset.student;
+        const page = Number(input.dataset.page);
+        const recordId = classId + "_" + studentId + "_" + page + "_" + date;
+
+        if (rawValue === "") {
+          try {
+            await deleteDoc(doc(db, "writingAssessments", recordId));
+            input.style.background = "";
+          } catch (error) {
+            console.error(error);
+            alert("Nilai gagal dihapus. Periksa koneksi internet.");
+          }
+          return;
+        }
+
+        const score = Number(rawValue);
+
+        if (!Number.isInteger(score) || score < 70 || score > 90) {
+        alert("Nilai harus berupa angka bulat antara 70 sampai 90.");
+          input.value = "";
+          input.focus();
+          return;
+        }
+
+        input.disabled = true;
+
+        try {
+          await setDoc(
+            doc(db, "writingAssessments", recordId),
+            {
+              studentId,
+              studentName: santri.find(s => s.id === studentId)?.name || "",
+              classId,
+              className: selectedClass.name,
+              page,
+              score,
+              assessmentDate: date,
+              updatedAt: serverTimestamp()
+            },
+            { merge: true }
+          );
+
+          input.style.background = "#d9f2df";
+        } catch (error) {
+          console.error(error);
+          alert("Nilai gagal disimpan. Periksa koneksi atau izin database.");
+        } finally {
+          input.disabled = false;
+        }
+      };
+    });
+
+  } catch (error) {
+    console.error(error);
+    list.innerHTML =
+      "<p class='muted'>Gagal memuat tabel penilaian: " +
+      esc(error.message || "Kesalahan tidak diketahui") + "</p>";
+  }
+}
+
+$("writingClassSelect").onchange = loadWritingAssessmentTable;
+$("writingAssessmentDate").onchange = loadWritingAssessmentTable;
 
 // MEMUAT JADWAL LIBUR MINGGUAN
 async function loadWeeklySchedule() {
