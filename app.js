@@ -1208,6 +1208,7 @@ $("readingClassSelect").onchange = async () => {
       '#readingStudentList .reading-matrix{border-collapse:separate;border-spacing:0;font-size:12px;white-space:nowrap;min-width:max-content;width:100%}' +
       '#readingStudentList .reading-matrix{overflow:visible!important;border-radius:0!important}' +
       '#readingStudentList .reading-matrix th{padding:9px 8px;background:#104b32;color:#fff;font-weight:700;text-align:center}' +
+      '#readingStudentList .reading-matrix .reading-page-head{position:sticky!important;top:0!important;z-index:10!important;background:#104b32!important;color:#fff!important}' +
       '#readingStudentList .reading-matrix .reading-no-head{position:sticky!important;top:0!important;left:0!important;z-index:12!important;width:42px;min-width:42px;max-width:42px;background:#104b32!important;color:white;text-align:center}' +
       '#readingStudentList .reading-matrix .reading-name-head{position:sticky!important;top:0!important;left:42px!important;z-index:11!important;min-width:155px;background:#104b32!important;text-align:left;box-shadow:2px 0 4px rgba(0,0,0,.12)}' +
       '#readingStudentList .reading-matrix .reading-student-no{position:sticky!important;left:0!important;z-index:6!important;width:42px;min-width:42px;max-width:42px;padding:9px 4px;background:#f1f7f3!important;color:#174b35!important;text-align:center;font-weight:600;border-bottom:1px solid #e5ebe6}' +
