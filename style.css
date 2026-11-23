@@ -4743,3 +4743,818 @@ font-size: 19px;
 #evaluasiPenilaianPanel .assessment-accordion-toggle { border-radius:13px !important; }
 #evaluasiPenilaianPanel .assessment-accordion-item:has(.assessment-accordion-toggle[aria-expanded="true"]) .assessment-accordion-toggle { border-radius:13px 13px 0 0 !important; }
 #evaluasiPenilaianPanel .assessment-accordion-content { border-radius:0 0 13px 13px !important; }
+
+
+/* DASHBOARD EVALUASI PEMBELAJARAN — SELARAS DENGAN DESAIN APLIKASI */
+#evaluasiDashboardPanel .eval-dashboard{
+  position:relative;
+  z-index:1;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  padding:22px;
+  border:1px solid rgba(255,255,255,.96);
+  border-radius:19px;
+  background:rgba(255,255,255,.96);
+  box-shadow:0 7px 22px rgba(16,75,50,.075);
+}
+#evaluasiDashboardPanel .eval-dashboard-heading{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:0 1px 14px;
+  border-bottom:1px solid #e8eee9;
+}
+#evaluasiDashboardPanel .eval-dashboard-heading h2{
+  position:relative;
+  margin:4px 0 7px;
+  padding-bottom:11px;
+  color:#07583b;
+  font-size:22px;
+  font-weight:850;
+  letter-spacing:-.35px;
+}
+#evaluasiDashboardPanel .eval-dashboard-heading h2::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:0;
+  width:58px;
+  height:4px;
+  border-radius:5px;
+  background:linear-gradient(90deg,#08784f 0 65%,#d2ad50 65% 100%);
+}
+#evaluasiDashboardPanel .eval-dashboard-heading p{
+  margin:0;
+  color:#78857d;
+  font-size:12px;
+}
+#evaluasiDashboardPanel .eval-eyebrow{
+  color:#b18d37;
+  font-size:10px;
+  font-weight:850;
+  letter-spacing:1.7px;
+}
+#evaluasiDashboardPanel .eval-refresh-btn{
+  width:40px;
+  height:40px;
+  flex:0 0 40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid #dce8df;
+  border-radius:12px;
+  background:linear-gradient(145deg,#fff,#edf6f0);
+  color:#07583b;
+  font-size:23px;
+  box-shadow:0 4px 12px rgba(16,75,50,.07);
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+#evaluasiDashboardPanel .eval-refresh-btn:active{transform:scale(.96)}
+#evaluasiDashboardPanel .eval-filters{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin:0;
+  padding:14px 16px;
+  border:1px solid #dfeae2;
+  border-radius:14px;
+  background:linear-gradient(135deg,#f8fcf9,#f1f7f2);
+  box-shadow:none;
+}
+#evaluasiDashboardPanel .eval-filters label{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  margin:0;
+  color:#104b32;
+  font-size:11px;
+  font-weight:750;
+}
+#evaluasiDashboardPanel .eval-filters input,
+#evaluasiDashboardPanel .eval-filters select{
+  width:100%;
+  min-width:0;
+  min-height:42px;
+  margin:0;
+  padding:9px 11px;
+  border:1px solid #d8e5dc;
+  border-radius:9px;
+  background:#fff;
+  color:#24352c;
+  font:inherit;
+  font-size:13px;
+  box-shadow:inset 0 1px 2px rgba(16,75,50,.025);
+}
+#evaluasiDashboardPanel .eval-message{
+  min-height:14px;
+  margin:-8px 2px -5px;
+  color:#78857d;
+  font-size:11px;
+}
+#evaluasiDashboardPanel .eval-summary-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:11px;
+}
+#evaluasiDashboardPanel .eval-stat-card{
+  position:relative;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  overflow:hidden;
+  padding:14px 13px 13px;
+  border:1px solid #dcebe0;
+  border-left:4px solid #176b45;
+  border-radius:13px;
+  background:linear-gradient(145deg,#fff,#edf6f0);
+  box-shadow:0 5px 15px rgba(16,75,50,.055);
+}
+#evaluasiDashboardPanel .eval-stat-icon{
+  width:29px;
+  height:29px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:9px;
+  background:#e3f0e7;
+  color:#104b32;
+  font-size:15px;
+}
+#evaluasiDashboardPanel .eval-stat-label{
+  color:#68796e;
+  font-size:10px;
+  line-height:1.35;
+  font-weight:700;
+}
+#evaluasiDashboardPanel .eval-stat-card strong{
+  color:#176b45;
+  font-size:25px;
+  line-height:1.12;
+  font-weight:850;
+}
+#evaluasiDashboardPanel .eval-stat-attention{
+  border-left-color:#c58b36;
+  background:linear-gradient(145deg,#fff,#fbf5e9);
+}
+#evaluasiDashboardPanel .eval-stat-attention .eval-stat-icon{
+  background:#f7edda;
+  color:#9a6e22;
+}
+#evaluasiDashboardPanel .eval-stat-attention strong{color:#a8792b}
+#evaluasiDashboardPanel .eval-analysis-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
+}
+#evaluasiDashboardPanel .eval-card{
+  min-width:0;
+  padding:16px;
+  border:1px solid #e0eae3;
+  border-radius:15px;
+  background:#fbfdfb;
+  box-shadow:0 4px 13px rgba(16,75,50,.045);
+}
+#evaluasiDashboardPanel .eval-card-heading{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:15px;
+  padding-bottom:11px;
+  border-bottom:1px solid #e7eee9;
+}
+#evaluasiDashboardPanel .eval-card-heading>div{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  min-width:0;
+}
+#evaluasiDashboardPanel .eval-card-heading h3{
+  margin:1px 0 0;
+  color:#104b32;
+  font-size:13px;
+  line-height:1.4;
+  font-weight:800;
+}
+#evaluasiDashboardPanel .eval-card-heading small{
+  flex:0 0 auto;
+  color:#89958d;
+  font-size:9px;
+  text-align:right;
+}
+#evaluasiDashboardPanel .eval-section-index{
+  width:25px;
+  height:25px;
+  flex:0 0 25px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid #e3d4a9;
+  border-radius:8px;
+  background:#fbf7ec;
+  color:#9a7a32;
+  font-size:10px;
+  font-weight:850;
+}
+#evaluasiDashboardPanel .eval-chart-list{
+  display:flex;
+  flex-direction:column;
+  gap:13px;
+}
+#evaluasiDashboardPanel .eval-chart-row{
+  display:grid;
+  grid-template-columns:78px minmax(25px,1fr) 24px;
+  align-items:center;
+  gap:8px;
+}
+#evaluasiDashboardPanel .eval-chart-label{
+  color:#596a60;
+  font-size:10px;
+  font-weight:650;
+  white-space:nowrap;
+}
+#evaluasiDashboardPanel .eval-chart-track{
+  height:9px;
+  overflow:hidden;
+  border-radius:20px;
+  background:#e9efeb;
+}
+#evaluasiDashboardPanel .eval-chart-fill{
+  height:100%;
+  min-width:0;
+  border-radius:20px;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.25);
+}
+#evaluasiDashboardPanel .eval-chart-count{
+  color:#30443a;
+  font-size:11px;
+  font-weight:800;
+  text-align:right;
+}
+#evaluasiDashboardPanel .eval-empty{
+  padding:14px 10px;
+  border:1px dashed #d9e5dc;
+  border-radius:10px;
+  background:#f7faf8;
+  color:#78857d;
+  font-size:11px;
+  text-align:center;
+}
+#evaluasiDashboardPanel .eval-attention-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+#evaluasiDashboardPanel .eval-attention-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:10px;
+  padding:10px 11px;
+  border:1px solid #e8eee9;
+  border-radius:10px;
+  background:#fff;
+}
+#evaluasiDashboardPanel .eval-attention-name{
+  color:#24352c;
+  font-size:11px;
+  font-weight:800;
+}
+#evaluasiDashboardPanel .eval-attention-class{
+  display:block;
+  margin-top:2px;
+  color:#89958d;
+  font-size:10px;
+}
+#evaluasiDashboardPanel .eval-attention-tags{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:5px;
+}
+#evaluasiDashboardPanel .eval-attention-tag{
+  padding:4px 8px;
+  border:1px solid #f0dfc8;
+  border-radius:20px;
+  background:#fff7ec;
+  color:#9b612d;
+  font-size:9px;
+  font-weight:800;
+  white-space:nowrap;
+}
+#evaluasiDashboardPanel .eval-class-list{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+#evaluasiDashboardPanel .eval-class-row{
+  display:grid;
+  grid-template-columns:100px minmax(25px,1fr) 52px;
+  align-items:center;
+  gap:9px;
+}
+#evaluasiDashboardPanel .eval-class-name{
+  color:#596a60;
+  font-size:10px;
+  font-weight:650;
+}
+#evaluasiDashboardPanel .eval-class-track{
+  height:8px;
+  overflow:hidden;
+  border-radius:20px;
+  background:#e9efeb;
+}
+#evaluasiDashboardPanel .eval-class-fill{
+  height:100%;
+  border-radius:20px;
+  background:linear-gradient(90deg,#176b45,#63a17b);
+}
+#evaluasiDashboardPanel .eval-class-count{
+  color:#78857d;
+  font-size:10px;
+  font-weight:700;
+  text-align:right;
+}
+#evaluasiDashboardPanel .eval-footnote{
+  margin:0 2px 1px;
+  color:#89958d;
+  font-size:9px;
+  line-height:1.5;
+}
+@media(max-width:700px){
+  #evaluasiDashboardPanel .eval-dashboard{gap:13px;padding:16px}
+  #evaluasiDashboardPanel .eval-dashboard-heading h2{font-size:20px}
+  #evaluasiDashboardPanel .eval-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  #evaluasiDashboardPanel .eval-stat-card{padding:12px}
+  #evaluasiDashboardPanel .eval-stat-card strong{font-size:23px}
+  #evaluasiDashboardPanel .eval-analysis-grid{grid-template-columns:1fr;gap:11px}
+  #evaluasiDashboardPanel .eval-card{padding:14px}
+  #evaluasiDashboardPanel .eval-card-heading h3{font-size:12px}
+  #evaluasiDashboardPanel .eval-filters{padding:12px;gap:9px}
+  #evaluasiDashboardPanel .eval-chart-row{grid-template-columns:76px minmax(25px,1fr) 22px;gap:7px}
+  #evaluasiDashboardPanel .eval-class-row{grid-template-columns:94px minmax(25px,1fr) 48px;gap:7px}
+}
+@media(max-width:380px){
+  #evaluasiDashboardPanel .eval-dashboard{padding:12px}
+  #evaluasiDashboardPanel .eval-filters{grid-template-columns:1fr}
+  #evaluasiDashboardPanel .eval-card-heading{flex-direction:column;gap:4px}
+  #evaluasiDashboardPanel .eval-card-heading small{margin-left:33px;text-align:left}
+  #evaluasiDashboardPanel .eval-attention-row{grid-template-columns:1fr}
+  #evaluasiDashboardPanel .eval-attention-tags{justify-content:flex-start}
+}
+
+
+
+
+/* Penyempurnaan judul Dashboard Evaluasi */
+#evaluasiDashboardPanel .eval-dashboard-heading{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+}
+#evaluasiDashboardPanel .eval-dashboard-heading > div{
+  flex:1 1 auto;
+  min-width:0;
+}
+#evaluasiDashboardPanel .eval-dashboard-heading h2{
+  font-size:17px !important;
+  font-weight:600 !important;
+  line-height:1.25 !important;
+  letter-spacing:0 !important;
+}
+#evaluasiDashboardPanel .eval-dashboard-heading .eval-eyebrow{
+  font-size:9px;
+  letter-spacing:1.2px;
+}
+#evaluasiDashboardPanel .eval-refresh-btn{
+  width:34px !important;
+  height:34px !important;
+  flex:0 0 34px !important;
+  padding:0 !important;
+  margin-left:auto !important;
+  border-radius:9px !important;
+  font-size:20px !important;
+}
+@media(max-width:600px){
+  #evaluasiDashboardPanel .eval-dashboard-heading{
+    padding:12px 14px !important;
+    gap:8px !important;
+  }
+  #evaluasiDashboardPanel .eval-dashboard-heading h2{
+    font-size:16px !important;
+    font-weight:600 !important;
+  }
+  #evaluasiDashboardPanel .eval-refresh-btn{
+    width:32px !important;
+    height:32px !important;
+    flex-basis:32px !important;
+  }
+}
+
+
+/* Header Monitoring Pembelajaran dibuat ringkas */
+#evaluasiDashboardPanel .eval-dashboard-heading{
+  display:block !important;
+  width:max-content !important;
+  max-width:100% !important;
+  margin:0 0 2px !important;
+  padding:0 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+}
+#evaluasiDashboardPanel .eval-dashboard-heading h2{
+  display:inline-block !important;
+  width:auto !important;
+  margin:0 !important;
+  padding:8px 14px !important;
+  border:0 !important;
+  border-radius:9px !important;
+  background:linear-gradient(120deg,#176b45,#0b3d2e) !important;
+  color:#c9a64f !important;
+  font-size:15px !important;
+  font-weight:650 !important;
+  line-height:1.3 !important;
+  letter-spacing:0 !important;
+}
+#evaluasiDashboardPanel .eval-dashboard-heading h2::after{
+  display:none !important;
+  content:none !important;
+}
+#evaluasiDashboardPanel .eval-class-filter-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  width:100%;
+  min-height:27px;
+}
+#evaluasiDashboardPanel .eval-refresh-btn{
+  width:25px !important;
+  height:25px !important;
+  min-width:25px !important;
+  flex:0 0 25px !important;
+  padding:0 !important;
+  margin:0 0 0 auto !important;
+  border:1px solid #cbdccf !important;
+  border-radius:7px !important;
+  background:#fff !important;
+  color:#104b32 !important;
+  font-size:16px !important;
+  line-height:1 !important;
+  box-shadow:0 2px 5px rgba(16,75,50,.06) !important;
+}
+@media(max-width:600px){
+  #evaluasiDashboardPanel .eval-dashboard-heading{
+    margin:0 0 1px !important;
+    padding:0 !important;
+  }
+  #evaluasiDashboardPanel .eval-dashboard-heading h2{
+    padding:7px 12px !important;
+    font-size:14px !important;
+    font-weight:650 !important;
+  }
+  #evaluasiDashboardPanel .eval-class-filter-head{
+    min-height:25px;
+  }
+  #evaluasiDashboardPanel .eval-refresh-btn{
+    width:23px !important;
+    height:23px !important;
+    min-width:23px !important;
+    flex-basis:23px !important;
+    font-size:15px !important;
+  }
+}
+
+
+/* Penyesuaian akhir Monitoring Pembelajaran */
+#evaluasiDashboardPanel .eval-dashboard-heading{
+  display:block !important;
+  width:calc(100% + 44px) !important;
+  max-width:none !important;
+  margin:-22px -22px 0 !important;
+  padding:11px 18px !important;
+  box-sizing:border-box !important;
+  border:0 !important;
+  border-radius:13px 13px 0 0 !important;
+  background:linear-gradient(120deg,#176b45,#0b3d2e) !important;
+  box-shadow:none !important;
+}
+#evaluasiDashboardPanel .eval-dashboard-heading h2{
+  display:block !important;
+  width:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+  background:transparent !important;
+  color:#c9a64f !important;
+  font-size:15px !important;
+  font-weight:650 !important;
+  line-height:1.35 !important;
+}
+#evaluasiDashboardPanel .eval-filters{
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  align-items:end !important;
+}
+#evaluasiDashboardPanel .eval-filters label{
+  min-width:0;
+}
+#evaluasiDashboardPanel .eval-class-filter-head{
+  min-height:27px !important;
+  align-items:center !important;
+}
+#evaluasiDashboardPanel .eval-refresh-btn{
+  width:26px !important;
+  height:26px !important;
+  min-width:26px !important;
+  flex:0 0 26px !important;
+  border-radius:4px !important;
+  padding:0 !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  font-size:16px !important;
+}
+@media(max-width:700px){
+  #evaluasiDashboardPanel .eval-dashboard-heading{
+    width:calc(100% + 32px) !important;
+    margin:-16px -16px 0 !important;
+    padding:10px 15px !important;
+  }
+  #evaluasiDashboardPanel .eval-filters{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:8px !important;
+  }
+}
+@media(max-width:380px){
+  #evaluasiDashboardPanel .eval-dashboard{padding:12px !important}
+  #evaluasiDashboardPanel .eval-dashboard-heading{
+    width:calc(100% + 24px) !important;
+    margin:-12px -12px 0 !important;
+    padding:9px 12px !important;
+  }
+  #evaluasiDashboardPanel .eval-filters{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:7px !important;
+    padding:10px !important;
+  }
+  #evaluasiDashboardPanel .eval-filters input,
+  #evaluasiDashboardPanel .eval-filters select{
+    min-height:39px !important;
+    padding:8px 7px !important;
+    font-size:11px !important;
+  }
+  #evaluasiDashboardPanel .eval-refresh-btn{
+    width:24px !important;
+    height:24px !important;
+    min-width:24px !important;
+    flex-basis:24px !important;
+  }
+}
+
+
+/* Samakan tinggi label filter dan paksa tombol muat ulang persegi */
+#evaluasiDashboardPanel .eval-filters{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+  align-items:start !important;
+}
+#evaluasiDashboardPanel .eval-filters > label{
+  display:grid !important;
+  grid-template-rows:22px 42px !important;
+  align-content:start !important;
+  align-items:stretch !important;
+  gap:4px !important;
+  min-width:0 !important;
+}
+#evaluasiDashboardPanel .eval-filter-label-head,
+#evaluasiDashboardPanel .eval-class-filter-head{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  width:100% !important;
+  height:22px !important;
+  min-height:22px !important;
+  line-height:22px !important;
+  box-sizing:border-box !important;
+}
+#evaluasiDashboardPanel .eval-filters input,
+#evaluasiDashboardPanel .eval-filters select{
+  width:100% !important;
+  height:42px !important;
+  min-height:42px !important;
+  box-sizing:border-box !important;
+  margin:0 !important;
+}
+#evaluasiDashboardPanel .eval-refresh-btn{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:22px !important;
+  height:22px !important;
+  min-width:22px !important;
+  max-width:22px !important;
+  min-height:22px !important;
+  max-height:22px !important;
+  flex:0 0 22px !important;
+  aspect-ratio:1 / 1 !important;
+  box-sizing:border-box !important;
+  padding:0 !important;
+  margin:0 0 0 auto !important;
+  border-radius:3px !important;
+  line-height:20px !important;
+}
+@media(max-width:380px){
+  #evaluasiDashboardPanel .eval-filters{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+  }
+  #evaluasiDashboardPanel .eval-filters > label{
+    grid-template-rows:22px 40px !important;
+  }
+  #evaluasiDashboardPanel .eval-filters input,
+  #evaluasiDashboardPanel .eval-filters select{
+    height:40px !important;
+    min-height:40px !important;
+    padding:7px 5px !important;
+    font-size:10px !important;
+  }
+}
+
+
+/* FINAL OVERRIDE: ukuran tombol dan keselarasan dua filter */
+#evaluasiDashboardPanel .eval-filters{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  align-items:start !important;
+}
+#evaluasiDashboardPanel .eval-filters > label{
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:flex-start !important;
+  align-items:stretch !important;
+  gap:4px !important;
+  min-width:0 !important;
+  margin:0 !important;
+}
+#evaluasiDashboardPanel .eval-filter-label-head,
+#evaluasiDashboardPanel .eval-class-filter-head{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  box-sizing:border-box !important;
+  width:100% !important;
+  height:24px !important;
+  min-height:24px !important;
+  max-height:24px !important;
+  line-height:24px !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+#evaluasiDashboardPanel .eval-filters input,
+#evaluasiDashboardPanel .eval-filters select{
+  display:block !important;
+  box-sizing:border-box !important;
+  width:100% !important;
+  height:42px !important;
+  min-height:42px !important;
+  max-height:42px !important;
+  margin:0 !important;
+}
+#evaluasiDashboardPanel .eval-filters button.eval-refresh-btn,
+#evaluasiDashboardPanel button#refreshEvaluationDashboard{
+  display:inline-flex !important;
+  box-sizing:border-box !important;
+  width:24px !important;
+  min-width:24px !important;
+  max-width:24px !important;
+  height:24px !important;
+  min-height:24px !important;
+  max-height:24px !important;
+  flex:0 0 24px !important;
+  inline-size:24px !important;
+  block-size:24px !important;
+  aspect-ratio:1 / 1 !important;
+  padding:0 !important;
+  margin:0 0 0 auto !important;
+  border-radius:3px !important;
+  line-height:22px !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+@media(max-width:380px){
+  #evaluasiDashboardPanel .eval-filters{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+  #evaluasiDashboardPanel .eval-filters input,
+  #evaluasiDashboardPanel .eval-filters select{
+    height:40px !important;
+    min-height:40px !important;
+    max-height:40px !important;
+    padding:6px 5px !important;
+    font-size:10px !important;
+  }
+}
+
+
+
+/* FILTER MONITORING PEMBELAJARAN — satu kontrol baru per kolom */
+#evaluasiDashboardPanel .eval-filters{
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px;
+  align-items:end; margin:0; padding:14px; border:1px solid #dfeae2;
+  border-radius:14px; background:#f6faf7; box-shadow:none;
+}
+#evaluasiDashboardPanel .eval-filters > label{
+  display:flex; flex-direction:column; gap:6px; min-width:0; margin:0;
+  color:#294638; font-size:12px; font-weight:700;
+}
+#evaluasiDashboardPanel .eval-filter-label-head,
+#evaluasiDashboardPanel .eval-class-filter-head{
+  display:flex; align-items:center; justify-content:space-between;
+  min-height:22px; line-height:22px;
+}
+#evaluasiDashboardPanel .eval-filter-select{
+  display:block; box-sizing:border-box; width:100%; min-width:0; height:42px;
+  margin:0; padding:0 25px 0 10px; border:1px solid #cbdccf;
+  border-radius:9px; background-color:#fff; color:#193f2d;
+  font-family:Arial,sans-serif; font-size:12px; font-weight:600;
+  line-height:normal; appearance:auto; -webkit-appearance:menulist;
+  pointer-events:auto; touch-action:manipulation;
+}
+#evaluasiDashboardPanel .eval-filter-select:focus{
+  outline:2px solid rgba(23,107,69,.2); outline-offset:1px; border-color:#176b45;
+}
+#evaluasiDashboardPanel button#refreshEvaluationDashboard{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:24px; min-width:24px; height:24px; padding:0;
+  border:1px solid #d5e2d9; border-radius:7px; background:#fff;
+  color:#176b45; font-size:17px; line-height:1;
+}
+@media(max-width:380px){
+  #evaluasiDashboardPanel .eval-filters{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:10px}
+  #evaluasiDashboardPanel .eval-filters > label{font-size:11px}
+  #evaluasiDashboardPanel .eval-filter-select{height:40px;padding-left:7px;padding-right:18px;font-size:10px}
+}
+
+
+/* Judul utama panel pada modul evaluasi */
+.eval-module-title {
+  display: block;
+  width: 100%;
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: linear-gradient(120deg, #0b3d2e, #176b45);
+  color: #d2ad50;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: .1px;
+  box-shadow: 0 4px 10px rgba(16, 75, 50, .12);
+}
+
+/* FIX TEGAS: header tiga panel utama modul evaluasi */
+#evaluasiPenilaianPanel .card > h2.eval-module-title,
+#evaluasiBulananPanel .card > h2.eval-module-title,
+#evaluasiRaporPanel .card > h2.eval-module-title {
+  display:block !important;
+  box-sizing:border-box !important;
+  width:calc(100% + 40px) !important;
+  margin:-20px -20px 18px !important;
+  padding:16px 20px !important;
+  background:linear-gradient(120deg,#176b45,#0b3d2e) !important;
+  color:#c9a64f !important;
+  border:0 !important;
+  border-radius:14px 14px 0 0 !important;
+  box-shadow:none !important;
+  font-size:20px !important;
+  font-weight:800 !important;
+  line-height:1.35 !important;
+  letter-spacing:0 !important;
+  text-align:left !important;
+}
+#evaluasiPenilaianPanel .card > h2.eval-module-title::after,
+#evaluasiBulananPanel .card > h2.eval-module-title::after,
+#evaluasiRaporPanel .card > h2.eval-module-title::after {
+  content:none !important;
+  display:none !important;
+}
+
+/* Sudut lengkung kartu aspek Penilaian Pembelajaran */
+#evaluasiPenilaianPanel .assessment-accordion-item {
+  border-radius:14px !important;
+  border:1px solid #dce7df !important;
+  overflow:visible !important;
+}
+#evaluasiPenilaianPanel .assessment-accordion-toggle {
+  border-radius:13px !important;
+}
+#evaluasiPenilaianPanel .assessment-accordion-item:has(.assessment-accordion-toggle[aria-expanded="true"]) .assessment-accordion-toggle {
+  border-radius:13px 13px 0 0 !important;
+}
+#evaluasiPenilaianPanel .assessment-accordion-content {
+  border-radius:0 0 13px 13px !important;
+}

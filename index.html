@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#176b45">
   <title>Administrasi Madin Kaligintung</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css?v=39">
+  <link rel="stylesheet" href="style.css?v=40">
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Almendra+SC&display=swap" rel="stylesheet">
@@ -659,9 +659,95 @@
     <!-- MODUL EVALUASI PEMBELAJARAN -->
 
 <section id="evaluasiDashboardPanel" class="panel hidden">
-  <div class="card">
-    <h2>Dashboard Evaluasi</h2>
-    <p class="muted">Ringkasan perkembangan pembelajaran santri.</p>
+  <div class="eval-dashboard">
+    <div class="eval-dashboard-heading">
+      <h2>Monitoring Pembelajaran</h2>
+    </div>
+
+    <div class="eval-filters card">
+      <label>
+        <span class="eval-filter-label-head">Periode</span>
+        <select id="evaluationMonth" class="eval-filter-select" aria-label="Pilih bulan dan tahun"></select>
+      </label>
+      <label for="evaluationClass" class="eval-class-filter">
+        <span class="eval-class-filter-head">
+          <span>Kelas</span>
+          <button type="button" id="refreshEvaluationDashboard" class="eval-refresh-btn" aria-label="Muat ulang data evaluasi" title="Muat ulang">↻</button>
+        </span>
+        <select id="evaluationClass" class="eval-filter-select">
+          <option value="__all__">Semua Kelas</option>
+        </select>
+      </label>
+    </div>
+
+    <div id="evaluationDashboardMessage" class="eval-message muted" aria-live="polite"></div>
+
+    <div class="eval-summary-grid">
+      <article class="eval-stat-card">
+        <span class="eval-stat-icon">♙</span>
+        <span class="eval-stat-label">Santri Dinilai</span>
+        <strong id="evalTotalStudents">0</strong>
+      </article>
+      <article class="eval-stat-card">
+        <span class="eval-stat-icon">📖</span>
+        <span class="eval-stat-label">Hasil Membaca</span>
+        <strong id="evalReadingStudents">0</strong>
+      </article>
+      <article class="eval-stat-card">
+        <span class="eval-stat-icon">✎</span>
+        <span class="eval-stat-label">Hasil Menulis</span>
+        <strong id="evalWritingStudents">0</strong>
+      </article>
+      <article class="eval-stat-card eval-stat-attention">
+        <span class="eval-stat-icon">!</span>
+        <span class="eval-stat-label">Perlu Bimbingan</span>
+        <strong id="evalAttentionStudents">0</strong>
+      </article>
+    </div>
+
+    <div class="eval-analysis-grid">
+      <section class="eval-card">
+        <div class="eval-card-heading">
+          <div><span class="eval-section-index">01</span><h3>Penilaian Membaca Yanbu'a</h3></div>
+          <small>Hasil per halaman</small>
+        </div>
+        <div id="evalReadingChart" class="eval-chart-list">
+          <p class="muted">Pilih periode untuk melihat hasil.</p>
+        </div>
+      </section>
+
+      <section class="eval-card">
+        <div class="eval-card-heading">
+          <div><span class="eval-section-index">02</span><h3>Penilaian Menulis Arab</h3></div>
+          <small>Predikat rata-rata santri</small>
+        </div>
+        <div id="evalWritingChart" class="eval-chart-list">
+          <p class="muted">Pilih periode untuk melihat hasil.</p>
+        </div>
+      </section>
+    </div>
+
+    <section class="eval-card eval-attention-card">
+      <div class="eval-card-heading">
+        <div><span class="eval-section-index">03</span><h3>Santri Perlu Perhatian</h3></div>
+        <small>Prioritas pendampingan</small>
+      </div>
+      <div id="evalAttentionList">
+        <p class="muted">Belum ada data.</p>
+      </div>
+    </section>
+
+    <section class="eval-card">
+      <div class="eval-card-heading">
+        <div><span class="eval-section-index">04</span><h3>Cakupan Penilaian per Jilid</h3></div>
+        <small>Santri yang sudah dinilai</small>
+      </div>
+      <div id="evalClassComparison" class="eval-class-list">
+        <p class="muted">Belum ada data.</p>
+      </div>
+    </section>
+
+    <p class="eval-footnote">Data ditampilkan berdasarkan periode dan kelas yang dipilih. Hasil membaca dihitung per halaman, sedangkan predikat menulis berdasarkan rata-rata nilai bulanan santri.</p>
   </div>
 </section>
 
@@ -881,7 +967,7 @@
   });
 })();
 </script>
-  <script type="module" src="app.js?v=38"></script>
+  <script type="module" src="app.js?v=39"></script>
 <script>
 (function () {
 
