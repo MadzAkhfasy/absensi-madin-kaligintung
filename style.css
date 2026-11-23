@@ -4721,3 +4721,25 @@ font-size: 19px;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
+
+
+/* Judul utama panel modul evaluasi */
+#evaluasiPenilaianPanel .card > h2.eval-module-title,
+#evaluasiBulananPanel .card > h2.eval-module-title,
+#evaluasiRaporPanel .card > h2.eval-module-title {
+ display:block !important; box-sizing:border-box !important;
+ width:calc(100% + 40px) !important; margin:-20px -20px 18px !important;
+ padding:16px 20px !important; background:linear-gradient(120deg,#176b45,#0b3d2e) !important;
+ color:#c9a64f !important; border:0 !important; border-radius:14px 14px 0 0 !important;
+ box-shadow:none !important; font-size:20px !important; font-weight:800 !important;
+ line-height:1.35 !important; letter-spacing:0 !important; text-align:left !important;
+}
+#evaluasiPenilaianPanel .card > h2.eval-module-title::after,
+#evaluasiBulananPanel .card > h2.eval-module-title::after,
+#evaluasiRaporPanel .card > h2.eval-module-title::after { content:none !important; display:none !important; }
+
+/* Sudut lengkung kartu aspek Penilaian Pembelajaran */
+#evaluasiPenilaianPanel .assessment-accordion-item { border-radius:14px !important; border:1px solid #dce7df !important; overflow:visible !important; }
+#evaluasiPenilaianPanel .assessment-accordion-toggle { border-radius:13px !important; }
+#evaluasiPenilaianPanel .assessment-accordion-item:has(.assessment-accordion-toggle[aria-expanded="true"]) .assessment-accordion-toggle { border-radius:13px 13px 0 0 !important; }
+#evaluasiPenilaianPanel .assessment-accordion-content { border-radius:0 0 13px 13px !important; }
