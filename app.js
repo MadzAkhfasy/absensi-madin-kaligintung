@@ -548,9 +548,6 @@ $("showReadingRecapBtn").onclick = async () => {
 let table = `
       <div style="margin-top:18px">
         <h3>${esc(selectedClass.name)}</h3>
-        <p class="muted">
-          Rekap bulan ${esc(month)}
-        </p>
 
         <div style="
           max-height:65vh;
@@ -829,9 +826,6 @@ $("showWritingRecapBtn").onclick = async () => {
           ${esc(selectedClass?.name || "")}
         </h3>
 
-        <p class="muted" style="margin:0 0 5px">
-          ${esc(monthLabel)}
-        </p>
 
         <p style="font-size:13px;margin:0 0 12px">
           Total santri: <strong>${santri.length}</strong>
