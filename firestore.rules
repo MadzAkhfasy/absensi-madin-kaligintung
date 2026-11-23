@@ -1,4 +1,5 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
     function signedIn() {
@@ -12,30 +13,33 @@ service cloud.firestore {
 
     match /users/{uid} {
       allow read: if signedIn() && (request.auth.uid == uid || admin());
+
       // Profil admin dibuat secara manual oleh pemilik proyek di Firebase Console.
       allow create: if false;
-      allow update: if admin() ||
-  (signedIn() &&
-   request.auth.uid == uid &&
-   request.resource.data.diff(resource.data).affectedKeys()
-     .hasOnly(['photoUrl', 'photoFileId']));
-
-allow delete: if admin();
+      allow update: if admin()
+        || (
+          signedIn()
+          && request.auth.uid == uid
+          && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['photoUrl', 'photoFileId'])
+        );
+      allow delete: if admin();
+    }
 
     match /classes/{classId} {
-  allow read: if signedIn();
-  allow write: if admin();
-}
+      allow read: if signedIn();
+      allow write: if admin();
+    }
 
-match /calendarSettings/{settingId} {
-  allow read: if signedIn();
-  allow write: if admin();
-}
+    match /calendarSettings/{settingId} {
+      allow read: if signedIn();
+      allow write: if admin();
+    }
 
-match /holidays/{holidayId} {
-  allow read: if signedIn();
-  allow create, update, delete: if admin();
-}
+    match /holidays/{holidayId} {
+      allow read: if signedIn();
+      allow create, update, delete: if admin();
+    }
 
     match /students/{studentId} {
       allow read, write: if admin();
