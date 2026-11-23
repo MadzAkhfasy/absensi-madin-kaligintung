@@ -2845,12 +2845,263 @@ await renderDashboard();
   }
 };
 
+/* DASHBOARD EVALUASI PEMBELAJARAN */
+let evaluationDashboardCache = null;
+let evaluationDashboardClassOptionsReady = false;
+
+function setupEvaluationDashboardFilters() {
+  const monthSelect = $("evaluationMonth");
+  const classSelect = $("evaluationClass");
+  if (!monthSelect || !classSelect) return;
+
+  if (!monthSelect.value) monthSelect.value = new Date().toLocaleDateString("sv-SE").slice(0, 7);
+
+  if (!monthSelect.dataset.ready) {
+    const startYear = 2026;
+    const startMonth = 11;
+    const totalMonths = 60;
+    const monthNames = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+    const options = [];
+    for (let offset = 0; offset < totalMonths; offset++) {
+      const date = new Date(startYear, startMonth - 1 + offset, 1);
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const value = year + "-" + String(month).padStart(2, "0");
+      options.push({ value, label: monthNames[month - 1] + " " + year });
+    }
+    monthSelect.innerHTML = options.map(option =>
+      '<option value="' + option.value + '">' + option.label + '</option>'
+    ).join("");
+    monthSelect.dataset.ready = "1";
+  }
+
+  if (!evaluationDashboardClassOptionsReady) {
+    const visibleClasses = classes
+      .filter(c => (c.name || "").startsWith("Kelas Jilid"))
+      .filter(c => canAccessAllClasses() || c.id === myClass())
+      .sort((a,b) => a.name.localeCompare(b.name, "id"));
+    classSelect.innerHTML = "";
+    if (canAccessAllClasses()) {
+      const all = document.createElement("option");
+      all.value = "__all__";
+      all.textContent = "Semua Kelas";
+      classSelect.appendChild(all);
+    }
+    visibleClasses.forEach(cls => {
+      const option = document.createElement("option");
+      option.value = cls.id;
+      option.textContent = cls.name;
+      classSelect.appendChild(option);
+    });
+    evaluationDashboardClassOptionsReady = true;
+  }
+
+  monthSelect.onchange = () => loadEvaluationDashboard();
+  classSelect.onchange = () => renderEvaluationDashboardFromCache();
+  $("refreshEvaluationDashboard").onclick = () => {
+    evaluationDashboardCache = null;
+    loadEvaluationDashboard(true);
+  };
+}
+
+function evaluationMonthBounds(month) {
+  const parts = month.split("-").map(Number);
+  const start = new Date(parts[0], parts[1] - 1, 1);
+  const end = new Date(parts[0], parts[1], 1);
+  return {
+    startISO: start.toISOString(),
+    endISO: end.toISOString(),
+    startDate: month + "-01",
+    endDate: end.toLocaleDateString("sv-SE")
+  };
+}
+
+function renderEvaluationBars(target, rows, emptyText) {
+  if (!rows.length || rows.every(row => !row.value)) {
+    target.innerHTML = '<div class="eval-empty">' + (emptyText || "Belum ada hasil penilaian pada periode ini.") + '</div>';
+    return;
+  }
+  const max = Math.max(1, ...rows.map(row => row.value));
+  target.innerHTML = rows.map(row => `
+    <div class="eval-chart-row">
+      <span class="eval-chart-label">${row.label}</span>
+      <div class="eval-chart-track"><div class="eval-chart-fill" style="width:${row.value ? Math.max(3, row.value / max * 100) : 0}%;background:${row.color}"></div></div>
+      <span class="eval-chart-count">${row.value}</span>
+    </div>
+  `).join("");
+}
+
+function renderEvaluationDashboardFromCache() {
+  if (!evaluationDashboardCache) return;
+  const selectedClassId = $("evaluationClass").value;
+  const visibleClasses = classes
+    .filter(c => (c.name || "").startsWith("Kelas Jilid"))
+    .filter(c => canAccessAllClasses() || c.id === myClass());
+  const allowedIds = new Set(visibleClasses.map(c => c.id));
+  const classIds = selectedClassId && selectedClassId !== "__all__"
+    ? new Set([selectedClassId])
+    : allowedIds;
+
+  const activeStudents = students.filter(s =>
+    (s.status || "Aktif") === "Aktif" && classIds.has(s.classId)
+  );
+  const activeStudentMap = new Map(activeStudents.map(s => [s.id, s]));
+  const reading = evaluationDashboardCache.reading.filter(a =>
+    classIds.has(a.classId) && activeStudentMap.has(a.studentId)
+  );
+  const writing = evaluationDashboardCache.writing.filter(a =>
+    classIds.has(a.classId) && activeStudentMap.has(a.studentId)
+  );
+
+  const readingStudentIds = new Set(reading.map(a => a.studentId));
+  const writingTotals = new Map();
+  writing.forEach(a => {
+    const score = Number(a.score);
+    if (!Number.isFinite(score)) return;
+    const item = writingTotals.get(a.studentId) || {total:0,count:0};
+    item.total += score;
+    item.count++;
+    writingTotals.set(a.studentId,item);
+  });
+
+  const writingGrades = new Map();
+  writingTotals.forEach((item,id) => {
+    const average = item.total / item.count;
+    const grade = average >= 88 ? "A" : average >= 83 ? "B" : average >= 76 ? "C" : "D";
+    writingGrades.set(id,{average,grade});
+  });
+
+  const attention = new Map();
+  reading.forEach(a => {
+    if (a.result === "red") {
+      const item = attention.get(a.studentId) || {reading:false,writing:false};
+      item.reading = true;
+      attention.set(a.studentId,item);
+    }
+  });
+  writingGrades.forEach((value,id) => {
+    if (value.grade === "D") {
+      const item = attention.get(id) || {reading:false,writing:false};
+      item.writing = true;
+      attention.set(id,item);
+    }
+  });
+
+  $("evalTotalStudents").textContent = new Set([...readingStudentIds,...writingTotals.keys()]).size;
+  $("evalReadingStudents").textContent = readingStudentIds.size;
+  $("evalWritingStudents").textContent = writingTotals.size;
+  $("evalAttentionStudents").textContent = attention.size;
+
+  const readingColors = {
+    green:"#3d9965", yellow:"#e0b83f", orange:"#e58b43", red:"#d65b5b"
+  };
+  const readingLabels = [
+    ["green","Lancar","#3d9965"],
+    ["yellow","1 kali خ","#e0b83f"],
+    ["orange","2 kali خ","#e58b43"],
+    ["red","Belum lancar","#d65b5b"]
+  ];
+  const readingCounts = {green:0,yellow:0,orange:0,red:0};
+  reading.forEach(a => { if (Object.prototype.hasOwnProperty.call(readingCounts,a.result)) readingCounts[a.result]++; });
+  renderEvaluationBars($("evalReadingChart"),readingLabels.map(([key,label,color])=>({label,value:readingCounts[key],color})));
+
+  const gradeCounts = {A:0,B:0,C:0,D:0};
+  writingGrades.forEach(item => { gradeCounts[item.grade]++; });
+  renderEvaluationBars($("evalWritingChart"),[
+    {label:"A · Sangat Baik",value:gradeCounts.A,color:"#3d9965"},
+    {label:"B · Baik",value:gradeCounts.B,color:"#75a978"},
+    {label:"C · Cukup",value:gradeCounts.C,color:"#d8ad45"},
+    {label:"D · Perlu Bimbingan",value:gradeCounts.D,color:"#d65b5b"}
+  ]);
+
+  const attentionRows = [...attention.entries()]
+    .map(([id,issue]) => ({student:activeStudentMap.get(id),issue}))
+    .filter(item => item.student)
+    .sort((a,b) => (a.student.name || "").localeCompare(b.student.name || "", "id"));
+  const attentionBox = $("evalAttentionList");
+  if (!attentionRows.length) {
+    attentionBox.innerHTML = '<div class="eval-empty">Tidak ada santri yang masuk kategori perlu bimbingan pada periode ini.</div>';
+  } else {
+    attentionBox.innerHTML = '<div class="eval-attention-list">' + attentionRows.slice(0,6).map(({student,issue}) => {
+      const tags = [];
+      if (issue.reading) tags.push("Membaca");
+      if (issue.writing) tags.push("Menulis");
+      const cls = classes.find(c => c.id === student.classId);
+      return '<div class="eval-attention-row"><div><span class="eval-attention-name">' + esc(student.name || "Tanpa nama") + '</span><span class="eval-attention-class">' + esc(cls?.name || "-") + '</span></div><div class="eval-attention-tags">' + tags.map(tag => '<span class="eval-attention-tag">' + tag + '</span>').join("") + '</div></div>';
+    }).join("") + '</div>' + (attentionRows.length > 6 ? '<p class="muted" style="font-size:10px;margin:8px 0 0">Menampilkan 6 dari ' + attentionRows.length + ' santri.</p>' : "");
+  }
+
+  const classRows = visibleClasses
+    .filter(cls => classIds.has(cls.id))
+    .map(cls => {
+      const classStudentIds = new Set(activeStudents.filter(s => s.classId === cls.id).map(s => s.id));
+      const assessed = new Set([
+        ...reading.filter(a => a.classId === cls.id).map(a => a.studentId),
+        ...writing.filter(a => a.classId === cls.id).map(a => a.studentId)
+      ]);
+      return {name:cls.name.replace("Kelas ",""),count:[...assessed].filter(id=>classStudentIds.has(id)).length,total:classStudentIds.size};
+    });
+  const maxClass = Math.max(1,...classRows.map(row=>row.total));
+  $("evalClassComparison").innerHTML = classRows.length
+    ? classRows.map(row => '<div class="eval-class-row"><span class="eval-class-name">' + esc(row.name) + '</span><div class="eval-class-track"><div class="eval-class-fill" style="width:' + (row.total ? row.count / row.total * 100 : 0) + '%"></div></div><span class="eval-class-count">' + row.count + ' / ' + row.total + '</span></div>').join("")
+    : '<div class="eval-empty">Belum ada kelas yang dapat ditampilkan.</div>';
+
+  const monthLabel = new Date($("evaluationMonth").value + "-01T00:00:00").toLocaleDateString("id-ID",{month:"long",year:"numeric"});
+  $("evaluationDashboardMessage").textContent = "Periode " + monthLabel + " · " + (selectedClassId === "__all__" ? "Semua kelas" : (classes.find(c=>c.id===selectedClassId)?.name || "Kelas"));
+}
+
+async function loadEvaluationDashboard(force = false) {
+  if (!currentUser || !profile) return;
+  setupEvaluationDashboardFilters();
+  const month = $("evaluationMonth").value;
+  if (!month) return;
+  const message = $("evaluationDashboardMessage");
+  const cacheKey = month;
+  if (!force && evaluationDashboardCache && evaluationDashboardCache.month === cacheKey && Date.now() - evaluationDashboardCache.loadedAt < 300000) {
+    renderEvaluationDashboardFromCache();
+    return;
+  }
+
+  message.textContent = "Memuat data evaluasi...";
+  $("evalReadingChart").innerHTML = '<div class="eval-empty">Sedang memuat...</div>';
+  $("evalWritingChart").innerHTML = '<div class="eval-empty">Sedang memuat...</div>';
+  const bounds = evaluationMonthBounds(month);
+
+  try {
+    const [readingSnap,writingSnap] = await Promise.all([
+      getDocs(query(collection(db,"readingAssessments"),
+        where("assessedAt",">=",bounds.startISO),
+        where("assessedAt","<",bounds.endISO)
+      )),
+      getDocs(query(collection(db,"writingAssessments"),
+        where("assessmentDate",">=",bounds.startDate),
+        where("assessmentDate","<",bounds.endDate)
+      ))
+    ]);
+
+    evaluationDashboardCache = {
+      month:cacheKey,
+      loadedAt:Date.now(),
+      reading:readingSnap.docs.map(d=>({id:d.id,...d.data()})),
+      writing:writingSnap.docs.map(d=>({id:d.id,...d.data()}))
+    };
+    renderEvaluationDashboardFromCache();
+  } catch(error) {
+    console.error("Dashboard evaluasi:",error);
+    message.textContent = "Gagal memuat dashboard evaluasi: " + error.message;
+    $("evalReadingChart").innerHTML = '<div class="eval-empty">Data belum dapat dimuat.</div>';
+    $("evalWritingChart").innerHTML = '<div class="eval-empty">Data belum dapat dimuat.</div>';
+  }
+}
+
+
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
   document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));
   document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("hidden",x.id!==b.dataset.tab));
 
   if(b.dataset.tab==="studentsPanel") renderStudentList();
   if(b.dataset.tab==="staffPanel") loadStaffProfiles();
+  if(b.dataset.tab==="evaluasiDashboardPanel") loadEvaluationDashboard();
 });
 // =====================================
 // NAVIGASI MODUL ADMINISTRASI MADIN
@@ -2959,6 +3210,7 @@ tabs.classList.toggle(
 
   if (target === "studentsPanel") renderStudentList();
   if (target === "staffPanel") loadStaffProfiles();
+  if (target === "evaluasiDashboardPanel") loadEvaluationDashboard();
 }
 
 document.querySelectorAll("[data-module]").forEach(button => {
