@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#176b45">
   <title>Administrasi Madin Kaligintung</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css?v=41">
+  <link rel="stylesheet" href="style.css?v=42">
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Almendra+SC&display=swap" rel="stylesheet">
@@ -683,22 +683,22 @@
     <div id="evaluationDashboardMessage" class="eval-message muted" aria-live="polite"></div>
 
     <div class="eval-summary-grid">
-      <article class="eval-stat-card">
+      <article class="eval-stat-card" data-eval-list="all" title="Tekan untuk melihat daftar santri">
         <span class="eval-stat-icon">♙</span>
         <span class="eval-stat-label">Santri Dinilai</span>
         <strong id="evalTotalStudents">0</strong>
       </article>
-      <article class="eval-stat-card">
+      <article class="eval-stat-card" data-eval-list="reading" title="Tekan untuk melihat daftar santri">
         <span class="eval-stat-icon">📖</span>
         <span class="eval-stat-label">Hasil Membaca</span>
         <strong id="evalReadingStudents">0</strong>
       </article>
-      <article class="eval-stat-card">
+      <article class="eval-stat-card" data-eval-list="writing" title="Tekan untuk melihat daftar santri">
         <span class="eval-stat-icon">✎</span>
         <span class="eval-stat-label">Hasil Menulis</span>
         <strong id="evalWritingStudents">0</strong>
       </article>
-      <article class="eval-stat-card eval-stat-attention">
+      <article class="eval-stat-card eval-stat-attention" data-eval-list="attention" title="Tekan untuk melihat daftar santri">
         <span class="eval-stat-icon">!</span>
         <span class="eval-stat-label">Perlu Bimbingan</span>
         <strong id="evalAttentionStudents">0</strong>
@@ -924,7 +924,7 @@
   </main>
 
   <footer>Madrasah Diniyah Kaligintung · Absensi Santri</footer>
-  <script type="module" src="app.js?v=41"></script>
+  <script type="module" src="app.js?v=42"></script>
 <script>
 (function () {
 
