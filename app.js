@@ -1591,6 +1591,7 @@ async function loadWritingAssessmentTable() {
         const studentId = input.dataset.student;
         const page = Number(input.dataset.page);
         const recordKey = studentId + "_" + page;
+        const recordId = classId + "_" + studentId + "_" + page + "_" + date;
 
         if (rawValue === "") {
           try {
