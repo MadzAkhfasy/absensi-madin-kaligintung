@@ -527,13 +527,9 @@ $("showReadingRecapBtn").onclick = async () => {
     }
 
     const latest = {};
-    const writingRecordsByCell = {};
 
     assessments.forEach(a => {
-      const key = a.studentId + "_" + a.page;
-      if (!writingRecordsByCell[key]) writingRecordsByCell[key] = [];
-      writingRecordsByCell[key].push(a);
-      latest[key] = a;
+      latest[a.studentId + "_" + a.page] = a;
     });
 
     const farthestPage = Math.max(
@@ -1518,9 +1514,13 @@ async function loadWritingAssessmentTable() {
       .filter(a => a.assessmentDate === date);
 
     const latest = {};
+    const writingRecordsByCell = {};
 
     assessments.forEach(a => {
-      latest[a.studentId + "_" + a.page] = a;
+      const key = a.studentId + "_" + a.page;
+      if (!writingRecordsByCell[key]) writingRecordsByCell[key] = [];
+      writingRecordsByCell[key].push(a);
+      latest[key] = a;
     });
 
     if (!santri.length) {
