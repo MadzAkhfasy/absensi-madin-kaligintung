@@ -2981,20 +2981,28 @@ function renderEvaluationBars(target, rows, emptyText) {
 }
 
 function setupEvaluationDashboardSummaryCards() {
-  const cards = document.querySelectorAll("#evaluasiDashboardPanel .eval-stat-card[data-eval-list]");
-  cards.forEach(card => {
-    if (card.dataset.evalClickReady === "true") return;
-    card.dataset.evalClickReady = "true";
+  document.querySelectorAll("#evaluasiDashboardPanel .eval-stat-card[data-eval-list]").forEach(card => {
     card.setAttribute("role", "button");
     card.setAttribute("tabindex", "0");
     card.setAttribute("aria-haspopup", "dialog");
-    card.addEventListener("click", () => showEvaluationDashboardStudents(card.dataset.evalList));
-    card.addEventListener("keydown", event => {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        showEvaluationDashboardStudents(card.dataset.evalList);
-      }
-    });
+  });
+}
+
+// Event delegation: kartu tetap dapat ditekan walau dashboard dirender ulang,
+// atau fungsi setup filter dipanggil sebelum/ketika panel berganti.
+if (!document.documentElement.dataset.evalSummaryClickHandler) {
+  document.documentElement.dataset.evalSummaryClickHandler = "true";
+  document.addEventListener("click", event => {
+    const card = event.target.closest("#evaluasiDashboardPanel .eval-stat-card[data-eval-list]");
+    if (!card) return;
+    event.preventDefault();
+    showEvaluationDashboardStudents(card.dataset.evalList);
+  });
+  document.addEventListener("keydown", event => {
+    const card = event.target.closest("#evaluasiDashboardPanel .eval-stat-card[data-eval-list]");
+    if (!card || (event.key !== "Enter" && event.key !== " ")) return;
+    event.preventDefault();
+    showEvaluationDashboardStudents(card.dataset.evalList);
   });
 }
 

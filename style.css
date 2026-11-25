@@ -5597,3 +5597,15 @@ font-size: 19px;
   font-size:11px;
   font-weight:500;
 }
+
+/* Perkuat area sentuh kartu statistik pada layar ponsel */
+#evaluasiDashboardPanel .eval-summary-grid .eval-stat-card[data-eval-list]{
+  position:relative !important;
+  z-index:2 !important;
+  pointer-events:auto !important;
+  touch-action:manipulation;
+  cursor:pointer !important;
+}
+#evaluasiDashboardPanel .eval-summary-grid .eval-stat-card[data-eval-list] *{
+  pointer-events:none;
+}
