@@ -2877,6 +2877,8 @@ await renderDashboard();
 /* DASHBOARD EVALUASI PEMBELAJARAN */
 let evaluationDashboardCache = null;
 let evaluationDashboardClassOptionsReady = false;
+let evaluationDashboardStudentLists = { all:[], reading:[], writing:[], attention:[] };
+let evaluationDashboardVisibleClasses = [];
 
 // Invalidasi tampilan evaluasi setelah nilai membaca/menulis berubah.
 // Data di Firestore tetap menjadi sumber utama; dashboard dan rekap dimuat ulang.
@@ -2942,6 +2944,7 @@ function setupEvaluationDashboardFilters() {
     evaluationDashboardClassOptionsReady = true;
   }
 
+  setupEvaluationDashboardSummaryCards();
   monthSelect.onchange = () => loadEvaluationDashboard();
   classSelect.onchange = () => renderEvaluationDashboardFromCache();
   $("refreshEvaluationDashboard").onclick = () => {
@@ -2977,6 +2980,76 @@ function renderEvaluationBars(target, rows, emptyText) {
   `).join("");
 }
 
+function setupEvaluationDashboardSummaryCards() {
+  const cards = document.querySelectorAll("#evaluasiDashboardPanel .eval-stat-card[data-eval-list]");
+  cards.forEach(card => {
+    if (card.dataset.evalClickReady === "true") return;
+    card.dataset.evalClickReady = "true";
+    card.setAttribute("role", "button");
+    card.setAttribute("tabindex", "0");
+    card.setAttribute("aria-haspopup", "dialog");
+    card.addEventListener("click", () => showEvaluationDashboardStudents(card.dataset.evalList));
+    card.addEventListener("keydown", event => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        showEvaluationDashboardStudents(card.dataset.evalList);
+      }
+    });
+  });
+}
+
+function showEvaluationDashboardStudents(type) {
+  const modal = $("attendanceStatusModal");
+  const title = $("attendanceStatusTitle");
+  const list = $("attendanceStatusList");
+  const titles = {
+    all: "Daftar Santri yang Dinilai",
+    reading: "Daftar Santri dengan Hasil Membaca",
+    writing: "Daftar Santri dengan Hasil Menulis",
+    attention: "Daftar Santri Perlu Bimbingan"
+  };
+  title.textContent = titles[type] || "Daftar Santri Evaluasi";
+  list.innerHTML = '<p class="muted">Memuat daftar santri...</p>';
+  modal.classList.remove("hidden");
+
+  const matching = evaluationDashboardStudentLists[type] || [];
+  const visibleClasses = evaluationDashboardVisibleClasses || [];
+  const classOrder = [
+    "Kelas Jilid 5","Kelas Jilid 4","Kelas Jilid 3",
+    "Kelas Jilid 2","Kelas Jilid 1","Kelas Jilid Pemula"
+  ];
+  const orderedClasses = visibleClasses.slice().sort((a,b) =>
+    classOrder.indexOf(a.name) - classOrder.indexOf(b.name)
+  );
+  const grouped = orderedClasses.map(cls => ({
+    name:cls.name,
+    students:matching.filter(item => item.classId === cls.id)
+      .sort((a,b) => (a.student.name || "").localeCompare(b.student.name || "", "id"))
+  })).filter(group => group.students.length);
+
+  if (!matching.length) {
+    list.innerHTML = '<p class="muted">Tidak ada santri dalam kategori ini pada periode dan kelas yang dipilih.</p>';
+    return;
+  }
+
+  list.innerHTML = grouped.map(group => `
+    <div class="attendance-class-group">
+      <h3>${esc(group.name)} <span>${group.students.length} santri</span></h3>
+      <table class="attendance-status-table"><tbody>
+        ${group.students.map((item,index) => `
+          <tr>
+            <td>${index+1}</td>
+            <td>
+              <strong>${esc(item.student.name || "Tanpa nama")}</strong>
+              ${item.note ? '<small class="eval-list-note">'+esc(item.note)+'</small>' : ""}
+            </td>
+          </tr>
+        `).join("")}
+      </tbody></table>
+    </div>
+  `).join("");
+}
+
 function renderEvaluationDashboardFromCache() {
   if (!evaluationDashboardCache) return;
   const selectedClassId = $("evaluationClass").value;
@@ -2984,6 +3057,7 @@ function renderEvaluationDashboardFromCache() {
     .filter(c => (c.name || "").startsWith("Kelas Jilid"))
     .filter(c => canAccessAllClasses() || c.id === myClass());
   const allowedIds = new Set(visibleClasses.map(c => c.id));
+  evaluationDashboardVisibleClasses = visibleClasses.slice();
   const classIds = selectedClassId && selectedClassId !== "__all__"
     ? new Set([selectedClassId])
     : allowedIds;
@@ -3037,6 +3111,26 @@ function renderEvaluationDashboardFromCache() {
   $("evalReadingStudents").textContent = readingStudentIds.size;
   $("evalWritingStudents").textContent = writingTotals.size;
   $("evalAttentionStudents").textContent = attention.size;
+
+  const toStudentRows = ids => [...ids]
+    .map(id => activeStudentMap.get(id))
+    .filter(Boolean)
+    .map(student => ({student,classId:student.classId}));
+  const allAssessedIds = new Set([...readingStudentIds,...writingTotals.keys()]);
+  evaluationDashboardStudentLists = {
+    all:toStudentRows(allAssessedIds),
+    reading:toStudentRows(readingStudentIds),
+    writing:toStudentRows(writingTotals.keys()),
+    attention:[...attention.entries()]
+      .map(([id,issue]) => {
+        const student = activeStudentMap.get(id);
+        if (!student) return null;
+        const reasons = [];
+        if (issue.reading) reasons.push("Membaca: belum lancar");
+        if (issue.writing) reasons.push("Menulis: predikat D");
+        return {student,classId:student.classId,note:reasons.join(" · ")};
+      }).filter(Boolean)
+  };
 
   const readingColors = {
     green:"#3d9965", yellow:"#e0b83f", orange:"#e58b43", red:"#d65b5b"
