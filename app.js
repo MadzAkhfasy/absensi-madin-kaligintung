@@ -527,9 +527,13 @@ $("showReadingRecapBtn").onclick = async () => {
     }
 
     const latest = {};
+    const writingRecordsByCell = {};
 
     assessments.forEach(a => {
-      latest[a.studentId + "_" + a.page] = a;
+      const key = a.studentId + "_" + a.page;
+      if (!writingRecordsByCell[key]) writingRecordsByCell[key] = [];
+      writingRecordsByCell[key].push(a);
+      latest[key] = a;
     });
 
     const farthestPage = Math.max(
@@ -1180,8 +1184,11 @@ $("readingClassSelect").onchange = async () => {
       .filter(a => a.classId === classId);
 
     const latest = {};
+    const assessmentByCell = {};
     assessments.forEach(a => {
       const key = a.studentId + "_" + a.page;
+      if (!assessmentByCell[key]) assessmentByCell[key] = [];
+      assessmentByCell[key].push(a);
       if (!latest[key] || (a.assessedAt || "") > (latest[key].assessedAt || "")) {
         latest[key] = a;
       }
@@ -1392,7 +1399,13 @@ menu.appendChild(divider);
       deleteButton.textContent = "Menghapus...";
 
       try {
-        await deleteDoc(doc(db, "readingAssessments", existingRecord.id));
+        // Hapus berdasarkan ID dokumen yang benar-benar dibaca dari Firestore,
+        // termasuk duplikat lama untuk santri/halaman yang sama.
+        const recordsToDelete = assessmentByCell[recordKey] || [existingRecord];
+        await Promise.all(recordsToDelete.map(record =>
+          deleteDoc(doc(db, "readingAssessments", record.id))
+        ));
+        delete assessmentByCell[recordKey];
         delete latest[recordKey];
         input.textContent = "";
         input.dataset.result = "";
@@ -1577,11 +1590,22 @@ async function loadWritingAssessmentTable() {
         const rawValue = input.value.trim();
         const studentId = input.dataset.student;
         const page = Number(input.dataset.page);
-        const recordId = classId + "_" + studentId + "_" + page + "_" + date;
+        const recordKey = studentId + "_" + page;
 
         if (rawValue === "") {
           try {
-            await deleteDoc(doc(db, "writingAssessments", recordId));
+            const recordsToDelete = writingRecordsByCell[recordKey] || [];
+            if (!recordsToDelete.length) {
+              input.style.background = "";
+              return;
+            }
+            // Gunakan ID dokumen aktual, bukan ID gabungan yang diasumsikan.
+            // Ini juga membersihkan duplikat lama pada tanggal/sel yang sama.
+            await Promise.all(recordsToDelete.map(record =>
+              deleteDoc(doc(db, "writingAssessments", record.id))
+            ));
+            delete writingRecordsByCell[recordKey];
+            delete latest[recordKey];
             input.style.background = "";
             invalidateAssessmentViews("writing");
           } catch (error) {
