@@ -247,15 +247,7 @@
   </div>
 </div>
 
-<div id="attendanceStatusModal" class="hidden">
-  <div class="attendance-status-content">
-    <div class="attendance-status-header">
-      <h2 id="attendanceStatusTitle">Daftar Santri</h2>
-      <button type="button" id="closeAttendanceStatus">✕</button>
-    </div>
-    <div id="attendanceStatusList"></div>
-  </div>
-</div>
+<!-- Modal daftar santri global: harus di luar panel/tab yang dapat disembunyikan -->
 <details class="dashboard-fold attendance-chart-card">
   <summary>Analisis Kehadiran Santri</summary>  <div class="fold-content">
     <p class="muted">
@@ -922,6 +914,16 @@
 
 <!-- AKHIR MODUL EVALUASI -->
   </main>
+
+<div id="attendanceStatusModal" class="hidden">
+  <div class="attendance-status-content">
+    <div class="attendance-status-header">
+      <h2 id="attendanceStatusTitle">Daftar Santri</h2>
+      <button type="button" id="closeAttendanceStatus">✕</button>
+    </div>
+    <div id="attendanceStatusList"></div>
+  </div>
+</div>
 
   <footer>Madrasah Diniyah Kaligintung · Absensi Santri</footer>
   <script type="module" src="app.js?v=43"></script>
