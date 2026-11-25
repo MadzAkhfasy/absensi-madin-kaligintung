@@ -1352,6 +1352,7 @@ $("readingClassSelect").onchange = async () => {
               input.style.background = bg;
               input.classList.toggle("red", key === "red");
               menu.remove();
+              invalidateAssessmentViews("reading");
 
             } catch (error) {
               console.error(error);
@@ -1398,6 +1399,7 @@ menu.appendChild(divider);
         input.style.background = "";
         input.classList.remove("red");
         menu.remove();
+        invalidateAssessmentViews("reading");
       } catch (error) {
         console.error(error);
         alert("Nilai gagal dihapus. Periksa koneksi internet.");
@@ -1581,6 +1583,7 @@ async function loadWritingAssessmentTable() {
           try {
             await deleteDoc(doc(db, "writingAssessments", recordId));
             input.style.background = "";
+            invalidateAssessmentViews("writing");
           } catch (error) {
             console.error(error);
             alert("Nilai gagal dihapus. Periksa koneksi internet.");
@@ -1616,6 +1619,7 @@ async function loadWritingAssessmentTable() {
           );
 
           input.style.background = "#d9f2df";
+          invalidateAssessmentViews("writing");
         } catch (error) {
           console.error(error);
           alert("Nilai gagal disimpan. Periksa koneksi atau izin database.");
@@ -2848,6 +2852,23 @@ await renderDashboard();
 /* DASHBOARD EVALUASI PEMBELAJARAN */
 let evaluationDashboardCache = null;
 let evaluationDashboardClassOptionsReady = false;
+
+// Invalidasi tampilan evaluasi setelah nilai membaca/menulis berubah.
+// Data di Firestore tetap menjadi sumber utama; dashboard dan rekap dimuat ulang.
+function invalidateAssessmentViews(type) {
+  evaluationDashboardCache = null;
+
+  const recap = type === "reading"
+    ? { result: $("readingRecapResult"), message: $("readingRecapMessage") }
+    : { result: $("writingRecapResult"), message: $("writingRecapMessage") };
+
+  if (recap.result) recap.result.innerHTML = "";
+  if (recap.message) {
+    recap.message.textContent =
+      "Data penilaian berubah. Tekan Tampilkan Rekap untuk memuat data terbaru.";
+  }
+}
+
 
 function setupEvaluationDashboardFilters() {
   const monthSelect = $("evaluationMonth");
