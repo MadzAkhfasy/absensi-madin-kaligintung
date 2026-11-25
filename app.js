@@ -5261,6 +5261,9 @@ $("closeAttendanceStatus").addEventListener("click", () => {
 $("attendanceStatusModal").addEventListener("click", event => {
   if (event.target.id === "attendanceStatusModal") {
     $("attendanceStatusModal").classList.add("hidden");
+    $("attendanceStatusModal").style.setProperty("display", "none", "important");
+    $("attendanceStatusModal").style.removeProperty("visibility");
+    $("attendanceStatusModal").style.removeProperty("opacity");
   }
 });
 // DROPDOWN CUSTOM MADIN
