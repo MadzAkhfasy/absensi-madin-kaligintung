@@ -3008,6 +3008,12 @@ if (!document.documentElement.dataset.evalSummaryClickHandler) {
 
 function showEvaluationDashboardStudents(type) {
   const modal = $("attendanceStatusModal");
+  // Pastikan modal menjadi anak langsung BODY, bukan bagian panel yang dapat disembunyikan.
+  if (modal.parentElement !== document.body) document.body.appendChild(modal);
+  modal.classList.remove("hidden");
+  modal.style.setProperty("display", "flex", "important");
+  modal.style.setProperty("visibility", "visible", "important");
+  modal.style.setProperty("opacity", "1", "important");
   const title = $("attendanceStatusTitle");
   const list = $("attendanceStatusList");
   const titles = {
@@ -5247,11 +5253,17 @@ document.querySelectorAll(
 // TUTUP JENDELA DAFTAR SANTRI
 $("closeAttendanceStatus").addEventListener("click", () => {
   $("attendanceStatusModal").classList.add("hidden");
+  $("attendanceStatusModal").style.setProperty("display", "none", "important");
+  $("attendanceStatusModal").style.removeProperty("visibility");
+  $("attendanceStatusModal").style.removeProperty("opacity");
 });
 
 $("attendanceStatusModal").addEventListener("click", event => {
   if (event.target.id === "attendanceStatusModal") {
     $("attendanceStatusModal").classList.add("hidden");
+    $("attendanceStatusModal").style.setProperty("display", "none", "important");
+    $("attendanceStatusModal").style.removeProperty("visibility");
+    $("attendanceStatusModal").style.removeProperty("opacity");
   }
 });
 // DROPDOWN CUSTOM MADIN
