@@ -2955,6 +2955,12 @@ function setupEvaluationDashboardFilters() {
   };
 }
 
+function nextEvaluationMonth(month) {
+  const [year, monthNumber] = month.split("-").map(Number);
+  const next = new Date(year, monthNumber, 1);
+  return next.getFullYear() + "-" + String(next.getMonth() + 1).padStart(2, "0");
+}
+
 function evaluationMonthBounds(month) {
   const parts = month.split("-").map(Number);
   const start = new Date(parts[0], parts[1] - 1, 1);
