@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#176b45">
   <title>Administrasi Madin Kaligintung</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css?v=44">
+  <link rel="stylesheet" href="style.css?v=45">
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Almendra+SC&display=swap" rel="stylesheet">
@@ -825,8 +825,9 @@
     <option value="">Pilih kelas</option>
   </select>
 
-  <label for="writingAssessmentDate">Tanggal Penilaian</label>
-  <input type="date" id="writingAssessmentDate">
+  <label for="writingAssessmentMonth">Bulan Penilaian</label>
+  <input type="month" id="writingAssessmentMonth">
+  <p class="writing-month-note">Nilai dicatat per bulan. Nilai pada halaman yang sama akan diperbarui jika dinilai kembali dalam bulan ini.</p>
 
   <div id="writingStudentList"></div>
 </div>
@@ -926,7 +927,7 @@
 </div>
 
   <footer>Madrasah Diniyah Kaligintung · Absensi Santri</footer>
-  <script type="module" src="app.js?v=44"></script>
+  <script type="module" src="app.js?v=45"></script>
 <script>
 (function () {
 
