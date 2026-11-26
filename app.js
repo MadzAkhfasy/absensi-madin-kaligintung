@@ -3259,7 +3259,7 @@ async function loadEvaluationDashboard(force = false) {
       loadedAt:Date.now(),
       reading:readingSnap.docs.map(d=>({id:d.id,...d.data()})),
       writing:Object.values(uniqueWritingRows)
-;
+    };
     renderEvaluationDashboardFromCache();
   } catch(error) {
     console.error("Dashboard evaluasi:",error);
