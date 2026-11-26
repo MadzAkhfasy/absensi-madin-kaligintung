@@ -1666,7 +1666,6 @@ async function loadWritingAssessmentTable() {
 
 $("writingClassSelect").onchange = loadWritingAssessmentTable;
 $("writingAssessmentMonth").onchange = loadWritingAssessmentTable;
-$("writingAssessmentDate").onchange = loadWritingAssessmentTable;
 
 // MEMUAT JADWAL LIBUR MINGGUAN
 async function loadWeeklySchedule() {
