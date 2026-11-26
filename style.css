@@ -5609,3 +5609,13 @@ font-size: 19px;
 #evaluasiDashboardPanel .eval-summary-grid .eval-stat-card[data-eval-list] *{
   pointer-events:none;
 }
+
+
+/* Jarak keterangan pada pilihan bulan penilaian menulis */
+#writingAssessmentView .writing-month-note {
+  margin: 8px 0 16px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
