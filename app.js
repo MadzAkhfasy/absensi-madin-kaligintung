@@ -5152,6 +5152,9 @@ async function showAttendanceByStatus(status) {
   title.textContent = "Santri " + status + " Hari Ini";
   list.innerHTML = '<p class="muted">Memuat data santri...</p>';
   modal.classList.remove("hidden");
+  modal.style.setProperty("display", "flex", "important");
+  modal.style.setProperty("visibility", "visible", "important");
+  modal.style.setProperty("opacity", "1", "important");
 
   try {
     const now = new Date();
