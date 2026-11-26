@@ -774,12 +774,20 @@ $("showWritingRecapBtn").onclick = async () => {
       where("classId", "==", classId)
     ));
 
-    const assessments = snap.docs
-      .map(d => d.data())
-      .filter(a =>
-        a.assessmentDate &&
-        a.assessmentDate.startsWith(month)
-    );
+    const monthRecords = snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(a => a.assessmentMonth === month ||
+        (!a.assessmentMonth && (a.assessmentDate || "").startsWith(month)));
+
+    const uniqueMonthly = {};
+    monthRecords.forEach(a => {
+      const key = a.studentId + "_" + a.page;
+      const old = uniqueMonthly[key];
+      const rank = a.assessmentMonth ? month + "-99" : (a.assessmentDate || "");
+      const oldRank = old ? (old.assessmentMonth ? month + "-99" : (old.assessmentDate || "")) : "";
+      if (!old || rank >= oldRank) uniqueMonthly[key] = a;
+    });
+    const assessments = Object.values(uniqueMonthly);
 
     const recap = {};
     let maxPage = 0;
@@ -1451,12 +1459,9 @@ menu.appendChild(divider);
 // PENILAIAN MENULIS ARAB YANBU'A
 // ======================================
 
-function getLocalDateString() {
+function getLocalMonthString() {
   const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const day = String(now.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
 }
 
 $("openWritingAssessmentBtn").onclick = () => {
@@ -1464,35 +1469,29 @@ $("openWritingAssessmentBtn").onclick = () => {
 
   if (select.options.length <= 1) {
     select.innerHTML = '<option value="">Pilih kelas</option>';
-
-    classes
-      .filter(kelas => kelas.name.startsWith("Kelas Jilid"))
-      .forEach(kelas => {
-        const option = document.createElement("option");
-        option.value = kelas.id;
-        option.textContent = kelas.name;
-        select.appendChild(option);
-      });
+    classes.filter(kelas => kelas.name.startsWith("Kelas Jilid")).forEach(kelas => {
+      const option = document.createElement("option");
+      option.value = kelas.id;
+      option.textContent = kelas.name;
+      select.appendChild(option);
+    });
   }
 
-  if (!$("writingAssessmentDate").value) {
-    $("writingAssessmentDate").value = getLocalDateString();
+  if (!$("writingAssessmentMonth").value) {
+    $("writingAssessmentMonth").value = getLocalMonthString();
   }
 
-  toggleAssessmentPanel(
-    "writingAssessmentView",
-    "openWritingAssessmentBtn"
-  );
+  toggleAssessmentPanel("writingAssessmentView", "openWritingAssessmentBtn");
 };
 
 async function loadWritingAssessmentTable() {
   const classId = $("writingClassSelect").value;
-  const date = $("writingAssessmentDate").value;
+  const month = $("writingAssessmentMonth").value;
   const list = $("writingStudentList");
 
   list.innerHTML = "";
 
-  if (!classId || !date) return;
+  if (!classId || !month) return;
 
   const selectedClass = classes.find(k => k.id === classId);
   const pageCount = READING_PAGE_COUNTS[selectedClass?.name] || 0;
@@ -1509,18 +1508,21 @@ async function loadWritingAssessmentTable() {
       where("classId", "==", classId)
     ));
 
-    const assessments = assessmentSnap.docs
-      .map(d => ({ id: d.id, ...d.data() }))
-      .filter(a => a.assessmentDate === date);
+    const classAssessments = assessmentSnap.docs
+      .map(d => ({ id: d.id, ...d.data() }));
+
+    const monthAssessments = classAssessments.filter(a =>
+      a.assessmentMonth === month ||
+      (!a.assessmentMonth && (a.assessmentDate || "").startsWith(month))
+    );
 
     const latest = {};
-    const writingRecordsByCell = {};
-
-    assessments.forEach(a => {
+    monthAssessments.forEach(a => {
       const key = a.studentId + "_" + a.page;
-      if (!writingRecordsByCell[key]) writingRecordsByCell[key] = [];
-      writingRecordsByCell[key].push(a);
-      latest[key] = a;
+      const old = latest[key];
+      const rank = a.assessmentMonth ? month + "-99" : (a.assessmentDate || "");
+      const oldRank = old ? (old.assessmentMonth ? month + "-99" : (old.assessmentDate || "")) : "";
+      if (!old || rank >= oldRank) latest[key] = a;
     });
 
     if (!santri.length) {
@@ -1539,8 +1541,8 @@ async function loadWritingAssessmentTable() {
       '#writingStudentList .writing-matrix{overflow:visible!important;border-radius:0!important}' +
       '#writingStudentList .writing-matrix .writing-no-head{position:sticky!important;top:0!important;left:0!important;z-index:12!important;width:42px;min-width:42px;max-width:42px;background:#104b32!important;color:white;text-align:center}' +
       '#writingStudentList .writing-matrix th{padding:9px 8px;background:#104b32;color:#fff;font-weight:700;text-align:center}' +
+      '#writingStudentList .writing-matrix .writing-page-head{position:sticky!important;top:0!important;z-index:10!important;background:#104b32!important;color:#fff!important}' +
       '#writingStudentList .writing-matrix .writing-name-head{position:sticky!important;top:0!important;left:42px!important;z-index:11!important;min-width:155px;background:#104b32!important;text-align:left;box-shadow:2px 0 4px rgba(0,0,0,.12)}' +
-      '#writingStudentList .writing-matrix .writing-page-head{position:sticky!important;top:0!important;z-index:10!important;background:#104b32!important;color:#fff!important;}' +
       '#writingStudentList .writing-matrix .writing-student-no{position:sticky!important;left:0!important;z-index:6!important;width:42px;min-width:42px;max-width:42px;padding:9px 4px;background:#f1f7f3!important;color:#174b35!important;text-align:center;font-weight:600;border-bottom:1px solid #e5ebe6}' +
       '#writingStudentList .writing-matrix .writing-student-name{position:sticky!important;left:42px!important;z-index:5!important;min-width:155px;padding:9px 8px;background:#f1f7f3!important;color:#174b35!important;text-align:left;font-size:12px;font-weight:600;border-bottom:1px solid #e5ebe6;box-shadow:2px 0 4px rgba(0,0,0,.08)}' +
       '#writingStudentList .writing-matrix tbody tr:nth-child(even) .writing-student-no,#writingStudentList .writing-matrix tbody tr:nth-child(even) .writing-student-name{background:#e5f0e8!important}' +
@@ -1590,23 +1592,21 @@ async function loadWritingAssessmentTable() {
         const rawValue = input.value.trim();
         const studentId = input.dataset.student;
         const page = Number(input.dataset.page);
-        const recordKey = studentId + "_" + page;
-        const recordId = classId + "_" + studentId + "_" + page + "_" + date;
+        const recordId = classId + "_" + studentId + "_" + page + "_" + month;
 
         if (rawValue === "") {
           try {
-            const recordsToDelete = writingRecordsByCell[recordKey] || [];
-            if (!recordsToDelete.length) {
-              input.style.background = "";
-              return;
+            await deleteDoc(doc(db, "writingAssessments", recordId));
+            const recordsToDelete = classAssessments.filter(a =>
+              a.studentId === studentId &&
+              Number(a.page) === page &&
+              (a.assessmentMonth === month ||
+                (!a.assessmentMonth && (a.assessmentDate || "").startsWith(month)))
+            );
+            for (const record of recordsToDelete) {
+              await deleteDoc(doc(db, "writingAssessments", record.id));
             }
-            // Gunakan ID dokumen aktual, bukan ID gabungan yang diasumsikan.
-            // Ini juga membersihkan duplikat lama pada tanggal/sel yang sama.
-            await Promise.all(recordsToDelete.map(record =>
-              deleteDoc(doc(db, "writingAssessments", record.id))
-            ));
-            delete writingRecordsByCell[recordKey];
-            delete latest[recordKey];
+            delete latest[studentId + "_" + page];
             input.style.background = "";
             invalidateAssessmentViews("writing");
           } catch (error) {
@@ -1637,7 +1637,7 @@ async function loadWritingAssessmentTable() {
               className: selectedClass.name,
               page,
               score,
-              assessmentDate: date,
+              assessmentMonth: month,
               updatedAt: serverTimestamp()
             },
             { merge: true }
@@ -1662,7 +1662,10 @@ async function loadWritingAssessmentTable() {
   }
 }
 
+
+
 $("writingClassSelect").onchange = loadWritingAssessmentTable;
+$("writingAssessmentMonth").onchange = loadWritingAssessmentTable;
 $("writingAssessmentDate").onchange = loadWritingAssessmentTable;
 
 // MEMUAT JADWAL LIBUR MINGGUAN
@@ -3227,18 +3230,36 @@ async function loadEvaluationDashboard(force = false) {
         where("assessedAt",">=",bounds.startISO),
         where("assessedAt","<",bounds.endISO)
       )),
-      getDocs(query(collection(db,"writingAssessments"),
-        where("assessmentDate",">=",bounds.startDate),
-        where("assessmentDate","<",bounds.endDate)
-      ))
+      Promise.all([
+        getDocs(query(collection(db,"writingAssessments"),
+          where("assessmentMonth",">=",month),
+          where("assessmentMonth","<",nextEvaluationMonth(month))
+        )),
+        getDocs(query(collection(db,"writingAssessments"),
+          where("assessmentDate",">=",bounds.startDate),
+          where("assessmentDate","<",bounds.endDate)
+        ))
+      ]).then(([monthlySnap,legacySnap]) => ({
+        docs: [...monthlySnap.docs, ...legacySnap.docs.filter(d => !monthlySnap.docs.some(m => m.id === d.id))]
+      }))
     ]);
+
+    const writingRows = writingSnap.docs.map(d=>({id:d.id,...d.data()}));
+    const uniqueWritingRows = {};
+    writingRows.forEach(a=>{
+      const key = a.classId + "_" + a.studentId + "_" + a.page;
+      const old = uniqueWritingRows[key];
+      const rank = a.assessmentMonth ? "9999" : (a.assessmentDate || "");
+      const oldRank = old ? (old.assessmentMonth ? "9999" : (old.assessmentDate || "")) : "";
+      if(!old || rank >= oldRank) uniqueWritingRows[key] = a;
+    });
 
     evaluationDashboardCache = {
       month:cacheKey,
       loadedAt:Date.now(),
       reading:readingSnap.docs.map(d=>({id:d.id,...d.data()})),
-      writing:writingSnap.docs.map(d=>({id:d.id,...d.data()}))
-    };
+      writing:Object.values(uniqueWritingRows)
+;
     renderEvaluationDashboardFromCache();
   } catch(error) {
     console.error("Dashboard evaluasi:",error);
