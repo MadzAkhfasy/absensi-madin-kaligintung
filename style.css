@@ -5619,3 +5619,27 @@ font-size: 19px;
   color: var(--muted);
   overflow-wrap: anywhere;
 }
+
+/* DASHBOARD KONTROL ADMINISTRASI */
+.control-summary-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}
+.control-summary-card{min-height:92px;padding:14px 12px;border:1px solid #d9e8dd;border-bottom:3px solid var(--gold);border-radius:14px;background:#fff;display:flex;flex-direction:column;justify-content:center;gap:7px}
+.control-summary-card strong{font-size:27px;color:var(--green-deep)}
+.control-summary-card span{font-size:12px;font-weight:700;line-height:1.35;color:var(--green-deep)}
+.control-summary-card.is-warning{background:#fffaf0;border-color:#f0dfb5}
+.control-summary-card.is-good{background:#f2faf4}
+.control-detail-card{margin-top:12px}
+.control-list-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 2px;border-bottom:1px solid #e8eee9;font-size:13px}
+.control-list-row:last-child{border-bottom:0}
+.control-updated{font-size:11px;margin:12px 2px}
+@media(min-width:600px){.control-summary-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* Dashboard Kontrol: ringkasan detail dapat dilipat */
+.control-detail-card{padding:0;overflow:hidden}
+.control-detail-card>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 16px;cursor:pointer;font-weight:700;color:var(--green-deep)}
+.control-detail-card>summary::-webkit-details-marker{display:none}
+.control-detail-card>summary::after{content:"＋";font-size:18px;color:var(--green-deep);font-weight:700}
+.control-detail-card[open]>summary::after{content:"−"}
+.control-detail-card>summary strong{margin-left:auto;white-space:nowrap;padding:4px 9px;border-radius:20px;background:#fff4d9;color:var(--green-deep);font-size:12px}
+.control-detail-card.is-good>summary strong{background:#e9f5ec}
+.control-detail-content{padding:0 16px 12px;border-top:1px solid #e8eee9}
+.control-detail-content>p{margin:12px 0 4px}
