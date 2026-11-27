@@ -5643,14 +5643,3 @@ font-size: 19px;
 .control-detail-card.is-good>summary strong{background:#e9f5ec}
 .control-detail-content{padding:0 16px 12px;border-top:1px solid #e8eee9}
 .control-detail-content>p{margin:12px 0 4px}
-
-/* Dashboard Kontrol: ringkasan detail dapat dilipat */
-.control-detail-card{padding:0;overflow:hidden}
-.control-detail-card>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 16px;cursor:pointer;font-weight:700;color:var(--green-deep)}
-.control-detail-card>summary::-webkit-details-marker{display:none}
-.control-detail-card>summary::after{content:"＋";font-size:18px;color:var(--green-deep);font-weight:700}
-.control-detail-card[open]>summary::after{content:"−"}
-.control-detail-card>summary strong{margin-left:auto;white-space:nowrap;padding:4px 9px;border-radius:20px;background:#fff4d9;color:var(--green-deep);font-size:12px}
-.control-detail-card.is-good>summary strong{background:#e9f5ec}
-.control-detail-content{padding:0 16px 12px;border-top:1px solid #e8eee9}
-.control-detail-content>p{margin:12px 0 4px}
