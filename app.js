@@ -3443,9 +3443,24 @@ async function loadControlDashboard(force = false) {
 function renderControlDashboard(data) {
   const box = $("controlDashboardContent");
   if (!box) return;
-  const row = (name, cls) => '<div class="control-list-row"><span>' + esc(name) + '</span><small>' + esc(cls) + '</small></div>';
-  const studentRows = list => list.length ? list.slice(0,10).map(s => row(s.name || "Tanpa nama",clsName(s.classId))).join("") + (list.length > 10 ? '<p class="muted">Dan ' + (list.length-10) + ' santri lainnya.</p>' : "") : '<p class="muted">Tidak ada santri yang perlu ditindaklanjuti.</p>';
-  const classRows = list => list.length ? list.map(c => row(c.name,"Belum mengisi")).join("") : '<p class="muted">Semua kelas terjadwal sudah mengisi absensi.</p>';
+  const row = name => '<div class="control-list-row"><span>' + esc(name) + '</span></div>';
+  const studentRows = list => {
+    if (!list.length) return '<p class="muted">Tidak ada santri yang perlu ditindaklanjuti.</p>';
+    const grouped = new Map();
+    list.forEach(student => {
+      const classId = student.classId || "__unknown__";
+      if (!grouped.has(classId)) grouped.set(classId, []);
+      grouped.get(classId).push(student);
+    });
+    const orderedGroups = classes.filter(cls => grouped.has(cls.id)).map(cls => [cls.name || "Kelas tanpa nama", grouped.get(cls.id)]);
+    if (grouped.has("__unknown__")) orderedGroups.push(["Kelas belum terdata", grouped.get("__unknown__")]);
+    return orderedGroups.map(([className, studentsInClass]) =>
+      '<div class="control-class-group"><div class="control-class-heading"><strong>' + esc(className) + '</strong><span>' + studentsInClass.length + ' santri</span></div>' +
+      studentsInClass.map(student => row(student.name || "Tanpa nama")).join("") +
+      '</div>'
+    ).join("");
+  };
+  const classRows = list => list.length ? list.map(c => row(c.name)).join("") : '<p class="muted">Semua kelas terjadwal sudah mengisi absensi.</p>';
   const section = (title, count, content, stateClass = "") =>
     '<details class="card control-detail-card ' + stateClass + '">' +
     '<summary><span>' + title + '</span><strong>' + count + '</strong></summary>' +
@@ -3457,14 +3472,13 @@ function renderControlDashboard(data) {
     '<div class="control-summary-card ' + (data.pendingClasses.length ? "is-warning" : "is-good") + '"><strong>' + data.pendingClasses.length + '</strong><span>Kelas Belum Mengisi Absensi Hari Ini</span></div>' +
     '<div class="control-summary-card is-warning"><strong>' + data.missingReading.length + '</strong><span>Belum Dinilai Membaca Bulan Ini</span></div>' +
     '<div class="control-summary-card is-warning"><strong>' + data.missingWriting.length + '</strong><span>Belum Dinilai Menulis Bulan Ini</span></div></div>' +
-    section('Absensi Hari Ini · ' + esc(data.date), data.pendingClasses.length, classRows(data.pendingClasses), data.pendingClasses.length ? 'is-warning' : 'is-good') +
-    section('Biodata Belum Lengkap', data.incomplete.length + ' santri', studentRows(data.incomplete), data.incomplete.length ? 'is-warning' : 'is-good') +
-    section('Belum Dinilai Membaca · ' + esc(data.month), data.missingReading.length + ' santri', studentRows(data.missingReading), data.missingReading.length ? 'is-warning' : 'is-good') +
-    section('Belum Dinilai Menulis · ' + esc(data.month), data.missingWriting.length + ' santri', studentRows(data.missingWriting), data.missingWriting.length ? 'is-warning' : 'is-good') +
+    section('Absensi Hari Ini · ' + esc(data.date), data.pendingClasses.length, classRows(data.pendingClasses), data.pendingClasses.length ? "is-warning" : "is-good") +
+    section("Biodata Belum Lengkap", data.incomplete.length + " santri", studentRows(data.incomplete), data.incomplete.length ? "is-warning" : "is-good") +
+    section('Belum Dinilai Membaca · ' + esc(data.month), data.missingReading.length + " santri", studentRows(data.missingReading), data.missingReading.length ? "is-warning" : "is-good") +
+    section('Belum Dinilai Menulis · ' + esc(data.month), data.missingWriting.length + " santri", studentRows(data.missingWriting), data.missingWriting.length ? "is-warning" : "is-good") +
     '<p class="muted control-updated">Data diperbarui ' + new Date(data.loadedAt).toLocaleTimeString("id-ID") + '</p><button type="button" class="secondary full" id="refreshControlDashboard">Muat Ulang Ringkasan</button>';
   $("refreshControlDashboard").onclick = () => loadControlDashboard(true);
 }
-
 
 // AKHIR NAVIGASI MODUL
 $("loadReportBtn").onclick=loadReport;
